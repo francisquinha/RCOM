@@ -25,7 +25,7 @@ int main(int argc, char** argv)
     if ( (argc < 2) || 
   	     ((strcmp("/dev/ttyS0", argv[1])!=0) && 
   	      (strcmp("/dev/ttyS4", argv[1])!=0) )) {
-      printf("Usage:\tnserial SerialPort\n\tex: nserial /dev/ttyS4\n");
+      printf("Usage:\tnserial SerialPort\n\tex: nserial /dev/ttyS0\n");
       exit(1);
     }
 
@@ -48,17 +48,21 @@ int main(int argc, char** argv)
     newtio.c_lflag = 0;
 
     newtio.c_cc[VTIME]    = 0;   /* inter-character timer unused */
-    newtio.c_cc[VMIN]     = 5;   /* blocking read until 5 chars received */
+    newtio.c_cc[VMIN]     = 1;   /* blocking read until 1 chars received */
 
     tcflush(fd, TCIFLUSH);
     tcsetattr(fd,TCSANOW,&newtio);
 
     printf("New termios structure set\n");
+	
+	int total = 0;
 
     while (STOP==FALSE) {       /* loop for input */
-      res = read(fd,buf,256);   /* returns after 5 chars have been input */
+      res = read(fd,buf,256);   /* returns after 1 chars have been input */
       buf[res]=0;               /* so we can printf... */
       printf(":%s:%d\n", buf, res);
+	  total += res;
+	  printf("total: %d\n", total);
       if (buf[0]=='z') STOP=TRUE;
     }
     tcsetattr(fd,TCSANOW,&oldtio);

@@ -28,7 +28,7 @@ int main(int argc, char** argv)
     if ( (argc < 2) || 
   	     ((strcmp("/dev/ttyS0", argv[1])!=0) && 
   	      (strcmp("/dev/ttyS4", argv[1])!=0) )) {
-      printf("Usage:\tnserial SerialPort\n\tex: nserial /dev/ttyS4\n");
+      printf("Usage:\tnserial SerialPort\n\tex: nserial /dev/ttyS0\n");
       exit(1);
     }
 
@@ -49,7 +49,7 @@ int main(int argc, char** argv)
     newtio.c_lflag = 0;
 
     newtio.c_cc[VTIME]    = 0;   /* inter-character timer unused */
-    newtio.c_cc[VMIN]     = 5;   /* blocking read until 5 chars received */
+    newtio.c_cc[VMIN]     = 1;   /* blocking read until 1 chars received */
 
 
     tcflush(fd, TCIFLUSH);
@@ -69,11 +69,11 @@ int main(int argc, char** argv)
     res = write(fd,buf,256);
     printf("%d bytes written\n", res);
 
+	sleep(4);
+
     buf[0] = 'z';
-
-//    buf[1] = 0;
-    write (fd, buf, 256);    
-
+    write (fd, buf, 1);
+	
     if ( tcsetattr(fd,TCSANOW,&oldtio) == -1) {
       perror("tcsetattr");
       exit(-1);
