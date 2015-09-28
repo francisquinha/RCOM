@@ -1,0 +1,19 @@
+#include <signal.h>
+
+void sig_handler(int signo)
+{
+//if(signo==SIGTERM); //usar esta linha se tiver mais do q 1 sibal associado
+//escrever o q fazer, etc...
+}
+
+//na main, ou numa func a chamar na main
+
+  struct sigaction action;
+  action.sa_handler = sig_handler;
+  sigemptyset(&action.sa_mask);
+  action.sa_flags = 0;
+  if (sigaction(SIGTERM,&action,NULL) < 0)
+  {
+    perror("Unable to install handler");
+    exit(1);
+  }

@@ -1,0 +1,11 @@
+mudar nome dos scripts p/ um nome desejavel
+
+mover os scripts p/ bin com o comando:
+sudo mv pathscript/scritp.sh /usr/bin
+
+chamar script na linha de comandos com os devidos parametros:
+script.sh parametro1 parametro2 etc...
+
+cx->compila simples, tem o -Wall
+cxt->qnd se usa threads
+cxc->p/ threads e coisas posix como mem partilhada, semaforos, etc...
