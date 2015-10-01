@@ -1,0 +1,29 @@
+DESTPATH='/home/ubfeup/Área de Trabalho/rcom_prat2/'
+CC=gcc
+CFLAGS=-Wall
+EXECUTABLE=rcom_pratica_1
+
+all:noncanonical writenoncanonical clean_o
+
+writenoncanonical: writenoncanonical.o pratica1framework.o
+	$(CC) $(addprefix $(DESTPATH),$?) -o $(DESTPATH)$@ $(CFLAGS)
+
+writenoncanonical.o: writenoncanonical.c pratica1framework.h
+	$(CC) -c $*.c $(CFLAGS) -o $(DESTPATH)$@
+
+noncanonical: noncanonical.o pratica1framework.o
+	$(CC) $(addprefix $(DESTPATH),$?)  -o $(DESTPATH)$@ $(CFLAGS)
+
+noncanonical.o: noncanonical.c pratica1framework.h
+	$(CC) -c $*.c $(CFLAGS) -o $(DESTPATH)$@
+	
+pratica1framework.o: pratica1framework.c pratica1framework.h
+	$(CC) -c $*.c $(CFLAGS) -o $(DESTPATH)$@
+
+clean_o:
+	-rm $(DESTPATH)*.o
+
+clean:
+	-rm $(DESTPATH)*.o
+	-rm $(DESTPATH)noncanonical
+	-rm $(DESTPATH)writenoncanonical
