@@ -62,6 +62,60 @@ void timeout_alarm_handler()                   // atende alarme
 	timeouts_done++;
 }
 
+
+//===============================================================================
+//tramas
+//===============================================================================
+
+#define FLAG 0b01111110 // FLAG no inicio e fim da trama
+#define ATRANS 0b00000011 // A se for o emissor a enviar a trama e o receptor a responder
+#define ARECEI 0b00000001 // A se for o receptor a enviar a trama e o emissor a responder
+#define SET 0b00000111 // C se for uma trama de setup
+#define DISC 0b00001011	// C se for uma trama de disconnect
+#define UA 0b00000011 // C se for uma trama de unumbered acknowledgement
+#define RR0 0b00000001 // RR se R = 0 // nao tenho a certeza disto, nao sei se o R age desta forma ou ao contrario
+#define RR1 0b00100001 // RR se R = 1 // nao tenho a certeza disto, nao sei se o R age desta forma ou ao contrario
+#define REJ0 0b00000101 // RR se R = 0 // nao tenho a certeza disto, nao sei se o R age desta forma ou ao contrario
+#define REJ1 0b00100101 // RR se R = 1 // nao tenho a certeza disto, nao sei se o R age desta forma ou ao contrario
+
+/* C se for uma trama de positive acknowledgment */
+int getRR(int R) {
+	if (R == 0) return RR0;
+	else return RR1;
+}
+
+/* C se for uma trama de negative acknowledgment, R identifica a trama a que estamos a responder */
+int getREJ(int R) {
+	if (R == 0) return REJ0;
+	else return REJ1;
+}
+
+/* A depende do sentido da trama original */
+int getA(app_status_type status) {
+	if (status == APP_STATUS_TRANSMITTER) return ATRANS; // A se for o emissor a enviar a trama e o receptor a responder
+	else return ARECEI; // A se for o receptor a enviar a trama e o emissor a responder
+}
+
+/* C depende do tipo de trama e, se for positive ou negative acknowledgment, do numero da mensagem R */
+int getC(message_type message, int R) {
+	if (message == MESSAGE_SET) return SET;
+	else if (message == MESSAGE_DISC) return DISC;
+	else if (message == MESSAGE_UA) return UA;
+	else if (message == MESSAGE_RR) return getRR(R);
+	else return getREJ(R);
+}
+
+/* BCC1 codigo de verificacao, depende de A e de C: BCC1 = A ^ C (A ou exclusivo C) */
+int getBCC1(app_status_type status, int set_disc_ua_rr_rej, int R) {
+	return getA(status) ^ getC();
+}
+
+/* F | A | C | BCC1 | F */
+int getTrama(app_status_type status, int set_disc_ua_rr_rej, int R) {
+	return FLAG | getA(status) | getC(set_disc_ua_rr_rej, R) | getBCC1(status, set_disc_ua_rr_rej, R) | FLAG;
+}
+
+
 //===============================================================================
 //OPEN AND CLOSE TERMIOS
 //===============================================================================

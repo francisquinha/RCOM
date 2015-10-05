@@ -7,10 +7,6 @@ code\
 }\
 }
 
-#ifndef TYPEDEF_BOOLEAN_DECLARED_
-#define TYPEDEF_BOOLEAN_DECLARED_
-typedef int char; 
-#endif /* TYPEDEF_BOOLEAN_DECLARED_*/
 
 #define TRUE  1
 #define YES   1

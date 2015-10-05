@@ -24,7 +24,14 @@ typedef char app_status_type;//in case utilities is not included first...
 #define APP_STATUS_TRANSMITTER		 0
 #define APP_STATUS_RECEIVER			 1
 
-void set_basic_definitions(unsigned int timeout_in_seconds, unsigned int number_of_tries_when_failing, char* port, int boudrate)
+typedef char message_type;
+#define MESSAGE_SET		1
+#define MESSAGE_DISC	2
+#define MESSAGE_UA		3
+#define MESSAGE_RR		4
+#define MESSAGE_REJ		5
+
+void set_basic_definitions(unsigned int timeout_in_seconds, unsigned int number_of_tries_when_failing, char* port, int boudrate);
 
 /*int pack_data(char data);*/
 

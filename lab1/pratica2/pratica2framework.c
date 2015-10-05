@@ -8,6 +8,8 @@
 #include <unistd.h>
 #include <string.h>
 
+// #include "pratica2framework.h"
+
 #define FLAG 0b01111110 // F no inicio da trama
 #define SET 0b00000111 // C se for uma trama de setup
 #define DISC 0b00001011	// C se for uma trama de disconnect
@@ -30,7 +32,7 @@ int getREJ(int R) {
 // A depende do sentido da trama original
 int getA(bool sender2receiver) {
 	if (sender2receiver) return 0b00000011; // A se for o emissor a enviar a trama e o receptor a responder
-	else return 0b00000001; // A se for o receptor a enviar a trama e o emissor a responder
+	else 0b00000001; // A se for o receptor a enviar a trama e o emissor a responder
 }
 
 int getC(int set_disc_ua_rr_rej, int R) {
@@ -44,9 +46,4 @@ int getC(int set_disc_ua_rr_rej, int R) {
 // BCC1 codigo de verificacao, depende de A e de C: BCC1 = A ^ C (A ou exclusivo C)
 int getBCC1(bool sender2receiver, int set_disc_ua_rr_rej, int R) {
 	return getA(sender2receiver) ^ getC();
-}
-
-// F | A | C | BCC1 | F
-int getTrama(bool sender2receiver, int set_disc_ua_rr_rej, int R) {
-	return FLAG | getA(sender2receiver) | getC(set_disc_ua_rr_rej, R) | getBCC1(sender2receiver, set_disc_ua_rr_rej, R) | FLAG;
 }
