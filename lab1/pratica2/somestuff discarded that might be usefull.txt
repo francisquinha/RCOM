@@ -1,0 +1,58 @@
+//===================================================================
+//handlers
+//===================================================================
+bool OPENED_TERMIOS=false;//set to true if opened
+
+void sigint_handler()                   // atende alarme
+{
+	if (OPENED_TERMIOS)  close_tio();
+}
+
+
+//===================================================================
+//===================================================================
+//===================================================================
+
+#define DEBUG_READ_BYTES_1 1
+#define DEBUG_READ_BYTES_2 1
+int read_n_bytes(char* buf,bool* stop_reading_event,int num_of_bytes2read)
+{
+	STOP = FALSE;
+	int res = 0;
+
+	char* aux_buf_ptr = buf;
+	int total_res = 0;
+
+
+	debug_section(DEBUG_READ_BYTES_2,
+		char[READ_BYTES_DEBUGBUFFER_SIZE] debugbuffer;
+	)
+
+		debug_section(DEBUG_READ_BYTES_1,
+		printf("\n- - - reading bytes - - -\n");
+	)
+
+		while (STOP == FALSE) {
+			res = read(private_tio_fd, aux_buf_ptr, num_of_bytes2read - total_res);
+
+			debug_section(DEBUG_READ_BYTES_2,
+				int i = res - 1;
+			debugbuffer[res] = 0;
+			for (; i >= 0; --i) debugbuffer[i] = aux_buf_ptr[i];
+			printf("%s", debugbuffer);
+			)
+
+			aux_buf_ptr += sizeof(char) * res;
+			total_res += res;
+
+			if (total_res >= num_of_bytes2read || *stop_reading_event)//should never catch more...
+				STOP = TRUE;
+		}
+
+	debug_section(DEBUG_READ_BYTES_1,
+		printf("\n- - - end of reading bytes - - -\n");
+	)
+		if (total_res == num_of_bytes2read)
+		return 0;
+		else return total_res;
+}
