@@ -258,7 +258,7 @@ int llopen_receiver(int fd)
 			update_state_machine(APP_STATUS_RECEIVER,&state, buf[i]);
 
 		DEBUG_SECTION(DEBUG_LLOPEN_RECEIVER_OVERFLOW,
-			if (res <= i)
+			if (res > i)
 				printf("\nWARNING:llopen_receiver received more characters than expected\n");
 		);
 	}
@@ -306,7 +306,7 @@ int llopen_transmitter(int fd)
 			if (state == STATE_MACHINE_STOP) break;
 
 			DEBUG_SECTION(DEBUG_LLOPEN_TRANSMITTER_OVERFLOW,
-				if (res <= i)
+				if (res > i)
 					printf("\nWARNING:llopen_transmitter received more characters than expected\n");
 			);
 		}
@@ -314,7 +314,7 @@ int llopen_transmitter(int fd)
 	}
 
 	printf("%d bytes written.", res);
-	if (STOP == FALSE) printf("No confirmation of the reception was received!\n");
+	if (state != STATE_MACHINE_STOP) printf("No confirmation of the reception was received!\n");
 	else printf("Reception was confirmed.\n");
 
 	return OK;
