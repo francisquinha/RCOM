@@ -9,6 +9,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "utilities.h"
 #include "Protocol.h"
 
 #define BAUDRATE B38400
@@ -26,10 +27,9 @@ struct applicationLayer {
 
 int main(int argc, char** argv)
 {
-	//struct applicationLayer app;
-	//app.status = 1;
-
-    //char buf[256];
+  struct applicationLayer app;
+  app.status = 1;
+  //char buf[256];
 
     if ( (argc < 2) || 
   	     ((strcmp("/dev/ttyS0", argv[1])!=0) && 
@@ -38,12 +38,17 @@ int main(int argc, char** argv)
       exit(1);
     }
 
-	/*
-	set_basic_definitions
-    open_tio
-	llopen
-    close_tio
-	*/
+    set_basic_definitions(3, 3, argv[1], BAUDRATE);
+    if(open_tio(&app.fileDescriptor,0,0)!=OK)
+    {
+      printf("\nERROR:Couldnot open terminal\n");
+      exit(1);
+    }
+    
+    llopen( app.fileDescriptor , APP_STATUS_RECEIVER);
+    
+    close_tio(app.fileDescriptor);
+
 
     return 0;
 }

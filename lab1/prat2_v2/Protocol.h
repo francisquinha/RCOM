@@ -45,7 +45,7 @@ void set_basic_definitions(unsigned int timeout_in_seconds, unsigned int number_
 @param tio_fd -> point to file descrictor used in conection. can be left empty, set it to 0/NULL if so is desired
 ...etc
 */
-int open_tio(int* tio_fd, char* serial_port, int vmin);//Vmin could be placed on linklayer
+int open_tio(int* tio_fd,int vtime, int vmin);//Vmin could be placed on linklayer
 
 /*
 @brief close conection

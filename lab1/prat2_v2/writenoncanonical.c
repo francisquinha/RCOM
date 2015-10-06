@@ -9,11 +9,12 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "utilities.h"
 #include "Protocol.h"
-/*
+
 #define BAUDRATE B38400
 #define _POSIX_SOURCE 1 // POSIX compliant source 
-#define FALSE 0
+/*#define FALSE 0
 #define TRUE 1
 
 volatile int STOP=FALSE;
@@ -26,10 +27,9 @@ struct applicationLayer {
 
 int main(int argc, char** argv)
 {
-  	//struct applicationLayer app;
-	//app.status = 0;
-  
-    //char buf[256];
+  struct applicationLayer app;
+  app.status = 0;
+  //char buf[256];
 
     if ( (argc < 2) || 
   	     ((strcmp("/dev/ttyS0", argv[1])!=0) && 
@@ -43,12 +43,17 @@ int main(int argc, char** argv)
     because we don't want to get killed if linenoise sends CTRL-C.
   */
    
-   	/*
-	set_basic_definitions
-    open_tio
-	llopen
-    close_tio
-	*/
+    set_basic_definitions(3, 3, argv[1], BAUDRATE);
+    if(open_tio(&app.fileDescriptor,0,0)!=OK)
+    {
+      printf("\nERROR:Couldnot open terminal\n");
+      exit(1);
+    }
+    
+    llopen( app.fileDescriptor , APP_STATUS_TRANSMITTER);
+    
+    close_tio(app.fileDescriptor);
+
 
     return 0;
 }

@@ -131,12 +131,12 @@ void set_basic_definitions(unsigned int timeout_in_seconds, unsigned int number_
 	//link_layer_data.frame;
 }
 
-int open_tio(int* tio_fd, char* serial_port, int vmin)
+int open_tio(int* tio_fd,int vtime,int vmin)
 {
 	total_read = 0;
 
 	int private_tio_fd = open(link_layer_data.port, O_RDWR | O_NOCTTY);
-	if (private_tio_fd < 0) { perror(serial_port); exit(-1); }
+	if (private_tio_fd < 0) { perror(link_layer_data.port); exit(-1); }
 
 	if (tcgetattr(private_tio_fd, &oldtio) == -1) { /* save current port settings */
 		perror("tcgetattr");
@@ -150,7 +150,7 @@ int open_tio(int* tio_fd, char* serial_port, int vmin)
 
 	/* set input mode (non-canonical, no echo,...) */
 	newtio.c_lflag = 0;
-	newtio.c_cc[VTIME] = link_layer_data.timeout * 10;   /* inter-character timer unused */
+	newtio.c_cc[VTIME] = vtime;//link_layer_data.timeout * 10;   /* inter-character timer unused */
 	newtio.c_cc[VMIN] = vmin;   /* blocking read until X chars received */
 
 
