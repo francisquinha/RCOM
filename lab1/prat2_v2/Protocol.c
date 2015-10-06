@@ -88,23 +88,24 @@ char getREJ(int R) {
 }
 
 /* A depende do sentido da trama original */
-char getA(app_status_type status) {
-	if (status == APP_STATUS_TRANSMITTER) return ATRANS; // A se for o emissor a enviar a trama e o receptor a responder
-	else return ARECEI; // A se for o receptor a enviar a trama e o emissor a responder
+char getA(/*app_status_type status*/) {
+	return ATRANS;
+	//if (status == APP_STATUS_TRANSMITTER) return ATRANS; // A se for o emissor a enviar a trama e o receptor a responder
+	//else return ARECEI; // A se for o receptor a enviar a trama e o emissor a responder
 }
 
 /* C depende do tipo de trama e, se for positive ou negative acknowledgment, do numero da mensagem R */
 char getC(message_type message, int R) {
-	if (message == MESSAGE_SET) return SET;//note used
+	if (message == MESSAGE_SET) return SET;
 	else if (message == MESSAGE_DISC) return DISC;
-	else if (message == MESSAGE_UA) return UA;//not used
+	else if (message == MESSAGE_UA) return UA;
 	else if (message == MESSAGE_RR) return getRR(R);
 	else return getREJ(R);
 }
 
 /* BCC1 codigo de verificacao, depende de A e de C: BCC1 = A ^ C (A ou exclusivo C) */
-char getBCC1(app_status_type status, message_type message, int R) {
-	return getA(status) ^ getC(message,R);
+char getBCC1(/*app_status_type status,*/ message_type message, int R) {
+	return getA(/*status*/) ^ getC(message,R);
 }
 
 /* F | A | C | BCC1 | F */
@@ -217,9 +218,9 @@ int update_state_machine(app_status_type status, state_machine_state* state, cha
 			switch (*state)
 			{
 			case STATE_MACHINE_START:return OK;/*flag checked before switch*/
-			case STATE_MACHINE_FLAG_RCV: if (rcv == getA(status)) *state += 1;  else *state = STATE_MACHINE_START; return OK;
-			case STATE_MACHINE_A_RCV: if (rcv == getC(status, 0)) *state += 1; else *state = STATE_MACHINE_START; return OK;
-			case STATE_MACHINE_C_RCV: if (rcv == getBCC1(status, MESSAGE_SET, 0))  *state += 1; else *state = STATE_MACHINE_START; return OK;
+			case STATE_MACHINE_FLAG_RCV: if (rcv == getA(/*status*/)) *state += 1;  else *state = STATE_MACHINE_START; return OK;
+			case STATE_MACHINE_A_RCV: if (rcv == getC(status == APP_STATUS_TRANSMITTER ? MESSAGE_UA : MESSAGE_SET, 0)) *state += 1; else *state = STATE_MACHINE_START; return OK;
+			case STATE_MACHINE_C_RCV: if (rcv == getBCC1(/*status,*/ status == APP_STATUS_TRANSMITTER ? MESSAGE_UA : MESSAGE_SET, 0))  *state += 1; else *state = STATE_MACHINE_START; return OK;
 
 			default:
 				printf("\nWARNING(usm2):Not valid/expected state (%d) reached in --> int state_machine(app_status_type status) => from => Protocol.c\n", *state);
