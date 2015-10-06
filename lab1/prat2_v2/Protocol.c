@@ -216,10 +216,10 @@ int update_state_machine(app_status_type status, state_machine_state* state, cha
 		{
 			switch (*state)
 			{
-
-			//STATE_MACHINE_FLAG_RCV: if (rcv == FLAG) *state += 1;  else *state = STATE_MACHINE_START; return OK;
-			case STATE_MACHINE_A_RCV: if (rcv == getA(status))   *state += 1; else *state = STATE_MACHINE_START; return OK;
-			case STATE_MACHINE_C_RCV: if (rcv == getC(status,0)) *state += 1; else *state = STATE_MACHINE_START; return OK;
+			case STATE_MACHINE_START:return OK;/*flag checked before switch*/
+			case STATE_MACHINE_FLAG_RCV: if (rcv == getA(status)) *state += 1;  else *state = STATE_MACHINE_START; return OK;
+			case STATE_MACHINE_A_RCV: if (rcv == getC(status, 0)) *state += 1; else *state = STATE_MACHINE_START; return OK;
+			case STATE_MACHINE_C_RCV: if (rcv == getBCC1(status, MESSAGE_SET, 0))  *state += 1; else *state = STATE_MACHINE_START; return OK;
 
 			default:
 				printf("\nWARNING(usm2):Not valid/expected state (%d) reached in --> int state_machine(app_status_type status) => from => Protocol.c\n", *state);
@@ -227,7 +227,7 @@ int update_state_machine(app_status_type status, state_machine_state* state, cha
 			}
 		}
 	}
-	else if (*state == STATE_MACHINE_BCC_RCV && rcv == getBCC1(status,*state,0)) {
+	else if (*state == STATE_MACHINE_BCC_RCV && rcv == FLAG) {
 		*state = STATE_MACHINE_STOP; return OK;
 	}
 	
