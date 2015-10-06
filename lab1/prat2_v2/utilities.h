@@ -19,7 +19,7 @@ typedef int bool;
 #define OK    0
 
 #define PRINTBYTETOBINARY "%d%d%d%d%d%d%d%d"
-#define BYTETOBINARY(byte) {\
+#define BYTETOBINARY(byte)\
 (byte & 0x80 ? 1 : 0),\
 (byte & 0x40 ? 1 : 0),\
 (byte & 0x20 ? 1 : 0),\
@@ -27,6 +27,5 @@ typedef int bool;
 (byte & 0x08 ? 1 : 0),\
 (byte & 0x04 ? 1 : 0),\
 (byte & 0x02 ? 1 : 0),\
-(byte & 0x01 ? 1 : 0)\
-}
+(byte & 0x01 ? 1 : 0)
 

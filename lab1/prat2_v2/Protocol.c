@@ -198,12 +198,12 @@ typedef char state_machine_state;
 #define STATE_MACHINE_BCC_RCV	5
 #define STATE_MACHINE_STOP		6
 
-#define DEBUG_LLO_STATE_MACHINE
+#define DEBUG_LLO_STATE_MACHINE 1
 int update_state_machine(app_status_type status, state_machine_state* state, char rcv)
 {
-	//DEBUG_SECTION(DEBUG_LLO_STATE_MACHINE,
-		//printf("\nstatus:%d  state:%d  rcv:" PRINTBYTETOBINARY, status,state, BYTETOBINARY(rcv));
-	//	);
+	DEBUG_SECTION(DEBUG_LLO_STATE_MACHINE,
+		printf("\nstatus:%d  state:%d  rcv:" PRINTBYTETOBINARY, status,*state, BYTETOBINARY(rcv));
+		);
 
 	if (*state < STATE_MACHINE_BCC_RCV)
 	{
