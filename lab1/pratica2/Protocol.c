@@ -73,10 +73,10 @@ void timeout_alarm_handler()                   // atende alarme
 #define SET 0b00000111 // C se for uma trama de setup
 #define DISC 0b00001011	// C se for uma trama de disconnect
 #define UA 0b00000011 // C se for uma trama de unumbered acknowledgement
-#define RR0 0b00000001 // RR se R = 0 // nao tenho a certeza disto, nao sei se o R age desta forma ou ao contrario
-#define RR1 0b00100001 // RR se R = 1 // nao tenho a certeza disto, nao sei se o R age desta forma ou ao contrario
-#define REJ0 0b00000101 // RR se R = 0 // nao tenho a certeza disto, nao sei se o R age desta forma ou ao contrario
-#define REJ1 0b00100101 // RR se R = 1 // nao tenho a certeza disto, nao sei se o R age desta forma ou ao contrario
+#define RR0 0b00100001 // RR se R = 0 // nao tenho a certeza disto, nao sei se o R age desta forma ou ao contrario
+#define RR1 0b00000001 // RR se R = 1 // nao tenho a certeza disto, nao sei se o R age desta forma ou ao contrario
+#define REJ0 0b00100101 // RR se R = 0 // nao tenho a certeza disto, nao sei se o R age desta forma ou ao contrario
+#define REJ1 0b00000101 // RR se R = 1 // nao tenho a certeza disto, nao sei se o R age desta forma ou ao contrario
 
 /* C se for uma trama de positive acknowledgment */
 int getRR(int R) {
@@ -110,7 +110,7 @@ int getBCC1(app_status_type status, int set_disc_ua_rr_rej, int R) {
 	return getA(status) ^ getC();
 }
 
-/* F | A | C | BCC1 | F */
+/* F | A | C | BCC1 | F -------- isto esta errado */
 int getTrama(app_status_type status, int set_disc_ua_rr_rej, int R) {
 	return FLAG | getA(status) | getC(set_disc_ua_rr_rej, R) | getBCC1(status, set_disc_ua_rr_rej, R) | FLAG;
 }
