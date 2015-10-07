@@ -1,4 +1,4 @@
-DESTPATH='/home/ubfeup/Área de Trabalho/tmp1/comp/'
+DESTPATH='./'
 CC=gcc
 CFLAGS=-Wall
 EXECUTABLE=rcom_pratica_1
