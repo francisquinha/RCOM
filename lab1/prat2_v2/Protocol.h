@@ -15,7 +15,7 @@ struct linkLayer {
 	char port[20]; /*Dispositivo /dev/ttySx, x = 0, 4*/
 	int baudRate; /*Velocidade de transmissão*/
 	unsigned int sequenceNumber; /*Número de sequência da trama: 0, 1*/
-	unsigned int timeout; /*Valor do temporizador: 1 s*/
+	int timeout; /*Valor do temporizador: 1 s*/
 	unsigned int numTransmissions; /*Número de tentativas em caso de
 								   falha*/
 	char frame[MAX_FRAME_SIZE]; /*trama*/
@@ -32,7 +32,7 @@ typedef char message_type;
 #define MESSAGE_RR		4
 #define MESSAGE_REJ		5
 
-void set_basic_definitions(unsigned int timeout_in_seconds, unsigned int number_of_tries_when_failing, char* port, int boudrate);
+void set_basic_definitions( int timeout_in_seconds, unsigned int number_of_tries_when_failing, char* port, int boudrate);
 
 /*int pack_data(char data);*/
 
