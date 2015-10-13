@@ -74,6 +74,7 @@ void timeout_alarm_handler()                   // atende alarme
 #define REJ1 0b00100101 // C se REJ se R = 1, pede novamente mensagem com R = 1
 #define I0 0b00000000 //C se I se S = 0
 #define I1 0b00100000 //C se I se S = 1
+#define ESCAPE 0b01111101 //usado no stuffing e destuffing
 
 #define BCC_ON_SET 0b00000100//A TRANS ^ SET
 #define BBC_ON_UA 0b00000000//A RECEI ^ UA
@@ -215,6 +216,7 @@ typedef int state_machine_state;
 #define STATE_MACHINE_C_RCV			4
 #define STATE_MACHINE_BCC_RCV		5
 #define STATE_MACHINE_STOP			6
+#define STATE_MACHINE_ESCAPE		7
 /*
 #define STATE_MACHINE_INFO_RCV		9
 #define STATE_MACHINE_C_RCV_NACK	13
@@ -293,9 +295,14 @@ int update_state_machine(app_status_type appStatus, app_status_type adressStatus
 		else *state = STATE_MACHINE_START;
 		return OK;
 
-	case STATE_MACHINE_BCC_RCV:
+	case STATE_MACHINE_BCC_RCV://also goes 2 this state after STATE_MACHINE_ESCAPE
+		if (received_C_type == MESSAGE_I && rcv == ESCAPE) *state = STATE_MACHINE_ESCAPE;
 		if (rcv == FLAG) *state = STATE_MACHINE_STOP;
 		else *state = STATE_MACHINE_START;
+
+	case STATE_MACHINE_ESCAPE://could be done outside but makes more sense to be here
+		*state = STATE_MACHINE_BCC_RCV;
+		return OK;
 
 	default:
 		printf("\nWARNING(usm2):Not valid/expected state (%d) reached in --> int state_machine(app_status_type status) => from => Protocol.c\n", *state);
@@ -306,13 +313,6 @@ int update_state_machine(app_status_type appStatus, app_status_type adressStatus
 }
 
 
-
-void apply_stuffing(char* buf, int bufSize)
-{
-	int i = 0;
-	for (; i < bufSize; ++i)
-		if (1/*==FLAG||==ESCAPE*/);
-}
 
 /*estou a admitir que buf tem sempre espaço suficiente, podemos alterar pra usar reallocs com arrays dinamicos
 da forma como esta temos que garantir que o array tem tamanho 2x que o seu preenchimento p/ evitar erros*/
@@ -326,7 +326,7 @@ if (buf[i] == FLAG || buf[i] == ESCAPE)
 ++newSize;
 memmove(buf+i+1, buf+i, size-i);
 buf[i] = ESCAPE;
-buf[i+1] = //ver PDF
+buf[i+1] ^= 0x20;
 }
 
 return newSize;
@@ -341,7 +341,7 @@ return newSize;
 		{
 			--newSize;
 			memmove(buf + i , buf + i +1, size-i-1);
-			buf[i] = //ver PDF
+			buf[i] ^= 0x20;
 		}
 
 	return newSize;
