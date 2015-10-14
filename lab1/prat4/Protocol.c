@@ -56,6 +56,17 @@ void timeout_alarm_handler()                   // atende alarme
 	timeouts_done++;
 	STOP = TRUE;
 }
+
+void startAlarm() {
+	STOP = FALSE;
+	alarm(link_layer_data.timeout);
+}
+
+void stopAlarm() {
+	STOP = FALSE;
+	alarm(0);
+}
+
 #endif//==========================================================================
 
 //X=X=X=X   tramas
@@ -299,6 +310,7 @@ int update_state_machine(app_status_type appStatus, app_status_type adressStatus
 		if (received_C_type == MESSAGE_I && rcv == ESCAPE) *state = STATE_MACHINE_ESCAPE;
 		if (rcv == FLAG) *state = STATE_MACHINE_STOP;
 		else *state = STATE_MACHINE_START;
+		return OK;
 
 	case STATE_MACHINE_ESCAPE://could be done outside but makes more sense to be here
 		*state = STATE_MACHINE_BCC_RCV;
@@ -334,32 +346,67 @@ return newSize;
 
 /*int apply_destuffing(char* buf, int size)
 {
-	int newSize = size;
-	int i = 0;
-	for (; i < bufSize; ++i)
-		if ( buf[i] == ESCAPE)
-		{
-			--newSize;
-			memmove(buf + i , buf + i +1, size-i-1);
-			buf[i] ^= 0x20;
-		}
+int newSize = size;
+int i = 0;
+for (; i < bufSize; ++i)
+if ( buf[i] == ESCAPE)
+{
+--newSize;
+memmove(buf + i , buf + i +1, size-i-1);
+buf[i] ^= 0x20;
+}
 
-	return newSize;
+return newSize;
 }*/
+//
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+void write_UorS(app_status_type adressStatus, message_type msg_type, int SorR, int fd)
+{
+	char msg[4];
+	getMessage(adressStatus, msg_type, SorR, msg);
+	if (write(fd, msg, 4) != 4)
+	{
+		perror("write_UorS():");
+	}
+	if (write(fd, msg, 1) != 1)
+	{
+		perror("write_UorS():");
+	}
+}
+
+//presumes that data already comes with stuffing
+void write_I(int SorR,int fd, char* data, int data_size)
+{
+	char msg[4];
+	getMessage(APP_STATUS_TRANSMITTER, MESSAGE_I, SorR, msg);
+	if (write(fd, msg, 4) != 4)
+	{
+		perror("write_I():");
+	}
+	if (write(fd, data, data_size) != data_size)
+	{
+		perror("write_I():");
+	}
+	if (write(fd, msg, 1) != 1)
+	{
+		perror("write_I():");
+	}
+}
+
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #define DEBUG_LLOPEN_RECEIVER_OVERFLOW 1
 int llopen_receiver(int fd)
 {
-	STOP = FALSE;/*doesn't do anything right now. could define timeout later 4 receiver*/
 	state_machine_state state = STATE_MACHINE_START;
 	char buf[20];//used to receive stuff
 	int res;//number of bytes read or sent
 	//- - - - - - - - - -
 	//receive SET
-	while (state != STATE_MACHINE_STOP && STOP == FALSE)
+	while (state != STATE_MACHINE_STOP || received_C_type != MESSAGE_SET)
 	{
-		res = read(fd, buf, 20);
+		if ((res = read(fd, buf, 20))<0) perror("llopen_receiver:");
 
 		DEBUG_SECTION(DEBUG_LLOPEN_RECEIVER_OVERFLOW,
 			if (res > 5)
@@ -376,13 +423,7 @@ int llopen_receiver(int fd)
 		);
 	}
 	//- - - - - - - - - -
-	//send UA
-	/*how does the receiver knows sender received UA? is verefied in next state and then comes back to receive set mode if failed?
-	maybe should i have a "transition read"(shrodinger like) that can still respond UAs?*/
-	char msg[4];
-	getMessage(APP_STATUS_TRANSMITTER, MESSAGE_UA, 0, msg);
-	res = write(fd, msg, 4);
-	res = write(fd, msg, 1);
+	write_UorS(APP_STATUS_TRANSMITTER, MESSAGE_UA, 0, fd);
 
 	return OK;
 }
@@ -395,22 +436,18 @@ int llopen_transmitter(int fd)
 	state_machine_state state = STATE_MACHINE_START;
 	timeouts_done = 0;
 	char buf[20];//used to receive stuff
-	STOP = FALSE;
+	bool QUIT = NO;
 
 	DEBUG_SECTION(DEBUG_PRINT_SECTION_NUM,
 		printf("\n-section2-");
 	sleep(1);
 	);
 
-	while (state != STATE_MACHINE_STOP && timeouts_done < link_layer_data.numTransmissions)
+	while (QUIT==NO && timeouts_done < link_layer_data.numTransmissions)
 	{
-		char msg[4];
-		getMessage(APP_STATUS_TRANSMITTER, MESSAGE_SET, 0, msg);
-		res = write(fd, msg, 4);
-		res = write(fd, msg, 1);
+		write_UorS(APP_STATUS_TRANSMITTER, MESSAGE_SET, 0, fd);
 
-		STOP = FALSE;//to be set to true by the alarm
-		alarm(link_layer_data.timeout);
+		startAlarm();//ready alarm for possible timeout
 
 		DEBUG_SECTION(DEBUG_PRINT_SECTION_NUM,
 			printf("\n-section3-");
@@ -419,7 +456,8 @@ int llopen_transmitter(int fd)
 
 		while (STOP == FALSE)
 		{
-			res = read(fd, buf, 20);
+			//get respose
+			if ((res = read(fd, buf, 20)) < 0) perror("llopen_transmitter:");
 
 			DEBUG_SECTION(DEBUG_PRINT_SECTION_NUM,
 				printf("\n-section4-");
@@ -431,11 +469,13 @@ int llopen_transmitter(int fd)
 					printf("\nWARNING:llopen_transmitter received more than 5 characters at 1 time\n");
 			);
 
+			//update state machine and stop loop if valid
 			int i = 0;
 			for (; i < res && (state != STATE_MACHINE_STOP || received_C_type != MESSAGE_UA); ++i)
 				update_state_machine(APP_STATUS_TRANSMITTER, APP_STATUS_TRANSMITTER, MESSAGE_UA, buf[i], &state);
 
-			if (state == STATE_MACHINE_STOP) break;
+			if (state == STATE_MACHINE_STOP && received_C_type == MESSAGE_UA)
+			{ stopAlarm(); QUIT = YES; break; }
 
 			DEBUG_SECTION(DEBUG_LLOPEN_TRANSMITTER_OVERFLOW,
 				if (res > i)
@@ -515,71 +555,71 @@ int llread(int fd)
 	return OK;
 }
 
-
+/*
 int llwriter(int fd)
 {
-	/*
-	  int res;
-	  resetStateMachine();
-	  timeouts_done = 0;
-	  char buf[20];//used to receive stuff
-	  STOP = FALSE;
+	int res;
+	resetStateMachine();
+	timeouts_done = 0;
+	char buf[20];//used to receive stuff
+	bool QUIT = FALSE;
+	bool RETRANSMIT = TRUE;
 
-	  DEBUG_SECTION(DEBUG_PRINT_SECTION_NUM,
-	  printf("\n-section2-");
-	  sleep(1);
-	  );
+	DEBUG_SECTION(DEBUG_PRINT_SECTION_NUM,
+		printf("\n-section2-");
+	sleep(1);
+	);
 
-	  while (state != STATE_MACHINE_STOP && timeouts_done<link_layer_data.numTransmissions)
-	  {
-	  char msg[4];
-	  getMessage(APP_STATUS_TRANSMITTER, MESSAGE_SET, 0, msg);
-	  res = write(fd,msg,4);
-	  res = write(fd,msg,1);
+	while (state != STATE_MACHINE_STOP && timeouts_done < link_layer_data.numTransmissions)
+	{
+		char msg[4];
+		getMessage(APP_STATUS_TRANSMITTER, MESSAGE_I, 0, msg);
+		write(fd, msg, 4);
+		//write()
+		write(fd, msg, 1);
 
-	  STOP = FALSE;//to be set to true by the alarm
-	  alarm(link_layer_data.timeout);
+		startAlarm();
 
-	  DEBUG_SECTION(DEBUG_PRINT_SECTION_NUM,
-	  printf("\n-section3-");
-	  sleep(1);
-	  );
+		DEBUG_SECTION(DEBUG_PRINT_SECTION_NUM,
+			printf("\n-section3-");
+		sleep(1);
+		);
 
-	  while (STOP==FALSE)
-	  {
-	  res = read(fd, buf, 20);
+		while (STOP == FALSE)
+		{
+			res = read(fd, buf, 20);
 
-	  DEBUG_SECTION(DEBUG_PRINT_SECTION_NUM,
-	  printf("\n-section4-");
-	  sleep(1);
-	  );
+			DEBUG_SECTION(DEBUG_PRINT_SECTION_NUM,
+				printf("\n-section4-");
+			sleep(1);
+			);
 
-	  DEBUG_SECTION(DEBUG_LLOPEN_TRANSMITTER_OVERFLOW,
-	  if (res > 5)
-	  printf("\nWARNING:llopen_transmitter received more than 5 characters at 1 time\n");
-	  );
+			DEBUG_SECTION(DEBUG_LLOPEN_TRANSMITTER_OVERFLOW,
+				if (res > 5)
+					printf("\nWARNING:llopen_transmitter received more than 5 characters at 1 time\n");
+			);
 
-	  int i = 0;
-	  for (; i < res && state != STATE_MACHINE_STOP; ++i)
-	  update_state_machine(APP_STATUS_TRANSMITTER, ,MENSAGE_RR ,buf[i], &state);
+			int i = 0;
+			for (; i < res && state != STATE_MACHINE_STOP; ++i)
+				update_state_machine(APP_STATUS_TRANSMITTER, , MENSAGE_RR, buf[i], &state);
 
-	  if (state == STATE_MACHINE_STOP) break;
+			if (state == STATE_MACHINE_STOP){ stopAlarm(); break; }
 
-	  DEBUG_SECTION(DEBUG_LLOPEN_TRANSMITTER_OVERFLOW,
-	  if (res > i)
-	  printf("\nWARNING:llopen_transmitter received more characters than expected\n");
-	  );
-	  }
+			DEBUG_SECTION(DEBUG_LLOPEN_TRANSMITTER_OVERFLOW,
+				if (res > i)
+					printf("\nWARNING:llopen_transmitter received more characters than expected\n");
+			);
+		}
 
-	  }
+	}
 
-	  //printf("\n%d bytes written.", res);
-	  if (state != STATE_MACHINE_STOP) printf("No confirmation of the reception was received!\n");
-	  else printf("Reception was confirmed.\n");
-	  */
-	return OK;
+	//printf("\n%d bytes written.", res);
+	if (state != STATE_MACHINE_STOP) printf("No confirmation of the reception was received!\n");
+	else printf("Reception was confirmed.\n");
+	
+		return OK;
 }
-
+*/
 
 int llclose()
 {
