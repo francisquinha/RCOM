@@ -3,8 +3,8 @@
 typedef char bool;//in case utilities is not included first...
 #endif /* TYPEDEF_BOOLEAN_DECLARED_*/
 
-#ifndef PROTOCOL
-#define PROTOCOL
+#ifndef DATALINKPROTOCOL
+#define DATALINKPROTOCOL
 
 //===============================================================================
 //basic definitions
@@ -66,4 +66,4 @@ int llread(int fd, char** buffer);
 
 int llclose();
 
-#endif /* !PROTOCOL */
+#endif /* DATALINKPROTOCOL */
