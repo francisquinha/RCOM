@@ -14,7 +14,7 @@
 #include "DataLinkProtocol.h"
 
 //X=X=X=X   general debug stuff
-#if(1)
+#if (1)
 //===============================================================================
 
 #define DEBUG_READ_BYTES 	1
@@ -24,7 +24,7 @@ int total_read; /*variable used for debug purposes, increment when reading bytes
 #endif//==========================================================================
 
 //X=X=X=X   basic definitions
-#if(1)
+#if (1)
 //===============================================================================
 
 //#define BAUDRATE B38400
@@ -45,7 +45,7 @@ int NR = 0;
 #endif//==========================================================================
 
 //X=X=X=X   ALARM related
-#if(1)//==========================================================================
+#if (1)//==========================================================================
 
 //#define TIMEOUTS_ALLOWED 3
 //int timeout_inseconds;
@@ -73,7 +73,7 @@ void stopAlarm() {
 #endif//==========================================================================
 
 //X=X=X=X   tramas
-#if(1)
+#if (1)
 //===============================================================================
 
 #define FLAG 0b01111110 // FLAG no inicio e fim da trama
@@ -145,7 +145,7 @@ void getMessage(app_status_type status, message_type message, int R, char* msg) 
 #endif//==========================================================================
 
 //X=X=X=X   SET BASICS, OPEN AND CLOSE TERMIOS
-#if(1)
+#if (1)
 //===============================================================================
 bool port_name_was_set = NO;
 void set_basic_definitions(int timeout_in_seconds, int number_of_tries_when_failing, char* port, int baudrate)
@@ -221,12 +221,12 @@ int close_tio(int tio_fd)
 #endif//==========================================================================
 
 //X=X=X=X   PROTOCAL AUX FUNCS
-#if(1)
+#if (1)
 //================================================================================
 
 
 //-----   GET MSGS STATE MACHINE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-#if(1)
+#if (1)
 
 typedef int state_machine_state;
 #define STATE_MACHINE_START			1
@@ -336,6 +336,8 @@ int update_state_machine(app_status_type appStatus, app_status_type adressStatus
 
 #endif /*GET MSGS STATE MACHINE*/
 
+//-----   STTUFING AND DESTUFFING - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#if (1)
 /*buf deve entrar ja com o dobro do tamanho dos caracteres que tem
 pode ser dinamico ou nao
 data_size deve ser o tamanho efectivo ocupado
@@ -360,7 +362,7 @@ int apply_stuffing(char* buf, int /*bufSize*/data_size)
 		{
 			///*2)using multiple reallocs*/*buf = (char)realloc(*buf,++newSize);
 			++newSize;
-			memmove(buf + i + 1, buf + i, data_size - i);
+			memmove(buf + i + 1, buf + i, newSize - i);
 			buf[i] = ESCAPE;
 			buf[i + 1] ^= 0x20;
 			i++;			
@@ -392,13 +394,46 @@ int apply_destuffing(char* buf, int bufSize)
 
 	return bufSize;
 }
-//
+#endif /*STTUFING AND DESTUFFING*/
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+//-----   BCC2 GENERATION AND VALIDATION - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#if (1)
+#define BCC2_EVEN 0
+#define BCC2_ODD  1
+#define DEBUG_GENBBC2 1
+char genBCC2(char* buf, int bufsize) {
+	char BCC2;
+	if (BCC2_EVEN) BCC2 = 0b11111111;
+	else		 BCC2 = 0b00000000;
 
+	int i = 0;
+	for (; i < bufsize; i++)
+	{
+	  BCC2 ^= buf[i];
+	  DEBUG_SECTION(DEBUG_GENBBC2,printf("\ngenbcc2debug(i:%d):" PRINTBYTETOBINARY,i ,BYTETOBINARY(BCC2)););
+	}
+
+	return BCC2;
+}
+
+#define DEBUG_VALIDATEBBC2 1
+char validateBCC2(char* buf, int bufsize) {
+	char valid = buf[0];
+	int i = 1;
+	for (; i < bufsize; i++)
+		valid ^= buf[i];
+
+	DEBUG_SECTION(DEBUG_VALIDATEBBC2,printf("\nvalbcc2debug:" PRINTBYTETOBINARY, BYTETOBINARY(valid)););
+	
+	if (BCC2_EVEN) { if (valid == 0b11111111) return OK; }
+	else if (valid == 0b00000000) return OK;
+
+	return 1;
+}
+#endif /*BCC2 GENERATION AND VALIDATION */
 
 //-----   WRITE AND READ MSGS AUX - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-#if(1)
+#if (1)
 void write_UorS(app_status_type adressStatus, message_type msg_type, int SorR, int fd)
 {
 	char msg[4];
@@ -411,32 +446,6 @@ void write_UorS(app_status_type adressStatus, message_type msg_type, int SorR, i
 	{
 		perror("write_UorS():");
 	}
-}
-
-#define BCC2_EVEN 0
-#define BCC2_ODD  1
-char genBCC2(char* buf, int bufsize) {
-	char BCC2;
-	if (BCC2_EVEN) BCC2 = 0b11111111;
-	else		 BCC2 = 0b00000000;
-
-	int i = 0;
-	for (; i < bufsize; i++)
-		BCC2 ^= buf[i];
-
-	return BCC2;
-}
-
-char validadeBCC2(char* buf, int bufsize) {
-	char valid = buf[0];
-	int i = 1;
-	for (; i < bufsize; i++)
-		valid ^= buf[i];
-
-	if (BCC2_EVEN) { if (valid == 0b11111111) return OK; }
-	else if (valid == 0b00000000) return OK;
-
-	return 1;
 }
 
 #define DEBUG_WRITE_I 1
@@ -491,7 +500,7 @@ int write_I(int SorR, int fd, char* data, int data_size)
 #endif /*WRITE AND READ MSGS AUX*/
 
 // - - - LLOPEN AUXS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-#if(1)
+#if (1)
 #define DEBUG_LLOPEN_RECEIVER_OVERFLOW 1
 int llopen_receiver(int fd)
 {
@@ -597,7 +606,7 @@ int llopen_transmitter(int fd)
 #endif//==========================================================================
 
 //X=X=X=X   PROTOCAL MAIN FUNCS
-#if(1)
+#if (1)
 //===============================================================================
 
 int llopen(int fd, app_status_type status)
@@ -665,11 +674,13 @@ int llread(int fd, char** buffer)
 						return -1;
 					}
 
+					auxReceiveDataBuf_length = apply_destuffing(auxReceiveDataBuf, auxReceiveDataBuf_length);
+					
 					int ns = 0;
-					if (TRUE)//validateData(int* ns))//deve atualizar o NR de acordo com o que encontrar
+					if (validateBCC2(auxReceiveDataBuf,auxReceiveDataBuf_length)==OK
+					  //validateData(int* ns))//verificar NS e atualizar o NR de acordo com o que encontrar
+					)
 					{
-						auxReceiveDataBuf_length = apply_destuffing(auxReceiveDataBuf, auxReceiveDataBuf_length);
-						//validateBCC2
 						--auxReceiveDataBuf_length;//leave BCC2 out of data
 						write_UorS(APP_STATUS_TRANSMITTER, MESSAGE_RR, NR, fd);
 						//note: the original pointer must be updated so a pointer to the pointer must be used
