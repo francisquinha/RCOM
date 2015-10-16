@@ -11,7 +11,7 @@
 
 #include "utilities.h"
 #include "user_interface.h"
-#include "Protocol.h"
+#include "DataLinkProtocol.h"
 
 #define BAUDRATE B38400
 #define _POSIX_SOURCE 1 // POSIX compliant source 
@@ -26,7 +26,7 @@ volatile int STOP=FALSE;
 //=======================================================================
 
 struct applicationLayer {
-	int fileDescriptor; /*Descritor correspondente à porta série*/
+	int fd; /*Descritor correspondente à porta série*/
 	int status; /*TRANSMITTER 0 | RECEIVER 1*/
 };
 
@@ -38,18 +38,18 @@ struct applicationLayer app;
 
 void connect()
 {
-      if(open_tio(&app.fileDescriptor,0,0)!=OK)
+      if(open_tio(&app.fd,0,0)!=OK)
     {
       printf("\nERROR:Couldnot open terminal\n");
       exit(1);
     }
   
   
-      llopen( app.fileDescriptor , APP_STATUS_RECEIVER);
+      llopen( app.fd , APP_STATUS_RECEIVER);
 
       //send or read missing
       
-    close_tio(app.fileDescriptor);
+
 
 }
 
@@ -128,8 +128,25 @@ void config(char baud, char recon, char timeo, int frame)
 	default: break;
 	}
 	
-	set_basic_definitions(timeout, reconect_tries, 0, baudrate, frame);
+	set_basic_definitions(timeout, reconect_tries, 0, baudrate);
 
+}
+
+void testread()
+{
+	char *receive;
+	int rec_size = llread(app.fd, &receive);
+	
+	char endchar = receive[rec_size - 1];
+	//receive[rec_size - 1] = 0;
+	printf("\n");
+	//printf("%s%c - %d", receive, endchar, rec_size);test string
+	int i=0;
+	for(;i<rec_size;++i)
+	printf(PRINTBYTETOBINARY " - " , BYTETOBINARY(receive[i]));
+	printf("%d",rec_size);
+	gets(receive);
+	free(receive);
 }
 
 //=======================================================================
@@ -155,7 +172,10 @@ int main(int argc, char** argv)
 	   anws=main_menu(APP_STATUS_RECEIVER);
 	  		switch (anws){
 
-		case 'a':connect();
+		case 'a':
+			connect();
+			testread();
+			close_tio(app.fd);
 			break;
 		case 'b':printf("\nNOT IMPLEMENTED");//reconnect();
 			break;

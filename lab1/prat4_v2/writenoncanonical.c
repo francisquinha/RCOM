@@ -11,7 +11,7 @@
 
 #include "utilities.h"
 #include "user_interface.h"
-#include "Protocol.h"
+#include "DataLinkProtocol.h"
 
 #define BAUDRATE B38400
 #define _POSIX_SOURCE 1 // POSIX compliant source 
@@ -22,7 +22,7 @@ volatile int STOP=FALSE;
 */
 
 struct applicationLayer {
-	int fileDescriptor; /*Descritor correspondente à porta série*/
+	int fd; /*Descritor correspondente à porta série*/
 	int status; /*TRANSMITTER 0 | RECEIVER 1*/
 };
 
@@ -45,15 +45,20 @@ int main(int argc, char** argv)
   */
    
     set_basic_definitions(3, 3, argv[1], BAUDRATE);
-    if(open_tio(&app.fileDescriptor,0,0)!=OK)
+	if (open_tio(&app.fd, 0, 0) != OK)
     {
       printf("\nERROR:Couldnot open terminal\n");
       exit(1);
     }
     
-    llopen( app.fileDescriptor , APP_STATUS_TRANSMITTER);
+    llopen( app.fd , APP_STATUS_TRANSMITTER);
     
-    close_tio(app.fileDescriptor);
+	sleep(1);
+	char samplemsg[5] =//"abcde";
+	{0b01111101,0b01111101,0b01111110,0b01111110,0b01111101 };
+	llwrite(app.fd, samplemsg, 5);
+
+	close_tio(app.fd);
 
 
     return 0;
