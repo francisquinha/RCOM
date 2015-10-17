@@ -261,6 +261,7 @@ use received_C_type to confirm the type of packet received or check S/R for poss
 message_type received_C_type = -1;//not sure if the most correct approach but simplifies the state machine a lot, indicates type of message received and is reused outside ethod when _STOP state is reached
 char received_C=0;
 #define DEBUG_LLO_STATE_MACHINE 1
+#define DEBUG_STATE_MACHINE_GETC 0
 int update_state_machine(app_status_type appStatus, app_status_type adressStatus, message_type msgExpectedType, char rcv, state_machine_state* state)
 {
 	DEBUG_SECTION(DEBUG_LLO_STATE_MACHINE,
@@ -316,8 +317,10 @@ int update_state_machine(app_status_type appStatus, app_status_type adressStatus
 	     )       *state = STATE_MACHINE_BCC_RCV;
 		else *state = STATE_MACHINE_START;
 		
+		DEBUG_SECTION(DEBUG_STATE_MACHINE_GETC,
 		char aux = getBCC1(adressStatus, received_C_type,(received_C>>5 & 0b00000001));
 		printf("\n--" PRINTBYTETOBINARY , BYTETOBINARY(aux));
+		);
 		
 		return OK;
 
@@ -754,7 +757,6 @@ int llwrite(int fd, char * buffer, int length)
 
 			if (state == STATE_MACHINE_STOP)
 			{
-			  printf("\n--q");
 				if (received_C_type == MESSAGE_RR)
 				{
 				  //check NR 2 c if it's ok to send next I
