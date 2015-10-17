@@ -82,8 +82,8 @@ void stopAlarm() {
 #define SET 0b00000111 // C se for uma trama de setup
 #define DISC 0b00001011	// C se for uma trama de disconnect
 #define UA 0b00000011 // C se for uma trama de unumbered acknowledgement
-#define RR0 0b00100001 // C se RR se R = 0, pede mensagem seguinte, com R = 1
-#define RR1 0b00000001 // C se RR se R = 1, pede mensagem seguinte, com R = 0
+#define RR0 0b00000001 // C se RR se R = 0
+#define RR1 0b00100001 // C se RR se R = 1
 #define REJ0 0b00000101 // C se REJ se R = 0, pede novamente mensagem com R = 0
 #define REJ1 0b00100101 // C se REJ se R = 1, pede novamente mensagem com R = 1
 #define I0 0b00000000 //C se I se S = 0
@@ -257,8 +257,9 @@ E O WRITE PODE APANHAR REJ MSM ESPERANDO RRs
 
 use received_C_type to confirm the type of packet received or check S/R for possible missing packet
 */
-int R_S = 1;//to be used as the S or R bit, not yet implemented
+//int R_S = 1;//to be used as the S or R bit, not yet implemented
 message_type received_C_type = -1;//not sure if the most correct approach but simplifies the state machine a lot, indicates type of message received and is reused outside ethod when _STOP state is reached
+char received_C=0;
 #define DEBUG_LLO_STATE_MACHINE 1
 int update_state_machine(app_status_type appStatus, app_status_type adressStatus, message_type msgExpectedType, char rcv, state_machine_state* state)
 {
@@ -304,13 +305,20 @@ int update_state_machine(app_status_type appStatus, app_status_type adressStatus
 			received_C_type = msgExpectedType;
 		}
 		else *state = STATE_MACHINE_START;
-
+		received_C=rcv;
 		return OK;
 
 	case STATE_MACHINE_C_RCV:
 		//note:C type already received so it is a valid msg type (if it wasn't state would go back to START) unless we have an error in which bcc will hopefully fail
-		if (rcv == getBCC1(adressStatus, received_C_type, 0)) *state = STATE_MACHINE_BCC_RCV;
+	  //BBC1 is not generating REJ, only BBC2. should I change this behaviour???
+	  if (rcv == getBCC1(adressStatus, received_C_type,
+		  /*will only work on RR and REJ*/(received_C>>5 & 0b00000001)) 
+	     )       *state = STATE_MACHINE_BCC_RCV;
 		else *state = STATE_MACHINE_START;
+		
+		char aux = getBCC1(adressStatus, received_C_type,(received_C>>5 & 0b00000001));
+		printf("\n--" PRINTBYTETOBINARY , BYTETOBINARY(aux));
+		
 		return OK;
 
 	case STATE_MACHINE_BCC_RCV://also goes 2 this state after STATE_MACHINE_ESCAPE
@@ -676,11 +684,9 @@ int llread(int fd, char** buffer)
 
 					auxReceiveDataBuf_length = apply_destuffing(auxReceiveDataBuf, auxReceiveDataBuf_length);
 					
-					int ns = 0;
-					if (validateBCC2(auxReceiveDataBuf,auxReceiveDataBuf_length)==OK
-					  //validateData(int* ns))//verificar NS e atualizar o NR de acordo com o que encontrar
-					)
+					if (validateBCC2(auxReceiveDataBuf,auxReceiveDataBuf_length)==OK)
 					{
+						NR = received_C == I0? 1:0;
 						--auxReceiveDataBuf_length;//leave BCC2 out of data
 						write_UorS(APP_STATUS_TRANSMITTER, MESSAGE_RR, NR, fd);
 						//note: the original pointer must be updated so a pointer to the pointer must be used
@@ -692,7 +698,7 @@ int llread(int fd, char** buffer)
 						memcpy(*buffer, auxReceiveDataBuf, auxReceiveDataBuf_length);
 						return auxReceiveDataBuf_length;
 					}
-					else write_UorS(APP_STATUS_TRANSMITTER, MESSAGE_REJ, 0, fd);
+					else write_UorS(APP_STATUS_TRANSMITTER, MESSAGE_REJ, (received_C == I0? 0:1), fd);
 				}
 				//RECEIVED DISC ; SEND DISC BACK
 				else if (received_C_type == MESSAGE_DISC)
@@ -720,6 +726,8 @@ espera RR ou REJ
 se RR sai
 se REJ repete de inicio
 */
+#define DEBUG_LLWRITER_BADRR_R 1
+#define DEBUG_LLWRITER_REJ 1
 int llwrite(int fd, char * buffer, int length)
 {
 	int res;
@@ -731,7 +739,7 @@ int llwrite(int fd, char * buffer, int length)
 	while (/*QUIT == NO &&*/ timeouts_done < link_layer_data.numTransmissions)
 	{
 		int num_of_writen_bytes = write_I(NS, fd, buffer, length);
-
+		
 		startAlarm();//ready alarm for possible timeout
 
 		while (STOP == FALSE)
@@ -746,15 +754,50 @@ int llwrite(int fd, char * buffer, int length)
 
 			if (state == STATE_MACHINE_STOP)
 			{
+			  printf("\n--q");
 				if (received_C_type == MESSAGE_RR)
 				{
+				  //check NR 2 c if it's ok to send next I
+				  if (received_C != (NS ? RR0 : RR1))
+				    {
+				      stopAlarm(); 
+				      //update statistics
+				      
+				      DEBUG_SECTION(DEBUG_LLWRITER_BADRR_R,
+				    printf("\nllwriter debug: received a RR which C had  not expected R"););
+				      
+				      break;
+				    }
+				    
 					stopAlarm();
 					NS = NS ? 0 : 1;
 					return num_of_writen_bytes;//QUIT = YES; break;
 				}
 				else if (received_C_type == MESSAGE_REJ)
 				{
-					stopAlarm(); break;
+					stopAlarm(); 
+					
+					if(received_C != (NS ? REJ1 :REJ0) )
+					{
+					  //if this happens means a reject from
+					  //another message was received 
+					  //in this case I'm not sure what 2 do.
+					  //maybe the program should be aborted
+					  //because the transmission failed somewhere
+					  //and we cannot trace it back
+					  
+					  printf("\nllwriter:REJ with R different than expected !!!"
+					  "\nthis means the some of the data was lost and cannot be recovered!\n"
+					    "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+					  );
+					  //DO SOMETHING HERE;
+					}
+					
+					DEBUG_SECTION(DEBUG_LLWRITER_REJ,
+				    printf("\nllwriter debug: received REJ"););
+					
+					//update statistics
+					break;
 				}
 				else return 0;
 			}
