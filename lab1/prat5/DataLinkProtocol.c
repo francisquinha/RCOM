@@ -824,7 +824,11 @@ int llread(int fd, char** buffer)
 						memcpy(*buffer, auxReceiveDataBuf, auxReceiveDataBuf_length);
 						return auxReceiveDataBuf_length;
 					}
-					else write_UorS(APP_STATUS_TRANSMITTER, MESSAGE_REJ, (received_C == I0? 0:1), fd);
+					else
+					{
+						write_UorS(APP_STATUS_TRANSMITTER, MESSAGE_REJ, (received_C == I0 ? 0 : 1), fd);
+						state = STATE_MACHINE_START;
+					}
 				}
 				//RECEIVED DISC ; SEND DISC BACK
 				else if (received_C_type == MESSAGE_DISC)
@@ -834,9 +838,16 @@ int llread(int fd, char** buffer)
 				}
 				//RECEIVED SET ; SEND UA BACK
 				else if (received_C_type == MESSAGE_SET)
+				{
 					write_UorS(APP_STATUS_TRANSMITTER, MESSAGE_UA, 0, fd);
-				else DEBUG_SECTION(DEBUG_LLREAD_WARN_UNEXPECTED_MSG, printf("\nllread:received unexpected msg of type %d", received_C_type););
-				return OK;
+					state = STATE_MACHINE_START;
+				}
+				else
+				{
+					DEBUG_SECTION(DEBUG_LLREAD_WARN_UNEXPECTED_MSG, printf("\nllread:received unexpected msg of type %d", received_C_type););
+					state = STATE_MACHINE_START; 
+					//return OK;
+				}
 			}
 
 		}
