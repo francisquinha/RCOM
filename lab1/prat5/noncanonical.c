@@ -145,10 +145,10 @@ int testread()
 	printf(PRINTBYTETOBINARY " - " , BYTETOBINARY(receive[i]));
 	printf("%d",rec_size);
 	//gets(receive);
-	free(receive);
+	if (rec_size>0)free(receive);
 
 	//catch DISC
-	rec_size=llread(app.fd, NULL);
+	rec_size = llread(app.fd, &receive);
 	if (rec_size == -2) printf("\ngot disk");
 
 	return 0;

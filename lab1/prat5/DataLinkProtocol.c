@@ -20,6 +20,10 @@
 #define DEBUG_READ_BYTES 	1
 int total_read; /*variable used for debug purposes, increment when reading bytes*/
 
+//send a bcc eith 0 to tests the answer when errors occur
+bool gen0bcc = TRUE;
+#define DEBUG_REJ_WITHWRONG_BCCS 	1
+
 #define DEBUG_PRINT_SECTION_NUM 1
 #endif//==========================================================================
 
@@ -416,6 +420,9 @@ int apply_destuffing(char* buf, int bufSize)
 #define BCC2_ODD  1
 #define DEBUG_GENBBC2 1
 char genBCC2(char* buf, int bufsize) {
+	
+	/*send (almost always) invalid bcc*/if (gen0bcc) return 0;
+
 	char BCC2;
 	if (BCC2_EVEN) BCC2 = 0b11111111;
 	else		 BCC2 = 0b00000000;
@@ -484,6 +491,10 @@ int write_I(int SorR, int fd, char* data, int data_size)
 	char finalMessage2Send[(data_size+1)*2];//char* finalMessage2Send = (char*)malloc(data_size + 1);
 	memcpy(finalMessage2Send, data, data_size);
 	finalMessage2Send[data_size] = genBCC2(data, data_size);
+
+	DEBUG_SECTION(DEBUG_REJ_WITHWRONG_BCCS,
+		gen0bcc = gen0bcc? FALSE: TRUE;);
+
 	data_size = apply_stuffing(finalMessage2Send, data_size + 1);
 
 	DEBUG_SECTION(DEBUG_WRITE_I,
@@ -874,12 +885,13 @@ int llwrite(int fd, char * buffer, int length)
 				  //check NR 2 c if it's ok to send next I
 				  if (received_C != (NS ? RR0 : RR1))
 				    {
+					  state = STATE_MACHINE_START;
 				      stopAlarm(); 
 				      //update statistics
 				      
 				      DEBUG_SECTION(DEBUG_LLWRITER_BADRR_R,
 				    printf("\nllwriter debug: received a RR which C had  not expected R"););
-				      
+
 				      break;
 				    }
 				    
@@ -889,6 +901,7 @@ int llwrite(int fd, char * buffer, int length)
 				}
 				else if (received_C_type == MESSAGE_REJ)
 				{
+					state = STATE_MACHINE_START;
 					stopAlarm(); 
 					
 					if(received_C != (NS ? REJ1 :REJ0) )
