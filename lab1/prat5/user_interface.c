@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
 #include "utilities.h"
 #include "user_interface.h"
 
@@ -53,9 +54,11 @@ int main_menu(bool receiver)
 
 	if (receiver != 0) printf("\nd) Choose picture to send");
 
-	printf("\ne) Quit\n\n==>");
+	printf("\ne) Show Ocurrences Log");
 
-	return getAnswer(5);
+	printf("\nf) Quit\n\n==>");
+
+	return getAnswer(6);
 }
 
 
@@ -128,3 +131,29 @@ void show_progress(char* msg, Emission_data* data)
 
 	printf(">\n");
 }
+
+
+void show_prog_stats(unsigned long num_of_Is,
+	unsigned long total_num_of_timeouts,
+	unsigned long num_of_REJs,int appstatus)
+{
+	system("clear");
+
+	printf("\n- - - Ocurrences log - - -");
+
+	if (appstatus/*receiver*/) 
+		printf("\nNumber of Is received: %lu", num_of_Is);
+	else /*transmitter*/ printf("\nNumber of I's sent (RR confirmed): %lu", num_of_Is);
+
+	printf("\nTotal number of timeouts: %lu", total_num_of_timeouts);
+
+	if (appstatus/*receiver*/)
+	printf("\nTotak number of REJs received: %lu", num_of_REJs);
+	else /*transmitter*/printf("\nTotak number of REJs sent: %lu", num_of_REJs);
+
+	printf("\n- - - - - - - - - - - - - - -\nPress Any key to return to pevious menu...\n");
+
+	char w8[1];
+	fgets(w8, 1, stdin);
+}
+

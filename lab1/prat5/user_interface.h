@@ -22,20 +22,8 @@ int select_config(void(*apply_options) (char, char, char, int));
 void show_progress(char* msg, Emission_data* data);
 
 
-/*
-//the params maybe sent as references to the protocol to be updated
-//or the data could be defined in protocol instead. the later seems to make more sense
-
-struct Prog_Stats
-{	
-	//debug related
-	long total_bytes_received;
-	int num_of_disconnections;
-	int total_num_of_errors_found;//packets that had error
-	//...
-};
-
-void show_prog_stats();
-*/
+void show_prog_stats(unsigned long num_of_Is,
+	unsigned long total_num_of_timeouts,
+	unsigned long num_of_REJs, int appstatus);
 
 #endif /*USER_INTERFACE*/

@@ -40,6 +40,12 @@ struct linkLayer link_layer_data; /*contains data related to the link layer*/
 struct termios oldtio, newtio; /*termios old and new configuration*/
 //int private_tio_fd;			   /*termios file descriptor*/
 
+struct occurrences_Log occ_log;
+occurrences_Log_Ptr get_occurrences_log()
+{
+	return &occ_log;
+}
+
 app_status_type app_status;//indicates i fits transmisser or receiver
 
 int OPENED_TERMIOS = FALSE; /*indicates if termios is open. could be used in handlers if anything goes wrong*/
@@ -63,6 +69,7 @@ void timeout_alarm_handler()                   // atende alarme
 	printf("\nalarme # %d\n", timeouts_done);
 	timeouts_done++;
 	STOP = TRUE;
+	/*update occurrences log*/++occ_log.total_num_of_timeouts;
 }
 
 
@@ -88,8 +95,8 @@ void stopAlarm() {
 #define SET 0b00000111 // C se for uma trama de setup
 #define DISC 0b00001011	// C se for uma trama de disconnect
 #define UA 0b00000011 // C se for uma trama de unumbered acknowledgement
-#define RR0 0b00100001 // C se RR se R = 0, pede mensagem seguinte, com R = 1
-#define RR1 0b00000001 // C se RR se R = 1, pede mensagem seguinte, com R = 0
+#define RR0 0b00000001 // C se RR se S = 1, pede mensagem seguinte, com R = 0
+#define RR1 0b00100001 // C se RR se S = 0, pede mensagem seguinte, com R = 1
 #define REJ0 0b00000101 // C se REJ se R = 0, pede novamente mensagem com R = 0
 #define REJ1 0b00100101 // C se REJ se R = 1, pede novamente mensagem com R = 1
 #define I0 0b00000000 //C se I se S = 0
@@ -166,9 +173,6 @@ void set_basic_definitions(int timeout_in_seconds, int number_of_tries_when_fail
 	link_layer_data.numTransmissions = number_of_tries_when_failing;
 	if (port_name_was_set == NO) { strcpy(link_layer_data.port, port); port_name_was_set = YES; }
 	link_layer_data.baudRate = baudrate;
-	//link_layer.Iframe_numdatabytes = iframedatasize;
-	//link_layer_data.sequenceNumber;
-	//link_layer_data.frame;
 }
 
 int open_tio(int* tio_fd, int vtime, int vmin)
@@ -633,6 +637,8 @@ int llopen_transmitter(int fd)
 
 #endif /*LLOPEN AUXS*/
 
+// - - - LLCLOSE AUXS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#if (1)
 
 int llclose_receiver(int fd)
 {
@@ -681,7 +687,6 @@ int llclose_receiver(int fd)
 	return OK;
 }
 
-
 int llclose_transmitter(int fd)
 {
 	int res;
@@ -728,6 +733,7 @@ int llclose_transmitter(int fd)
 	return OK;
 }
 
+#endif /*LLCLOSE AUXS*/
 
 #endif//==========================================================================
 
@@ -737,6 +743,9 @@ int llclose_transmitter(int fd)
 
 int llopen(int fd, app_status_type status)
 {
+	occ_log.num_of_Is = 0;
+	occ_log.total_num_of_timeouts= 0;
+	occ_log.num_of_REJs			 = 0;
 	if (status == APP_STATUS_TRANSMITTER)
 	{
 		app_status = APP_STATUS_TRANSMITTER;
@@ -813,6 +822,7 @@ int llread(int fd, char** buffer)
 					if (validateBCC2(auxReceiveDataBuf,auxReceiveDataBuf_length)==OK)
 					{
 						NR = received_C == I0? 1:0;
+
 						--auxReceiveDataBuf_length;//leave BCC2 out of data
 						write_UorS(APP_STATUS_TRANSMITTER, MESSAGE_RR, NR, fd);
 						//note: the original pointer must be updated so a pointer to the pointer must be used
@@ -822,12 +832,16 @@ int llread(int fd, char** buffer)
 							return -1;
 						}
 						memcpy(*buffer, auxReceiveDataBuf, auxReceiveDataBuf_length);
+
+						/*update Occurrences_Log*/++occ_log.num_of_Is;
+
 						return auxReceiveDataBuf_length;
 					}
 					else
 					{
 						write_UorS(APP_STATUS_TRANSMITTER, MESSAGE_REJ, (received_C == I0 ? 0 : 1), fd);
 						state = STATE_MACHINE_START;
+						/*update Occurrences_Log*/++occ_log.num_of_REJs;
 					}
 				}
 				//RECEIVED DISC ; SEND DISC BACK
@@ -908,6 +922,9 @@ int llwrite(int fd, char * buffer, int length)
 				    
 					stopAlarm();
 					NS = NS ? 0 : 1;
+
+					/*update Occurrences_Log*/++occ_log.num_of_Is;
+
 					return num_of_writen_bytes;//QUIT = YES; break;
 				}
 				else if (received_C_type == MESSAGE_REJ)
@@ -934,7 +951,8 @@ int llwrite(int fd, char * buffer, int length)
 					DEBUG_SECTION(DEBUG_LLWRITER_REJ,
 				    printf("\nllwriter debug: received REJ"););
 					
-					//update statistics
+					/*update Occurrences_Log*/++occ_log.num_of_REJs;
+
 					break;
 				}
 				else return 0;

@@ -10,17 +10,32 @@ typedef char bool;//in case utilities is not included first...
 //basic definitions
 //===============================================================================
 
-#define MAX_FRAME_SIZE 64
-struct linkLayer {
+//#define MAX_FRAME_SIZE 64
+struct linkLayer{
 	char port[20]; /*Dispositivo /dev/ttySx, x = 0, 4*/
 	int baudRate; /*Velocidade de transmissão*/
 	unsigned int sequenceNumber; /*Número de sequência da trama: 0, 1*/
 	int timeout; /*Valor do temporizador: 1 s*/
 	 int numTransmissions; /*Número de tentativas em caso de
 								   falha*/
-	 int Iframe_numdatabytes;
+	 //int Iframe_numdatabytes;
 	//char frame[MAX_FRAME_SIZE]; /*trama*/
 };
+
+//should be relative to a single transmission
+//could be used to restore a lost conection???
+struct occurrences_Log{
+	//unsigned long total_bytes_received;
+	//int num_of_disconnections;
+	//int total_num_of_errors_found;
+
+	unsigned long num_of_Is;//sent if host(only counts when confirmation is received) | received by client
+	unsigned long total_num_of_timeouts;
+	unsigned long num_of_REJs;//received if host | sent if client
+};
+
+typedef struct occurrences_Log* occurrences_Log_Ptr;
+
 
 typedef char app_status_type;//in case utilities is not included first...
 #define APP_STATUS_TRANSMITTER		 0
@@ -53,6 +68,9 @@ int open_tio(int* tio_fd,int vtime, int vmin);//Vmin could be placed on linklaye
 @brief close conection
 */
 int close_tio(int tio_fd);
+
+//self explanatory
+occurrences_Log_Ptr get_occurrences_log();
 
 //===============================================================================
 //PROTOCOL MAIN FUNCS

@@ -32,6 +32,8 @@ struct applicationLayer {
 
 struct applicationLayer app;
 
+occurrences_Log_Ptr datalink_log;
+
 //=======================================================================
 // PROGRAM FUNCS
 //=======================================================================
@@ -127,7 +129,7 @@ void config(char baud, char recon, char timeo, int frame)
 	}
 	
 	set_basic_definitions(timeout, reconect_tries, 0, baudrate);
-
+	//missing frame
 }
 
 int testread()
@@ -136,7 +138,7 @@ int testread()
 	int rec_size = llread(app.fd, &receive);
 	
 	//catch info
-	char endchar = receive[rec_size - 1];
+	//char endchar = receive[rec_size - 1];
 	//receive[rec_size - 1] = 0;
 	printf("\n");
 	//printf("%s%c - %d", receive, endchar, rec_size);test string
@@ -173,7 +175,7 @@ int main(int argc, char** argv)
     }
 
         set_basic_definitions(3, 3, argv[1], BAUDRATE);
-    
+
     char anws=' ';
     	while (anws != 'e'){
 	   anws=main_menu(APP_STATUS_RECEIVER);
@@ -201,7 +203,11 @@ int main(int argc, char** argv)
 			break;
 		case 'd': printf("\nNOT IMPLEMENTED");//if (receiver != 0) choosePicture2Send();
 			break;
-		case 'e':printf("\nNow exiting...\n"); sleep(1);
+		case 'e':
+			datalink_log = get_occurrences_log();
+			show_prog_stats(datalink_log->num_of_Is, datalink_log->total_num_of_timeouts, datalink_log->num_of_REJs, APP_STATUS_RECEIVER);
+			break;
+		case 'f':printf("\nNow exiting...\n"); sleep(1);
 			break;
 		default: printf("\nNo valid command recognized."); sleep(1); break;
 			}
