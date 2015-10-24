@@ -13,10 +13,10 @@ typedef char bool;//in case utilities is not included first...
 #define MAX_FRAME_SIZE 64
 struct linkLayer {
 	char port[20]; /*Dispositivo /dev/ttySx, x = 0, 4*/
-	int baudRate; /*Velocidade de transmissão*/
-	unsigned int sequenceNumber; /*Número de sequência da trama: 0, 1*/
+	int baudRate; /*Velocidade de transmissÃ£o*/
+	unsigned int sequenceNumber; /*NÃºmero de sequÃªncia da trama: 0, 1*/
 	int timeout; /*Valor do temporizador: 1 s*/
-	 int numTransmissions; /*Número de tentativas em caso de
+	 int numTransmissions; /*NÃºmero de tentativas em caso de
 								   falha*/
 	 int Iframe_numdatabytes;
 	//char frame[MAX_FRAME_SIZE]; /*trama*/

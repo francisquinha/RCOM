@@ -26,7 +26,7 @@ volatile int STOP=FALSE;
 //=======================================================================
 
 struct applicationLayer {
-	int fd; /*Descritor correspondente à porta série*/
+	int fd; /*Descritor correspondente Ã  porta sÃ©rie*/
 	int status; /*TRANSMITTER 0 | RECEIVER 1*/
 };
 
@@ -40,7 +40,7 @@ int connect()
 {
       if(open_tio(&app.fd,0,0)!=OK)
     {
-      printf("\nERROR:Couldnot open terminal\n");
+      printf("\nERROR: Could not open terminal\n");
       exit(1);
     }
   
@@ -203,7 +203,7 @@ int main(int argc, char** argv)
 			break;
 		case 'e':printf("\nNow exiting...\n"); sleep(1);
 			break;
-		default: printf("\nNo valid command recognised."); sleep(1); break;
+		default: printf("\nNo valid command recognized."); sleep(1); break;
 			}
 	}
 

@@ -88,8 +88,8 @@ void stopAlarm() {
 #define SET 0b00000111 // C se for uma trama de setup
 #define DISC 0b00001011	// C se for uma trama de disconnect
 #define UA 0b00000011 // C se for uma trama de unumbered acknowledgement
-#define RR0 0b00000001 // C se RR se R = 0
-#define RR1 0b00100001 // C se RR se R = 1
+#define RR0 0b00100001 // C se RR se R = 0, pede mensagem seguinte, com R = 1
+#define RR1 0b00000001 // C se RR se R = 1, pede mensagem seguinte, com R = 0
 #define REJ0 0b00000101 // C se REJ se R = 0, pede novamente mensagem com R = 0
 #define REJ1 0b00100101 // C se REJ se R = 1, pede novamente mensagem com R = 1
 #define I0 0b00000000 //C se I se S = 0
@@ -251,8 +251,8 @@ typedef int state_machine_state;
 /*msgExpectedType SET; UA ; DISC ; RR ; I (DONT USE REJ IT WILL BE CONSIDERED WHEN USING RR)
 !!! !!! !!! IMPORTANT: AFTER REACHING TERMINAL STATES THE STATE MUST BE RESETED FROM OUTSIDE !!! !!! !!!
 
-appStatus	 indica o tipo de estado da aplicação (transmissor ou receptor)
-adressStatus indica o tipo de campo de endereço
+appStatus	 indica o tipo de estado da aplicaÃ§Ã£o (transmissor ou receptor)
+adressStatus indica o tipo de campo de endereÃ§o
 state		 o estado actual a atualizar
 msgExpectedType		 o tipo de mensaem que se esta a espera de receber (antes de receber o C)
 rcv			 o que caracter que foi lido da porta serie
@@ -359,7 +359,7 @@ int update_state_machine(app_status_type appStatus, app_status_type adressStatus
 /*buf deve entrar ja com o dobro do tamanho dos caracteres que tem
 pode ser dinamico ou nao
 data_size deve ser o tamanho efectivo ocupado
-assim poupasse processamento extra usando a soluçao em 1) ou 2) e evitasse possiveis erros de memoria
+assim poupasse processamento extra usando a soluÃ§ao em 1) ou 2) e evitasse possiveis erros de memoria
 */
 int apply_stuffing(char* buf, int /*bufSize*/data_size)
 {
@@ -901,7 +901,7 @@ int llwrite(int fd, char * buffer, int length)
 				      //update statistics
 				      
 				      DEBUG_SECTION(DEBUG_LLWRITER_BADRR_R,
-				    printf("\nllwriter debug: received a RR which C had  not expected R"););
+				    printf("\nllwriter debug: received a RR which C had not expected R"););
 
 				      break;
 				    }
