@@ -177,7 +177,7 @@ int main(int argc, char** argv)
         set_basic_definitions(3, 3, argv[1], BAUDRATE);
 
     char anws=' ';
-    	while (anws != 'e'){
+    	while (anws != 'f'){
 	   anws=main_menu(APP_STATUS_RECEIVER);
 	  		switch (anws){
 

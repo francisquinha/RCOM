@@ -153,7 +153,7 @@ void show_prog_stats(unsigned long num_of_Is,
 
 	printf("\n- - - - - - - - - - - - - - -\nPress Any key to return to pevious menu...\n");
 
-	char w8[1];
-	fgets(w8, 1, stdin);
+	char get[50];
+	gets(get);
 }
 
