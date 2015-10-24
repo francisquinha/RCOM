@@ -4,6 +4,7 @@
 #include <string.h>
 #include "utilities.h"
 #include "user_interface.h"
+#include "FileFuncs.h"
 
 //should have a start bigger than zero
 int getIntPositiveRange(int start, int end) {
@@ -52,7 +53,8 @@ int main_menu(bool receiver)
 	printf("\nb) Try to re-establish lost conection");
 	printf("\nc) Change configurations");
 
-	if (receiver != 0) printf("\nd) Choose picture to send");
+	if (receiver != 0) printf("\nd) Choose path to save picture");
+	else printf("\nd) Choose picture to send");
 
 	printf("\ne) Show Ocurrences Log");
 
@@ -135,20 +137,20 @@ void show_progress(char* msg, Emission_data* data)
 
 void show_prog_stats(unsigned long num_of_Is,
 	unsigned long total_num_of_timeouts,
-	unsigned long num_of_REJs,int appstatus)
+	unsigned long num_of_REJs, int appstatus)
 {
 	system("clear");
 
-	printf("\n- - - Ocurrences log - - -");
+	printf("- - - Ocurrences log - - -");
 
-	if (appstatus/*receiver*/) 
+	if (appstatus/*receiver*/)
 		printf("\nNumber of Is received: %lu", num_of_Is);
 	else /*transmitter*/ printf("\nNumber of I's sent (RR confirmed): %lu", num_of_Is);
 
 	printf("\nTotal number of timeouts: %lu", total_num_of_timeouts);
 
 	if (appstatus/*receiver*/)
-	printf("\nTotak number of REJs received: %lu", num_of_REJs);
+		printf("\nTotak number of REJs received: %lu", num_of_REJs);
 	else /*transmitter*/printf("\nTotak number of REJs sent: %lu", num_of_REJs);
 
 	printf("\n- - - - - - - - - - - - - - -\nPress Any key to return to pevious menu...\n");
@@ -157,3 +159,31 @@ void show_prog_stats(unsigned long num_of_Is,
 	gets(get);
 }
 
+
+
+long selectNload_image(char** image_buffer)
+{
+	system("clear");
+	printf("Please input image file path (relative or not):\n>");
+
+	char get_path[100];
+	gets(get_path);
+	char* image_path;
+	while (TRUE){
+		image_path = realpath(get_path, NULL);
+		if (image_path != NULL) break;
+		printf("\nInvalid path/file. Please choose another.\n");
+		gets(get_path);
+	}
+
+	long imageSize;
+	if ((imageSize = getFileBytes(image_path, image_buffer)) < 0)
+	{
+		printf("\nFailed to load image.\n");
+		return -1;
+	}
+	printf("\nImage sucessfully loaded.\n");
+	sleep(2);
+
+	return imageSize;
+}

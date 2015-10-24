@@ -767,7 +767,7 @@ int llopen(int fd, app_status_type status)
 #define DEBUG_LLREAD_WARN_UNEXPECTED_MSG 1
 #define LLREAD_AUXREADBUFFER_SIZE 128
 #define LLREAD_AUXDATABUFFER_SIZE 500
-//buffer ust be dynamic!
+//buffer must be dynamic!
 int llread(int fd, char** buffer)
 {
 	STOP = FALSE;/*doesn't do anything right now. could define timeout later 4 receiver*/

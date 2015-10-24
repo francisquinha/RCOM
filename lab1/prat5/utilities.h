@@ -1,3 +1,6 @@
+#ifndef UTILITIES
+#define UTILITIES
+
 // section: should be a definition created by the programmer that must be equal to zero to avoid running the debug code.
 
 #define DEBUG_SECTION(SECT,CODE) {\
@@ -29,3 +32,4 @@ typedef int bool;
 (byte & 0x02 ? 1 : 0),\
 (byte & 0x01 ? 1 : 0)
 
+#endif /* UTILITIES */

@@ -26,6 +26,34 @@ struct applicationLayer {
 	int status; /*TRANSMITTER 0 | RECEIVER 1*/
 };
 
+bool image_loaded=NO;
+char* image_bytes;
+long image_bytes_length;
+
+
+void testfunc()
+{
+	set_basic_definitions(3, 3, argv[1], BAUDRATE);
+	if (open_tio(&app.fd, 0, 0) != OK)
+	{
+		printf("\nERROR:Couldnot open terminal\n");
+		exit(1);
+	}
+
+	if (llopen(app.fd, APP_STATUS_TRANSMITTER) == 0)
+	{
+		sleep(1);
+		char samplemsg[5] =//"abcde";
+		{ 0b01111101, 0b01111101, 0b01111110, 0b01111110, 0b01111101 };
+
+		if (llwrite(app.fd, samplemsg, 5) > 0) {
+			printf("\nDOIN it");
+			llclose(app.fd);
+		}
+
+		close_tio(app.fd);
+}
+
 int main(int argc, char** argv)
 {
   struct applicationLayer app;
@@ -43,27 +71,7 @@ int main(int argc, char** argv)
     Open serial port device for reading and writing and not as controlling tty
     because we don't want to get killed if linenoise sends CTRL-C.
   */
-   
-    set_basic_definitions(3, 3, argv[1], BAUDRATE);
-	if (open_tio(&app.fd, 0, 0) != OK)
-    {
-      printf("\nERROR:Couldnot open terminal\n");
-      exit(1);
-    }
-    
-	if (llopen(app.fd, APP_STATUS_TRANSMITTER) == 0)
-	{
-		sleep(1);
-		char samplemsg[5] =//"abcde";
-		{ 0b01111101, 0b01111101, 0b01111110, 0b01111110, 0b01111101 };
 
-		if (llwrite(app.fd, samplemsg, 5) > 0) {
-			printf("\nDOIN it");
-			llclose(app.fd);
-		}
-
-		close_tio(app.fd);
-	}
 
     return 0;
 }

@@ -26,4 +26,7 @@ void show_prog_stats(unsigned long num_of_Is,
 	unsigned long total_num_of_timeouts,
 	unsigned long num_of_REJs, int appstatus);
 
+long selectNload_image(char** image_buffer);
+
+
 #endif /*USER_INTERFACE*/
