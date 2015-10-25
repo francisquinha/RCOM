@@ -20,8 +20,8 @@
 #define DEBUG_READ_BYTES 	1
 int total_read; /*variable used for debug purposes, increment when reading bytes*/
 
-//send a bcc eith 0 to tests the answer when errors occur
-bool gen0bcc = TRUE;
+//send a bcc with 0 to tests the answer when errors occur
+bool gen0bcc = FALSE;
 #define DEBUG_REJ_WITHWRONG_BCCS 	1
 
 #define DEBUG_PRINT_SECTION_NUM 1
@@ -247,9 +247,6 @@ typedef int state_machine_state;
 #define STATE_MACHINE_STOP			6
 #define STATE_MACHINE_ESCAPE		7
 /*
-#define STATE_MACHINE_INFO_RCV		9
-#define STATE_MACHINE_C_RCV_NACK	13
-#define STATE_MACHINE_NOTVALID_I	14*/
 
 /*TODO !!! FALTA  anotar contagem de erros para as estatisticas e/ou debug*/
 /*msgExpectedType SET; UA ; DISC ; RR ; I (DONT USE REJ IT WILL BE CONSIDERED WHEN USING RR)
@@ -262,12 +259,11 @@ msgExpectedType		 o tipo de mensaem que se esta a espera de receber (antes de re
 rcv			 o que caracter que foi lido da porta serie
 
 SO VAI TRANSITAR SE APANHAR DO TIPO ESPERADO,
-EXCEPTO O READ Q PODE APANHAR SETS
+EXCEPTO O READ Q PODE APANHAR SETS OU DISKS
 E O WRITE PODE APANHAR REJ MSM ESPERANDO RRs
 
 use received_C_type to confirm the type of packet received or check S/R for possible missing packet
 */
-//int R_S = 1;//to be used as the S or R bit, not yet implemented
 message_type received_C_type = -1;//not sure if the most correct approach but simplifies the state machine a lot, indicates type of message received and is reused outside ethod when _STOP state is reached
 char received_C=0;
 #define DEBUG_LLO_STATE_MACHINE 1

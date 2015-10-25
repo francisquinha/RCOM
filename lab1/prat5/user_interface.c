@@ -15,7 +15,8 @@ int getIntPositiveRange(int start, int end) {
 	while (!done) {
 		printf("(%d,%d)", start, end);
 
-		gets(get);
+		/*clean buf*/char c; while ((c = getchar()) != '\n' && c != EOF);
+		fgets(get, 50, stdin); //gets(get);
 		num = atoi(get);
 
 		if (num != 0 && start <= num && num <= end)
@@ -28,9 +29,10 @@ int getIntPositiveRange(int start, int end) {
 
 char getAnswer(int numOfChoices)
 {
-	char get[200];
+	char get[2];
 	do {
-		gets(get);
+		/*clean buf*/char c; while ((c = getchar()) != '\n' && c != EOF);
+		fgets(get, 2, stdin); //gets(get);
 		if (get[0] < 'a' || get[0] >= 'a' + numOfChoices || get[1] != 0)
 			printf("\nOption not recognized, please select again:");
 
@@ -151,12 +153,13 @@ void show_prog_stats(unsigned long num_of_Is,
 
 	if (appstatus/*receiver*/)
 		printf("\nTotak number of REJs received: %lu", num_of_REJs);
-	else /*transmitter*/printf("\nTotak number of REJs sent: %lu", num_of_REJs);
+	else /*transmitter*/printf("\nTotal number of REJs sent: %lu", num_of_REJs);
 
 	printf("\n- - - - - - - - - - - - - - -\nPress Any key to return to pevious menu...\n");
 
-	char get[50];
-	gets(get);
+	char get[2];
+	/*clean buf*/char c; while ((c = getchar()) != '\n' && c != EOF);
+	fgets(get, 2, stdin); //gets(get);
 }
 
 
@@ -167,13 +170,15 @@ long selectNload_image(char** image_buffer)
 	printf("Please input image file path (relative or not):\n>");
 
 	char get_path[100];
-	gets(get_path);
+	/*clean buf*/char c; while ((c = getchar()) != '\n' && c != EOF);
+	fgets(get_path, 100, stdin);//gets(get_path);
 	char* image_path;
 	while (TRUE){
 		image_path = realpath(get_path, NULL);
 		if (image_path != NULL) break;
 		printf("\nInvalid path/file. Please choose another.\n");
-		gets(get_path);
+		/*clean buf*/char c; while ((c = getchar()) != '\n' && c != EOF);
+		fgets(get_path, 100, stdin); //gets(get_path);
 	}
 
 	long imageSize;

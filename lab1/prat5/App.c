@@ -172,7 +172,7 @@ int testwriter()
 	*/
 	//if (llopen(app.fd, APP_STATUS_TRANSMITTER) == 0)
 	//{
-	sleep(1);
+	//sleep(1);
 	char samplemsg[5] =//"abcde";
 	{ 0b01111101, 0b01111101, 0b01111110, 0b01111110, 0b01111101 };
 
@@ -226,11 +226,10 @@ int main(int argc, char** argv)
 					llclose(app.fd);
 					//if (llclose() == OK)
 					//{
-					close_tio(app.fd);
-					conection_open = FALSE;
-					//}
-					sleep(9);
 				}
+				close_tio(app.fd);
+				conection_open = FALSE;
+				sleep(9);
 			}
 			break;
 		case 'b':printf("\nNOT IMPLEMENTED");//reconnect();
