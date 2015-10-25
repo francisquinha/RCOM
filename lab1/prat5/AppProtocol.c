@@ -46,12 +46,7 @@ int update_received_data(char* data_buffer, int data_buffer_length, char* newdat
 #define MAX_INFO_P 65540 /* maximum size of info packet: 1 byte for C, 1 byte for N, 2 bytes for L2 and L1, 255 * 256 + 255 bytes for info */
 #define MAX_TRY 3
 
-struct applicationLayer {
-	int fd; /*Descritor correspondente à porta série*/
-	int status; /*TRANSMITTER 0 | RECEIVER 1*/
-};
-
-int getControlPacket(char type, unsigned int size, unsigned char nameSize, char *name, char *controlPacket) {
+int getControlPacket(char control, unsigned int size, unsigned char nameSize, char *name, char *controlPacket) {
 	char fileSize[32];
 	char n = 0;
 	while (size != 0) {
@@ -59,7 +54,7 @@ int getControlPacket(char type, unsigned int size, unsigned char nameSize, char 
 		size >>= 8; // next byte
 	    n++;
 	}
-	controlPacket[0] = ((type == START) ? CS : CE);
+	controlPacket[0] = ((control == START) ? CS : CE);
 	controlPacket[1] = TSIZE;
 	controlPacket[2] = n;
 	unsigned int i;
@@ -144,14 +139,16 @@ int sendFile(int fd, unsigned char fileNameSize, char *fileName) {
 	else return -1;	
 }
 
-int receiveControlPacket(int fd, char *controlPacket, int *sizeControlPacket)
-{
-	return OK;
+int receiveControlPacket(int fd, char *controlPacket, int *sizeControlPacket) {
+	sizeControlPacket = llread(fd, &controlPacket);
+	if (sizeControlPacket > 0) return OK;
+	else return -1;
 }
 
-int receiveInfoPacket(int fd, char *infoPacket, int *sizeInfoPacket)
-{
-	return OK;
+int receiveInfoPacket(int fd, char *infoPacket, int *sizeInfoPacket) {
+	sizeInfoPacket = llread(fd, &infoPacket);
+	if (sizeInfoPacket > 0) return OK;
+	else return -1;
 }
 
 int receiveFile(int fd) {
@@ -166,43 +163,67 @@ int receiveFile(int fd) {
 	char fileName[255];
 	unsigned char fileNameSize;
 	unsigned int fileSize;
-	FILE *file;
-	file = fopen(fileName, "w");
-	
-	sizeControlPacket = getControlPacket(START, fileSize, fileNameSize, fileName, controlPacket); // START control packet
-	if (receiveControlPacket(fd, controlPacket, sizeControlPacket) == OK) {
-		int fileChar;
-		while (1) {
-			infoSize = 0;
-			while ((fileChar = fgetc(file)) != EOF && infoSize < maxInfoSize) {
-				info[infoSize] = (char) fileChar;
-				infoSize++;
+	if (receiveControlPacket(fd, controlPacket, &sizeControlPacket) == OK) {
+		if (controlPacket[0] == CS) {
+			if (controlPacket[1] == TSIZE) {
+				unsigned char sizeFileSize = controlPacket[2];
+				fileSize = 0;
+				unsigned int multiply = 1;
+				unsigned int i;
+				for (i = 0; i < sizeFileSize; i++) {
+					fileSize += (unsigned int) controlPacket[3 + i] * multiply;
+					multiply *= 256;
+				}
+				if (controlPacket[3 + sizeFileSize] == TNAME) {
+					fileNameSize = controlPacket[4 + sizeFileSize];
+					for (i = 0; i < fileNameSize; i++) 
+						fileName[i] = controlPacket[5 + sizeFileSize + i];
+					FILE *file;
+					file = fopen(fileName, "w");
+					while (receiveInfoPacket(fd, infoPacket, &sizeInfoPacket) == OK) {
+						if (infoPacket[0] == CD) {
+							if (infoPacket[1] == N) {
+								infoSize = infoPacket[2] * 256 + infoPacket[3];
+								for (i = 0; i < infoSize; i++)
+									fprintf(file, infoPacket[4 + i]);
+								N++;
+							}
+							else return -1;
+						}
+						else if (infoPacket[0] = CE) {
+							fclose(file);
+							if (infoPacket[1] == TSIZE) {
+								if (infoPacket[2] == sizeFileSize) {
+									unsigned int finalFileSize = 0;
+									multiply = 1;
+									for (i = 0; i < sizeFileSize; i++) {
+										finalFileSize += (unsigned int) infoPacket[3 + i] * multiply;
+										multiply *= 256;
+									}
+									if (finalFileSize = fileSize) {
+										if (infoPacket[3 + sizeFileSize] == TNAME) {
+											if (infoPacket[4 + sizeFileSize] == fileNameSize) {
+												for (i = 0; i < fileNameSize; i++) 
+													if (infoPacket[5 + sizeFileSize + i] != fileName[i]) return -1;
+												return OK;
+											}
+											else return -1;
+										}
+										else return -1;
+									}
+									else return -1;
+								}
+								else return -1;
+							}
+							else return -1;
+						}
+					}
+				}
+				else return -1;
 			}
-			if (infoSize == 0) break;
-			sizeInfoPacket = getInfoPacket(N, infoSize, info, infoPacket);
-			if (sendInfoPacket(fd, infoPacket, sizeInfoPacket) == OK) N++;
-			else {
-				fclose(file);
-				return -1;
-			}
+			else return -1;			
 		}
-		controlPacket[0] = CE; // END control packet
-		if (sendControlPacket(fd, controlPacket, sizeControlPacket) == OK) {
-			fclose(file);
-			return OK;
-		}
-		else {
-			fclose(file);
-			return -1;
-		}
+		else return -1;
 	}
-	else return -1;	
-	
-	char *receive;
-	int rec_size = llread(app.fd, &receive);
-	
-	FILE *file;
-	file = fopen(fileName, "r");
-	
-	
+	else return -1;
 }
