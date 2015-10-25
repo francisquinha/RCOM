@@ -8,11 +8,11 @@
 #define TNAME 0b00000001 // type para pacote de controlo no caso de ser nome do ficheiro
 #define START 1
 #define END 2
-#define L2 255
-#define L1 255
+#define L2 0
+#define L1 2
 #define MAX_CTRL_P 264 /* maximum size of control packet: 1 byte for C, 2 bytes for T and L, 4 bytes for size, 2 bytes for T and L, 255 bytes for name */
 #define MAX_INFO_P 65540 /* maximum size of info packet: 1 byte for C, 1 byte for N, 2 bytes for L2 and L1, 255 * 256 + 255 bytes for info */
-#define MAX_TRY 3
+#define MAX_TRY 1
 
 int getControlPacket(char control, unsigned int size, unsigned char nameSize, char *name, char *controlPacket);
 	
@@ -24,9 +24,7 @@ int sendInfoPacket(int fd, char *infoPacket, int sizeInfoPacket);
 
 int sendFile(int fd, unsigned char fileNameSize, char *fileName);
 
-int receiveControlPacket(int fd, char *controlPacket, int *sizeControlPacket);
-
-int receiveInfoPacket(int fd, char *infoPacket, int *sizeInfoPacket);
+int receivePacket(int fd, char **packet, int *sizePacket);
 
 int receiveFile(int fd);
 

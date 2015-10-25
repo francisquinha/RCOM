@@ -138,6 +138,17 @@ void config(char baud, char recon, char timeo, int frame)
 	//missing frame
 }
 
+int sendImage() {
+	char fileName[10] = "apple.txt";
+	sendFile(app.fd, 10, fileName);
+	return OK;
+}
+
+int receiveImage() {
+	receiveFile(app.fd);
+	return OK;
+}
+
 int testread()
 {
 	char *receive;
@@ -225,7 +236,7 @@ int main(int argc, char** argv)
 				conection_open = TRUE;
 				if (
 					( app.status == APP_STATUS_TRANSMITTER ?
-					testwriter() : testread()) == 0)
+					sendImage() : receiveImage()) == 0)
 				{
 					llclose(app.fd);
 					//if (llclose() == OK)

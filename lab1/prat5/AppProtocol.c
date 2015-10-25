@@ -51,7 +51,7 @@ int getControlPacket(char control, unsigned int size, unsigned char nameSize, ch
 	for (i = 0; i < n; i++) controlPacket[3 + i] = fileSize[i];		
 	controlPacket[3 + n] = TNAME;
 	controlPacket[4 + n] = nameSize;
-	for (i = 0; i < nameSize; i++) controlPacket[5 + n + i] = fileSize[i];		
+	for (i = 0; i < nameSize; i++) controlPacket[5 + n + i] = name[i];		
 	return 5 + n + nameSize; 	// 1 byte for C, 2 bytes for T and L, n bytes for size, 2 bytes for T and L, nameSize bytes for name
 }
 	
@@ -92,11 +92,10 @@ int sendFile(int fd, unsigned char fileNameSize, char *fileName) {
 	unsigned int infoSize;
 	unsigned int maxInfoSize = L2 * 256 + L1;
 	unsigned char N = 0;
-//	char fileName[255];
-//	unsigned char fileNameSize = getFileName(fileName);		// get file name from user
 	struct stat st;
 	stat(fileName, &st);
 	unsigned int fileSize = st.st_size;		// get file size from file statistics
+	printf("File size: %d\n", fileSize);
 	FILE *file;
 	file = fopen(fileName, "r");
 	sizeControlPacket = getControlPacket(START, fileSize, fileNameSize, fileName, controlPacket); // START control packet
@@ -129,70 +128,64 @@ int sendFile(int fd, unsigned char fileNameSize, char *fileName) {
 	else return -1;	
 }
 
-int receiveControlPacket(int fd, char *controlPacket, int *sizeControlPacket) {
-	*sizeControlPacket = llread(fd, &controlPacket);
-	if (*sizeControlPacket > 0) return OK;
-	else return -1;
-}
-
-int receiveInfoPacket(int fd, char *infoPacket, int *sizeInfoPacket) {
-	*sizeInfoPacket = llread(fd, &infoPacket);
-	if (*sizeInfoPacket > 0) return OK;
+int receivePacket(int fd, char **packet, int *sizePacket) {
+	*sizePacket = llread(fd, packet);
+	if (*sizePacket > 0) return OK;
 	else return -1;
 }
 
 int receiveFile(int fd) {
-	char controlPacket[MAX_CTRL_P];
-	int sizeControlPacket;
-	char infoPacket[MAX_INFO_P];
-	int sizeInfoPacket;
+	char* packet;
+	int sizePacket;
 	unsigned int infoSize;
 	unsigned char N = 0;
 	char fileName[255];
 	unsigned char fileNameSize;
 	unsigned int fileSize;
-	if (receiveControlPacket(fd, controlPacket, &sizeControlPacket) == OK) {
-		if (controlPacket[0] == CS) {
-			if (controlPacket[1] == TSIZE) {
-				unsigned char sizeFileSize = controlPacket[2];
+	if (receivePacket(fd, &packet, &sizePacket) == OK) {
+		if (packet[0] == CS) {
+			if (packet[1] == TSIZE) {
+				unsigned char sizeFileSize = packet[2];
 				fileSize = 0;
 				unsigned int multiply = 1;
 				unsigned int i;
 				for (i = 0; i < sizeFileSize; i++) {
-					fileSize += (unsigned int) controlPacket[3 + i] * multiply;
+					fileSize += (unsigned int) packet[3 + i] * multiply;
 					multiply *= 256;
 				}
-				if (controlPacket[3 + sizeFileSize] == TNAME) {
-					fileNameSize = controlPacket[4 + sizeFileSize];
+				if (packet[3 + sizeFileSize] == TNAME) {
+					fileNameSize = packet[4 + sizeFileSize];
 					for (i = 0; i < fileNameSize; i++) 
-						fileName[i] = controlPacket[5 + sizeFileSize + i];
+						fileName[i] = packet[5 + sizeFileSize + i];
 					FILE *file;
-					file = fopen(fileName, "a");
-					while (receiveInfoPacket(fd, infoPacket, &sizeInfoPacket) == OK) {
-						if (infoPacket[0] == CD) {
-							if (infoPacket[1] == N) {
-								infoSize = infoPacket[2] * 256 + infoPacket[3];
+					file = fopen(fileName, "w"); // new clean file
+					fclose(file);
+					file = fopen(fileName, "a"); // append
+					while (receivePacket(fd, &packet, &sizePacket) == OK) {
+						if (packet[0] == CD) {
+							if (packet[1] == N) {
+								infoSize = packet[2] * 256 + packet[3];
 								for (i = 0; i < infoSize; i++)
-									fputc((int) infoPacket[4 + i], file);
+									fputc((int) packet[4 + i], file);
 								N++;
 							}
 							else return -1;
 						}
-						else if (infoPacket[0] == CE) {
+						else if (packet[0] == CE) {
 							fclose(file);
-							if (infoPacket[1] == TSIZE) {
-								if (infoPacket[2] == sizeFileSize) {
+							if (packet[1] == TSIZE) {
+								if (packet[2] == sizeFileSize) {
 									unsigned int finalFileSize = 0;
 									multiply = 1;
 									for (i = 0; i < sizeFileSize; i++) {
-										finalFileSize += (unsigned int) infoPacket[3 + i] * multiply;
+										finalFileSize += (unsigned int) packet[3 + i] * multiply;
 										multiply *= 256;
 									}
 									if (finalFileSize == fileSize) {
-										if (infoPacket[3 + sizeFileSize] == TNAME) {
-											if (infoPacket[4 + sizeFileSize] == fileNameSize) {
+										if (packet[3 + sizeFileSize] == TNAME) {
+											if (packet[4 + sizeFileSize] == fileNameSize) {
 												for (i = 0; i < fileNameSize; i++) 
-													if (infoPacket[5 + sizeFileSize + i] != fileName[i]) return -1;
+													if (packet[5 + sizeFileSize + i] != fileName[i]) return -1;
 												return OK;
 											}
 											else return -1;
