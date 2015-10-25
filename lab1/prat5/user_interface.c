@@ -15,8 +15,9 @@ int getIntPositiveRange(int start, int end) {
 	while (!done) {
 		printf("(%d,%d)", start, end);
 
-		/*clean buf*/char c; while ((c = getchar()) != '\n' && c != EOF);
-		fgets(get, 50, stdin); //gets(get);
+		gets(get);
+		//fgets(get, 50, stdin); 
+		///*clean buf*/char c; while ((c = getchar()) != '\n' && c != EOF);
 		num = atoi(get);
 
 		if (num != 0 && start <= num && num <= end)
@@ -29,10 +30,11 @@ int getIntPositiveRange(int start, int end) {
 
 char getAnswer(int numOfChoices)
 {
-	char get[2];
+	char get[20];
 	do {
-		/*clean buf*/char c; while ((c = getchar()) != '\n' && c != EOF);
-		fgets(get, 2, stdin); //gets(get);
+		gets(get);
+		//fgets(get, 2, stdin); 
+		///*clean buf*/char c; while ((c = getchar()) != '\n' && c != EOF);
 		if (get[0] < 'a' || get[0] >= 'a' + numOfChoices || get[1] != 0)
 			printf("\nOption not recognized, please select again:");
 
@@ -41,7 +43,7 @@ char getAnswer(int numOfChoices)
 	return get[0];
 }
 
-int main_menu(bool receiver)
+char main_menu(bool receiver)
 {
 	system("clear");
 
@@ -155,11 +157,13 @@ void show_prog_stats(unsigned long num_of_Is,
 		printf("\nTotak number of REJs received: %lu", num_of_REJs);
 	else /*transmitter*/printf("\nTotal number of REJs sent: %lu", num_of_REJs);
 
-	printf("\n- - - - - - - - - - - - - - -\nPress Any key to return to pevious menu...\n");
+	printf("\n- - - - - - - - - - - - - - -\nPress Enter key to return to pevious menu...\n");
 
-	char get[2];
-	/*clean buf*/char c; while ((c = getchar()) != '\n' && c != EOF);
-	fgets(get, 2, stdin); //gets(get);
+	char get[20];
+
+	gets(get);
+	//fgets(get, 2, stdin); 
+	///*clean buf*/char c; while ((c = getchar()) != '\n' && c != EOF);
 }
 
 
@@ -170,15 +174,20 @@ long selectNload_image(char** image_buffer)
 	printf("Please input image file path (relative or not):\n>");
 
 	char get_path[100];
-	/*clean buf*/char c; while ((c = getchar()) != '\n' && c != EOF);
-	fgets(get_path, 100, stdin);//gets(get_path);
+
+	gets(get_path);
+	//fgets(get_path, 100, stdin);
+	///*clean buf*/char c; while ((c = getchar()) != '\n' && c != EOF);
+
 	char* image_path;
 	while (TRUE){
 		image_path = realpath(get_path, NULL);
 		if (image_path != NULL) break;
 		printf("\nInvalid path/file. Please choose another.\n");
-		/*clean buf*/char c; while ((c = getchar()) != '\n' && c != EOF);
-		fgets(get_path, 100, stdin); //gets(get_path);
+
+		gets(get_path);
+		//fgets(get_path, 100, stdin); 
+		///*clean buf*/char c; while ((c = getchar()) != '\n' && c != EOF);
 	}
 
 	long imageSize;
