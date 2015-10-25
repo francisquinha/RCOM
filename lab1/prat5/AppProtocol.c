@@ -44,7 +44,7 @@ int update_received_data(char* data_buffer, int data_buffer_length, char* newdat
 #define L1 255
 #define MAX_CTRL_P 264 /* maximum size of control packet: 1 byte for C, 2 bytes for T and L, 4 bytes for size, 2 bytes for T and L, 255 bytes for name */
 #define MAX_INFO_P 65540 /* maximum size of info packet: 1 byte for C, 1 byte for N, 2 bytes for L2 and L1, 255 * 256 + 255 bytes for info */
-
+#define MAX_TRY 3
 
 struct applicationLayer {
 	int fd; /*Descritor correspondente à porta série*/
@@ -81,16 +81,24 @@ int getInfoPacket(unsigned char N, unsigned int infoSize, char *info, char *info
 }
 
 int sendControlPacket(int fd, char *controlPacket, int sizeControlPacket) {
-	if (llwrite(fd, controlPacket, sizeControlPacket)) > 0) return OK;
+	unsigned char try = 0;
+	while (try < MAX_TRY) {
+		if (llwrite(fd, controlPacket, sizeControlPacket)) > 0) return OK;
+		try++;		
+	}
 	return -1;
 }
 
 int sendInfoPacket(int fd, char *InfoPacket, int sizeInfoPacket) {
-	if (llwrite(fd, infoPacket, sizeInfoPacket)) > 0) return OK;
+	unsigned char try = 0;
+	while (try < MAX_TRY) {
+		if (llwrite(fd, infoPacket, sizeInfoPacket)) > 0) return OK;
+		try++;		
+	}
 	return -1;
 }
 
-int sendFile(int fd) {
+int sendFile(int fd, unsigned char fileNameSize, char *fileName) {
 	char controlPacket[MAX_CTRL_P];
 	int sizeControlPacket;
 	char infoPacket[MAX_INFO_P];
@@ -99,15 +107,15 @@ int sendFile(int fd) {
 	unsigned int infoSize;
 	unsigned int maxInfoSize = L2 * 256 + L1;
 	unsigned char N = 0;
-	char fileName[255];
-	unsigned char fileNameSize = getFileName(fileName);		// get file name from user
+//	char fileName[255];
+//	unsigned char fileNameSize = getFileName(fileName);		// get file name from user
 	struct stat st;
 	stat(fileName, &st);
 	unsigned int fileSize = st.st_size;		// get file size from file statistics
-	sizeControlPacket = getControlPacket(START, fileSize, fileNameSize, fileName, controlPacket);
+	FILE *file;
+	file = fopen(fileName, "r");
+	sizeControlPacket = getControlPacket(START, fileSize, fileNameSize, fileName, controlPacket); // START control packet
 	if (sendControlPacket(fd, controlPacket, sizeControlPacket) == OK) {
-		FILE *file;
-		file=fopen(fileName, "r");
 		int fileChar;
 		while (1) {
 			infoSize = 0;
@@ -123,7 +131,7 @@ int sendFile(int fd) {
 				return -1;
 			}
 		}
-		controlPacket[0] = CE;
+		controlPacket[0] = CE; // END control packet
 		if (sendControlPacket(fd, controlPacket, sizeControlPacket) == OK) {
 			fclose(file);
 			return OK;
@@ -136,14 +144,65 @@ int sendFile(int fd) {
 	else return -1;	
 }
 
-
-
-int receiveControlPacket()
+int receiveControlPacket(int fd, char *controlPacket, int *sizeControlPacket)
 {
 	return OK;
 }
 
-int receiveInfoPacket()
+int receiveInfoPacket(int fd, char *infoPacket, int *sizeInfoPacket)
 {
 	return OK;
+}
+
+int receiveFile(int fd) {
+	char controlPacket[MAX_CTRL_P];
+	int sizeControlPacket;
+	char infoPacket[MAX_INFO_P];
+	int sizeInfoPacket;
+	char info[L2 * 256 + L1]; 		// maximum size of info
+	unsigned int infoSize;
+	unsigned int maxInfoSize = L2 * 256 + L1;
+	unsigned char N = 0;
+	char fileName[255];
+	unsigned char fileNameSize;
+	unsigned int fileSize;
+	FILE *file;
+	file = fopen(fileName, "w");
+	
+	sizeControlPacket = getControlPacket(START, fileSize, fileNameSize, fileName, controlPacket); // START control packet
+	if (receiveControlPacket(fd, controlPacket, sizeControlPacket) == OK) {
+		int fileChar;
+		while (1) {
+			infoSize = 0;
+			while ((fileChar = fgetc(file)) != EOF && infoSize < maxInfoSize) {
+				info[infoSize] = (char) fileChar;
+				infoSize++;
+			}
+			if (infoSize == 0) break;
+			sizeInfoPacket = getInfoPacket(N, infoSize, info, infoPacket);
+			if (sendInfoPacket(fd, infoPacket, sizeInfoPacket) == OK) N++;
+			else {
+				fclose(file);
+				return -1;
+			}
+		}
+		controlPacket[0] = CE; // END control packet
+		if (sendControlPacket(fd, controlPacket, sizeControlPacket) == OK) {
+			fclose(file);
+			return OK;
+		}
+		else {
+			fclose(file);
+			return -1;
+		}
+	}
+	else return -1;	
+	
+	char *receive;
+	int rec_size = llread(app.fd, &receive);
+	
+	FILE *file;
+	file = fopen(fileName, "r");
+	
+	
 }
