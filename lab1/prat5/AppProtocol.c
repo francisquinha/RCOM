@@ -1,3 +1,5 @@
+#include <sys/stat.h>
+
 #include "AppProtocol.h"
 //faltam includes
 
@@ -38,8 +40,11 @@ int update_received_data(char* data_buffer, int data_buffer_length, char* newdat
 #define TNAME 0b00000001 // type para pacote de controlo no caso de ser nome do ficheiro
 #define START 1
 #define END 2
-#define L2
-#define L1
+#define L2 255
+#define L1 255
+#define MAX_CTRL_P 264 /* maximum size of control packet: 1 byte for C, 2 bytes for T and L, 4 bytes for size, 2 bytes for T and L, 255 bytes for name */
+#define MAX_INFO_P 65540 /* maximum size of info packet: 1 byte for C, 1 byte for N, 2 bytes for L2 and L1, 255 * 256 + 255 bytes for info */
+
 
 struct applicationLayer {
 	int fd; /*Descritor correspondente à porta série*/
@@ -65,13 +70,13 @@ int getControlPacket(char type, unsigned int size, unsigned char nameSize, char 
 	return 5 + n + nameSize; 	// 1 byte for C, 2 bytes for T and L, n bytes for size, 2 bytes for T and L, nameSize bytes for name
 }
 	
-int getInfoPacket(unsigned char N, char *info, char *infoPacket) {
+int getInfoPacket(unsigned char N, unsigned int infoSize, char *info, char *infoPacket) {
 	infoPacket[0] = CD;
 	infoPacket[1] = N;
-	infoPacket[2] = L2;			// size of info = L2 * 256 + L1
-	infoPacket[3] = L1;
+	infoPacket[2] = infoSize / 256;
+	infoPacket[3] = infoSize % 256;
 	unsigned int i;
-	for (i = 0; i < L2 * 256 + L1; i++) infoPacket[4 + i] = info[i];		
+	for (i = 0; i < infoSize; i++) infoPacket[4 + i] = info[i];		
 	return 4 + L2 * 256 + L1;	// 1 byte for C, 1 byte for N, 2 bytes for L2 and L1, L2 * 256 + L1 bytes for info
 }
 
@@ -80,22 +85,55 @@ int sendControlPacket(int fd, char *controlPacket, int sizeControlPacket) {
 	return -1;
 }
 
-int sendInfoPacket() {
-	return OK;
+int sendInfoPacket(int fd, char *InfoPacket, int sizeInfoPacket) {
+	if (llwrite(fd, infoPacket, sizeInfoPacket)) > 0) return OK;
+	return -1;
 }
 
 int sendFile(int fd) {
-	char controlPacket[264]; /* maximum size of control packet: 1 byte for C, 2 bytes for T and L, 4 bytes for size, 2 bytes for T and L, 255 bytes for name */
+	char controlPacket[MAX_CTRL_P];
 	int sizeControlPacket;
-	char infoPacket[65540]; /* maximum size of info packet: 1 byte for C, 1 byte for N, 2 bytes for L2 and L1, 255 * 256 + 255 bytes for info */
-	int sizeControlPacket;
-	unsigned int fileSize = getFileSize();
+	char infoPacket[MAX_INFO_P];
+	int sizeInfoPacket;
+	char info[L2 * 256 + L1]; 		// maximum size of info
+	unsigned int infoSize;
+	unsigned int maxInfoSize = L2 * 256 + L1;
+	unsigned char N = 0;
 	char fileName[255];
-	unsigned char fileNameSize = getFileName(fileName);
+	unsigned char fileNameSize = getFileName(fileName);		// get file name from user
+	struct stat st;
+	stat(fileName, &st);
+	unsigned int fileSize = st.st_size;		// get file size from file statistics
 	sizeControlPacket = getControlPacket(START, fileSize, fileNameSize, fileName, controlPacket);
-	sendControlPacket(fd, controlPacket, sizeControlPacket);
-	
-	
+	if (sendControlPacket(fd, controlPacket, sizeControlPacket) == OK) {
+		FILE *file;
+		file=fopen(fileName, "r");
+		int fileChar;
+		while (1) {
+			infoSize = 0;
+			while ((fileChar = fgetc(file)) != EOF && infoSize < maxInfoSize) {
+				info[infoSize] = (char) fileChar;
+				infoSize++;
+			}
+			if (infoSize == 0) break;
+			sizeInfoPacket = getInfoPacket(N, infoSize, info, infoPacket);
+			if (sendInfoPacket(fd, infoPacket, sizeInfoPacket) == OK) N++;
+			else {
+				fclose(file);
+				return -1;
+			}
+		}
+		controlPacket[0] = CE;
+		if (sendControlPacket(fd, controlPacket, sizeControlPacket) == OK) {
+			fclose(file);
+			return OK;
+		}
+		else {
+			fclose(file);
+			return -1;
+		}
+	}
+	else return -1;	
 }
 
 
