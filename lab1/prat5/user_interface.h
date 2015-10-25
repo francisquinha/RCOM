@@ -8,7 +8,7 @@ typedef struct
 	int total_received_or_sent;
 }Emission_data;
 
-int main_menu(bool receiver);
+char main_menu(bool receiver);
 
 /*@brief display menu configuration
 * @param apply_options must be a pointer to a func that receives a pointer to an array of 4 chars. The chosen options will be sent to ths method that should apply them.

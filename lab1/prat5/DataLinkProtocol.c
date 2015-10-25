@@ -21,7 +21,7 @@
 int total_read; /*variable used for debug purposes, increment when reading bytes*/
 
 //send a bcc with 0 to tests the answer when errors occur
-bool gen0bcc = FALSE;
+bool gen0bcc = TRUE;
 #define DEBUG_REJ_WITHWRONG_BCCS 	1
 
 #define DEBUG_PRINT_SECTION_NUM 1
@@ -246,9 +246,7 @@ typedef int state_machine_state;
 #define STATE_MACHINE_BCC_RCV		5
 #define STATE_MACHINE_STOP			6
 #define STATE_MACHINE_ESCAPE		7
-/*
 
-/*TODO !!! FALTA  anotar contagem de erros para as estatisticas e/ou debug*/
 /*msgExpectedType SET; UA ; DISC ; RR ; I (DONT USE REJ IT WILL BE CONSIDERED WHEN USING RR)
 !!! !!! !!! IMPORTANT: AFTER REACHING TERMINAL STATES THE STATE MUST BE RESETED FROM OUTSIDE !!! !!! !!!
 
@@ -827,6 +825,7 @@ int llread(int fd, char** buffer)
 							perror("llread:");
 							return -1;
 						}
+						//memset(auxReadBuf, 0, LLREAD_AUXREADBUFFER_SIZE);
 						memcpy(*buffer, auxReceiveDataBuf, auxReceiveDataBuf_length);
 
 						/*update Occurrences_Log*/++occ_log.num_of_Is;
@@ -838,6 +837,7 @@ int llread(int fd, char** buffer)
 						write_UorS(APP_STATUS_TRANSMITTER, MESSAGE_REJ, (received_C == I0 ? 0 : 1), fd);
 						state = STATE_MACHINE_START;
 						/*update Occurrences_Log*/++occ_log.num_of_REJs;
+						auxReceiveDataBuf_length = 0;
 					}
 				}
 				//RECEIVED DISC ; SEND DISC BACK
@@ -851,11 +851,13 @@ int llread(int fd, char** buffer)
 				{
 					write_UorS(APP_STATUS_TRANSMITTER, MESSAGE_UA, 0, fd);
 					state = STATE_MACHINE_START;
+					auxReceiveDataBuf_length = 0;
 				}
 				else
 				{
 					DEBUG_SECTION(DEBUG_LLREAD_WARN_UNEXPECTED_MSG, printf("\nllread:received unexpected msg of type %d", received_C_type););
 					state = STATE_MACHINE_START; 
+					auxReceiveDataBuf_length = 0;
 					//return OK;
 				}
 			}
