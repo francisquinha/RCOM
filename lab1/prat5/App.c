@@ -11,6 +11,7 @@
 #include "user_interface.h"
 #include "DataLinkProtocol.h"
 #include "FileFuncs.h"
+#include "AppProtocol.h"
 
 #define BAUDRATE B38400 //default baudrate
 #define _POSIX_SOURCE 1 // POSIX compliant source 
@@ -25,7 +26,7 @@ volatile int STOP=FALSE;
 //=======================================================================
 
 struct applicationLayer {
-	int fd; /*Descritor correspondente à porta série*/
+	int fd; /*Descritor correspondente Ã  porta sÃ©rie*/
 	int status; /*TRANSMITTER 0 | RECEIVER 1*/
 };
 
@@ -173,11 +174,14 @@ int testwriter()
 	//if (llopen(app.fd, APP_STATUS_TRANSMITTER) == 0)
 	//{
 	//sleep(1);
-	char samplemsg[5] =//"abcde";
-	{ 0b01111101, 0b01111101, 0b01111110, 0b01111110, 0b01111101 };
-
-	if (llwrite(app.fd, samplemsg, 5) > 0) {
-		printf("\nDOIN it");
+	char controlPacket[MAX_CTRL_P];
+	int sizeControlPacket;
+	unsigned int fileSize = 123456789;
+	unsigned char fileNameSize = 4;
+	char fileName[4] = "ola";
+	sizeControlPacket = getControlPacket(START, fileSize, fileNameSize, fileName, controlPacket); // START control packet
+	if (sendControlPacket(app.fd, controlPacket, sizeControlPacket) == OK) {
+		printf("\ndone");
 		//llclose(app.fd);
 	}
 
@@ -254,7 +258,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-	//devia de ser feito um exit handler com isto para caso haja uma terminaçao inesperada
+	//devia de ser feito um exit handler com isto para caso haja uma terminaÃ§ao inesperada
 	if (conection_open) close_tio(app.fd);
 	if (image_bytes_length > 0) free(image_bytes);
 

@@ -1,5 +1,8 @@
 #include <sys/stat.h>
+#include <stdio.h>
 
+#include "utilities.h"
+#include "DataLinkProtocol.h"
 #include "AppProtocol.h"
 //faltam includes
 
@@ -9,7 +12,7 @@
 //================================================================================================================
 
 /*ESTOU A PRESSUPOR QUE O ARRAY DATA-BUFFER E DINAMICO (USA ALLOCS)*/
-int update_received_data(char* data_buffer, int data_buffer_length, char* newdata_buffer, int newdata_buffer_length) {
+/*int update_received_data(char* data_buffer, int data_buffer_length, char* newdata_buffer, int newdata_buffer_length) {
 	if (data_buffer_length > 0)
 	{
 		if ((data_buffer = (char*)malloc(newdata_buffer_length)) == NULL)
@@ -28,27 +31,14 @@ int update_received_data(char* data_buffer, int data_buffer_length, char* newdat
 	}
 	return OK;
 }
-
+*/
 //================================================================================================================
 //MAIN FUNCS
 //================================================================================================================
 
-#define CD 0b00000000 // campo de controlo no caso de um pacote de dados
-#define CS 0b00000001 // campo e controlo no caso de um pacote de start
-#define CE 0b00000010 // campo e controlo no caso de um pacote de end
-#define TSIZE 0b00000000 // type para pacote de controlo no caso de ser tamanho do ficheiro
-#define TNAME 0b00000001 // type para pacote de controlo no caso de ser nome do ficheiro
-#define START 1
-#define END 2
-#define L2 255
-#define L1 255
-#define MAX_CTRL_P 264 /* maximum size of control packet: 1 byte for C, 2 bytes for T and L, 4 bytes for size, 2 bytes for T and L, 255 bytes for name */
-#define MAX_INFO_P 65540 /* maximum size of info packet: 1 byte for C, 1 byte for N, 2 bytes for L2 and L1, 255 * 256 + 255 bytes for info */
-#define MAX_TRY 3
-
 int getControlPacket(char control, unsigned int size, unsigned char nameSize, char *name, char *controlPacket) {
 	char fileSize[32];
-	char n = 0;
+	unsigned int n = 0;
 	while (size != 0) {
 		fileSize[n] = (char) size;
 		size >>= 8; // next byte
@@ -78,16 +68,16 @@ int getInfoPacket(unsigned char N, unsigned int infoSize, char *info, char *info
 int sendControlPacket(int fd, char *controlPacket, int sizeControlPacket) {
 	unsigned char try = 0;
 	while (try < MAX_TRY) {
-		if (llwrite(fd, controlPacket, sizeControlPacket)) > 0) return OK;
+		if (llwrite(fd, controlPacket, sizeControlPacket) > 0) return OK;
 		try++;		
 	}
 	return -1;
 }
 
-int sendInfoPacket(int fd, char *InfoPacket, int sizeInfoPacket) {
+int sendInfoPacket(int fd, char *infoPacket, int sizeInfoPacket) {
 	unsigned char try = 0;
 	while (try < MAX_TRY) {
-		if (llwrite(fd, infoPacket, sizeInfoPacket)) > 0) return OK;
+		if (llwrite(fd, infoPacket, sizeInfoPacket) > 0) return OK;
 		try++;		
 	}
 	return -1;
@@ -140,14 +130,14 @@ int sendFile(int fd, unsigned char fileNameSize, char *fileName) {
 }
 
 int receiveControlPacket(int fd, char *controlPacket, int *sizeControlPacket) {
-	sizeControlPacket = llread(fd, &controlPacket);
-	if (sizeControlPacket > 0) return OK;
+	*sizeControlPacket = llread(fd, &controlPacket);
+	if (*sizeControlPacket > 0) return OK;
 	else return -1;
 }
 
 int receiveInfoPacket(int fd, char *infoPacket, int *sizeInfoPacket) {
-	sizeInfoPacket = llread(fd, &infoPacket);
-	if (sizeInfoPacket > 0) return OK;
+	*sizeInfoPacket = llread(fd, &infoPacket);
+	if (*sizeInfoPacket > 0) return OK;
 	else return -1;
 }
 
@@ -156,9 +146,7 @@ int receiveFile(int fd) {
 	int sizeControlPacket;
 	char infoPacket[MAX_INFO_P];
 	int sizeInfoPacket;
-	char info[L2 * 256 + L1]; 		// maximum size of info
 	unsigned int infoSize;
-	unsigned int maxInfoSize = L2 * 256 + L1;
 	unsigned char N = 0;
 	char fileName[255];
 	unsigned char fileNameSize;
@@ -179,18 +167,18 @@ int receiveFile(int fd) {
 					for (i = 0; i < fileNameSize; i++) 
 						fileName[i] = controlPacket[5 + sizeFileSize + i];
 					FILE *file;
-					file = fopen(fileName, "w");
+					file = fopen(fileName, "a");
 					while (receiveInfoPacket(fd, infoPacket, &sizeInfoPacket) == OK) {
 						if (infoPacket[0] == CD) {
 							if (infoPacket[1] == N) {
 								infoSize = infoPacket[2] * 256 + infoPacket[3];
 								for (i = 0; i < infoSize; i++)
-									fprintf(file, infoPacket[4 + i]);
+									fputc((int) infoPacket[4 + i], file);
 								N++;
 							}
 							else return -1;
 						}
-						else if (infoPacket[0] = CE) {
+						else if (infoPacket[0] == CE) {
 							fclose(file);
 							if (infoPacket[1] == TSIZE) {
 								if (infoPacket[2] == sizeFileSize) {
@@ -200,7 +188,7 @@ int receiveFile(int fd) {
 										finalFileSize += (unsigned int) infoPacket[3 + i] * multiply;
 										multiply *= 256;
 									}
-									if (finalFileSize = fileSize) {
+									if (finalFileSize == fileSize) {
 										if (infoPacket[3 + sizeFileSize] == TNAME) {
 											if (infoPacket[4 + sizeFileSize] == fileNameSize) {
 												for (i = 0; i < fileNameSize; i++) 
@@ -225,5 +213,5 @@ int receiveFile(int fd) {
 		}
 		else return -1;
 	}
-	else return -1;
+	return -1;
 }
