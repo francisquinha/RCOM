@@ -5,26 +5,61 @@
 #include <fcntl.h>
 #include <termios.h>
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-#include <strings.h>
+#include <string.h>
 #include <unistd.h>
 
+#include "utilities.h"
+#include "user_interface.h"
+#include "DataLinkProtocol.h"
+
 #define BAUDRATE B38400
-#define MODEMDEVICE "/dev/ttyS1"
-#define _POSIX_SOURCE 1 /* POSIX compliant source */
-#define FALSE 0
+#define _POSIX_SOURCE 1 // POSIX compliant source 
+/*#define FALSE 0
 #define TRUE 1
 
 volatile int STOP=FALSE;
+*/
+
+struct applicationLayer {
+	int fd; /*Descritor correspondente à porta série*/
+	int status; /*TRANSMITTER 0 | RECEIVER 1*/
+};
+
+bool image_loaded=NO;
+char* image_bytes;
+long image_bytes_length;
+
+
+void testfunc()
+{
+	set_basic_definitions(3, 3, argv[1], BAUDRATE);
+	if (open_tio(&app.fd, 0, 0) != OK)
+	{
+		printf("\nERROR:Couldnot open terminal\n");
+		exit(1);
+	}
+
+	if (llopen(app.fd, APP_STATUS_TRANSMITTER) == 0)
+	{
+		sleep(1);
+		char samplemsg[5] =//"abcde";
+		{ 0b01111101, 0b01111101, 0b01111110, 0b01111110, 0b01111101 };
+
+		if (llwrite(app.fd, samplemsg, 5) > 0) {
+			printf("\nDOIN it");
+			llclose(app.fd);
+		}
+
+		close_tio(app.fd);
+}
 
 int main(int argc, char** argv)
 {
-    int fd, res;
-    struct termios oldtio,newtio;
-    char buf[256];
-    int i; //, sum = 0, speed = 0;
-    
+  struct applicationLayer app;
+  app.status = 0;
+  //char buf[256];
+
     if ( (argc < 2) || 
   	     ((strcmp("/dev/ttyS0", argv[1])!=0) && 
   	      (strcmp("/dev/ttyS4", argv[1])!=0) )) {
@@ -32,52 +67,11 @@ int main(int argc, char** argv)
       exit(1);
     }
 
-    fd = open(argv[1], O_RDWR | O_NOCTTY );
-    if (fd <0) {perror(argv[1]); exit(-1); }
-
-    if ( tcgetattr(fd,&oldtio) == -1) { /* save current port settings */
-      perror("tcgetattr");
-      exit(-1);
-    }
-
-    bzero(&newtio, sizeof(newtio));
-    newtio.c_cflag = BAUDRATE | CS8 | CLOCAL | CREAD;
-    newtio.c_iflag = IGNPAR;
-    newtio.c_oflag = OPOST;
-
-    /* set input mode (non-canonical, no echo,...) */
-    newtio.c_lflag = 0;
-
-    newtio.c_cc[VTIME]    = 0;   /* inter-character timer unused */
-    newtio.c_cc[VMIN]     = 1;   /* blocking read until 1 chars received */
+  /*
+    Open serial port device for reading and writing and not as controlling tty
+    because we don't want to get killed if linenoise sends CTRL-C.
+  */
 
 
-    tcflush(fd, TCIFLUSH);
-
-    if ( tcsetattr(fd,TCSANOW,&newtio) == -1) {
-      perror("tcsetattr");
-      exit(-1);
-    }
-
-    for (i = 0; i < 256; i++) {
-      buf[i] = 'a';
-    }
-    
-    /*testing*/
-    buf[25] = '\n';
-
-    res = write(fd,buf,256);
-    printf("%d bytes written\n", res);
-
-	sleep(4);
-
-    buf[0] = 'z';
-    write (fd, buf, 1);
-	
-    if ( tcsetattr(fd,TCSANOW,&oldtio) == -1) {
-      perror("tcsetattr");
-      exit(-1);
-    }
-    close(fd);
     return 0;
 }
