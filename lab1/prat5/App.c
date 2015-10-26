@@ -37,8 +37,11 @@ occurrences_Log_Ptr datalink_log;
 bool conection_open = FALSE;
 
 //bool image_loaded = NO; //check with image bytes length nstead
+unsigned int image_already_bytes = 0;//num of image's bytes sent or received
 char* image_bytes;
-long image_bytes_length;
+unsigned int image_bytes_length = 0;
+char image_name[255]; //name is not path!!!
+unsigned char image_name_length=0;
 
 //=======================================================================
 // PROGRAM FUNCS
@@ -139,13 +142,29 @@ void config(char baud, char recon, char timeo, int frame)
 }
 
 int sendImage() {
-	char fileName[10] = "apple.txt";
-	sendFile(app.fd, 10, fileName);
+	//char fileName[10] = "apple.txt";
+	sendFile(app.fd, image_name_length, image_name, image_bytes_length, image_bytes, &image_already_bytes);
 	return OK;
 }
 
 int receiveImage() {
-	receiveFile(app.fd);
+	if (receiveFile(app.fd, image_name, &image_bytes, &image_bytes_length, &image_already_bytes) != OK) return -1;
+	printf("\nImage was completely received.\n");
+	if (save2File(image_bytes, image_bytes_length, image_name) != OK) return -1;
+	printf("\nImage was saved sucessfully.\n");
+	return OK;
+}
+
+
+int reconnect()
+{
+	if (image_already_bytes == 0 || image_already_bytes == image_bytes_length)
+	{ 
+		if (app.status) printf("\nNot possible:There is nothing to re-send");
+		else printf("\nNot possible:There is no data already received or all the data as already been received.");
+		return OK;
+	}
+
 	return OK;
 }
 
@@ -185,16 +204,16 @@ int testwriter()
 	//if (llopen(app.fd, APP_STATUS_TRANSMITTER) == 0)
 	//{
 	//sleep(1);
-	char controlPacket[MAX_CTRL_P];
+	/*char controlPacket[MAX_CTRL_P];
 	int sizeControlPacket;
 	unsigned int fileSize = 123456789;
 	unsigned char fileNameSize = 4;
 	char fileName[4] = "ola";
-	sizeControlPacket = getControlPacket(START, fileSize, fileNameSize, fileName, controlPacket); // START control packet
+	//sizeControlPacket = getControlPacket(START, fileSize, fileNameSize, fileName, controlPacket); // START control packet
 	if (sendControlPacket(app.fd, controlPacket, sizeControlPacket) == OK) {
 		printf("\ndone");
 		//llclose(app.fd);
-	}
+	}*/
 
 	//close_tio(app.fd);
 	//}
@@ -231,9 +250,13 @@ int main(int argc, char** argv)
 		switch (anws){
 
 		case 'a':
-			if (connect() == 0)
+			if (app.status == APP_STATUS_TRANSMITTER && image_bytes_length <= 0)
 			{
-				conection_open = TRUE;
+				printf("\nNO IMAGE SELECTED!");
+			}
+			else if (connect() == 0)
+			{
+				 conection_open = TRUE;
 				if (
 					( app.status == APP_STATUS_TRANSMITTER ?
 					sendImage() : receiveImage()) == 0)
@@ -244,7 +267,7 @@ int main(int argc, char** argv)
 				}
 				close_tio(app.fd);
 				conection_open = FALSE;
-				sleep(9);
+				//sleep(9);
 			}
 			break;
 		case 'b':printf("\nNOT IMPLEMENTED");//reconnect();
@@ -255,7 +278,7 @@ int main(int argc, char** argv)
 			if (app.status == APP_STATUS_TRANSMITTER)
 			{
 				if (image_bytes_length > 0) free(image_bytes);
-				image_bytes_length = selectNload_image(&image_bytes);
+				image_bytes_length = selectNload_image(&image_bytes, image_name,&image_name_length);
 			}
 			else printf("\nNOT IMPLEMENTED");
 			break;

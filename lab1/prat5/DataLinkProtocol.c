@@ -21,10 +21,10 @@
 int total_read; /*variable used for debug purposes, increment when reading bytes*/
 
 //send a bcc with 0 to tests the answer when errors occur
-bool gen0bcc = TRUE;
-#define DEBUG_REJ_WITHWRONG_BCCS 	1
+bool gen0bcc = FALSE;
+#define DEBUG_REJ_WITHWRONG_BCCS 	0
 
-#define DEBUG_PRINT_SECTION_NUM 1
+#define DEBUG_PRINT_SECTION_NUM 0
 #endif//==========================================================================
 
 //X=X=X=X   basic definitions
@@ -264,7 +264,7 @@ use received_C_type to confirm the type of packet received or check S/R for poss
 */
 message_type received_C_type = -1;//not sure if the most correct approach but simplifies the state machine a lot, indicates type of message received and is reused outside ethod when _STOP state is reached
 char received_C=0;
-#define DEBUG_LLO_STATE_MACHINE 1
+#define DEBUG_LLO_STATE_MACHINE 0
 #define DEBUG_STATE_MACHINE_GETC 0
 int update_state_machine(app_status_type appStatus, app_status_type adressStatus, message_type msgExpectedType, char rcv, state_machine_state* state)
 {
@@ -388,7 +388,7 @@ int apply_stuffing(char* buf, int /*bufSize*/data_size)
 }
 
 //buf nao precisa de ser array dinamico
-#define DEBUG_DESTUFFING 1
+#define DEBUG_DESTUFFING 0
 int apply_destuffing(char* buf, int bufSize)
 {
 	//int newSize = bufSize;
@@ -416,7 +416,7 @@ int apply_destuffing(char* buf, int bufSize)
 #if (1)
 #define BCC2_EVEN 0
 #define BCC2_ODD  1
-#define DEBUG_GENBBC2 1
+#define DEBUG_GENBBC 0
 char genBCC2(char* buf, int bufsize) {
 	
 	/*send (almost always) invalid bcc*/if (gen0bcc) return 0;
@@ -429,20 +429,20 @@ char genBCC2(char* buf, int bufsize) {
 	for (; i < bufsize; i++)
 	{
 	  BCC2 ^= buf[i];
-	  DEBUG_SECTION(DEBUG_GENBBC2,printf("\ngenbcc2debug(i:%d):" PRINTBYTETOBINARY,i ,BYTETOBINARY(BCC2)););
+	  DEBUG_SECTION(DEBUG_GENBBC,printf("\ngenbcc2debug(i:%d):" PRINTBYTETOBINARY,i ,BYTETOBINARY(BCC2)););
 	}
 
 	return BCC2;
 }
 
-#define DEBUG_VALIDATEBBC2 1
+#define DEBUG_VALIDATEBBC 0
 char validateBCC2(char* buf, int bufsize) {
 	char valid = buf[0];
 	int i = 1;
 	for (; i < bufsize; i++)
 		valid ^= buf[i];
 
-	DEBUG_SECTION(DEBUG_VALIDATEBBC2,printf("\nvalbcc2debug:" PRINTBYTETOBINARY, BYTETOBINARY(valid)););
+	DEBUG_SECTION(DEBUG_VALIDATEBBC,printf("\nvalbcc2debug:" PRINTBYTETOBINARY, BYTETOBINARY(valid)););
 	
 	if (BCC2_EVEN) { if (valid == 0b11111111) return OK; }
 	else if (valid == 0b00000000) return OK;
@@ -467,7 +467,7 @@ void write_UorS(app_status_type adressStatus, message_type msg_type, int SorR, i
 	}
 }
 
-#define DEBUG_WRITE_I 1
+#define DEBUG_WRITE_I 0
 //data must come in without stuffing
 int write_I(int SorR, int fd, char* data, int data_size)
 {
@@ -524,7 +524,7 @@ int write_I(int SorR, int fd, char* data, int data_size)
 
 // - - - LLOPEN AUXS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #if (1)
-#define DEBUG_LLOPEN_RECEIVER_OVERFLOW 1
+#define DEBUG_LLOPEN_RECEIVER_OVERFLOW 0
 int llopen_receiver(int fd)
 {
 	state_machine_state state = STATE_MACHINE_START;
@@ -556,7 +556,7 @@ int llopen_receiver(int fd)
 	return OK;
 }
 
-#define DEBUG_LLOPEN_TRANSMITTER_OVERFLOW 1
+#define DEBUG_LLOPEN_TRANSMITTER_OVERFLOW 0
 //should send set and receive UA
 int llopen_transmitter(int fd)
 {
@@ -758,7 +758,7 @@ int llopen(int fd, app_status_type status)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-#define DEBUG_LLREAD_WARN_UNEXPECTED_MSG 1
+#define DEBUG_LLREAD_WARN_UNEXPECTED_MSG 0
 #define LLREAD_AUXREADBUFFER_SIZE 128
 #define LLREAD_AUXDATABUFFER_SIZE 500
 //buffer must be dynamic!
@@ -875,8 +875,8 @@ espera RR ou REJ
 se RR sai
 se REJ repete de inicio
 */
-#define DEBUG_LLWRITER_BADRR_R 1
-#define DEBUG_LLWRITER_REJ 1
+#define DEBUG_LLWRITER_BADRR_R 0
+#define DEBUG_LLWRITER_REJ 0
 int llwrite(int fd, char * buffer, int length)
 {
 	int res;

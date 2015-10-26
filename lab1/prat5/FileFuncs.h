@@ -5,6 +5,6 @@
 //returns the length of the dest_buf
 long getFileBytes(char* filename, char** dest_buf);
 
-int save2File(char* data, long data_size, const char* filename);
+int save2File(char* data, int data_size, const char* filename);
 
 #endif /*FILEFUNCS*/

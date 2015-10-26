@@ -168,7 +168,7 @@ void show_prog_stats(unsigned long num_of_Is,
 
 
 
-long selectNload_image(char** image_buffer)
+unsigned int selectNload_image(char** image_buffer, char* out_image_name, unsigned char* out_image_name_length)
 {
 	system("clear");
 	printf("Please input image file path (relative or not):\n>");
@@ -196,8 +196,21 @@ long selectNload_image(char** image_buffer)
 		printf("\nFailed to load image.\n");
 		return -1;
 	}
-	printf("\nImage sucessfully loaded.\n");
-	sleep(2);
 
-	return imageSize;
+	//get name from path
+	image_path = strrchr(get_path, '/');
+	if (image_path==NULL)
+	{
+		strcpy(out_image_name, get_path);
+	}
+	else {
+		//(image_path - get_path + 1)
+		strcpy(out_image_name, image_path+1);
+	}
+
+	*out_image_name_length = strlen(out_image_name);
+
+	printf("\nImage sucessfully loaded.<%s , %ld bytes>\n", out_image_name, imageSize);
+	sleep(2);
+	return (unsigned int) imageSize;
 }
