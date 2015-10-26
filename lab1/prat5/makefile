@@ -1,4 +1,4 @@
-DESTPATH='/home/ubfeup/Área de Trabalho/bb/'
+DESTPATH='./'
 CC=gcc
 CFLAGS=-Wall
 
