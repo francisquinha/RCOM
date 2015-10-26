@@ -9,7 +9,7 @@
 #define START 1
 #define END 2
 #define L2 0
-#define L1 2
+#define L1 100
 #define MAX_CTRL_P 264 /* maximum size of control packet: 1 byte for C, 2 bytes for T and L, 4 bytes for size, 2 bytes for T and L, 255 bytes for name */
 #define MAX_INFO_P 65540 /* maximum size of info packet: 1 byte for C, 1 byte for N, 2 bytes for L2 and L1, 255 * 256 + 255 bytes for info */
 #define MAX_TRY 1

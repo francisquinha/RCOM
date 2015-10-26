@@ -85,7 +85,7 @@ int sendInfoPacket(int fd, char *infoPacket, int sizeInfoPacket) {
 	return -1;
 }
 
-int sendFile(int fd, unsigned char fileNameSize, const char *fileName, unsigned  int image_bytes_length, const char *image_bytes, unsigned  int* out_already_sent_bytes) {
+int sendFile(int fd, unsigned char fileNameSize, const char *fileName, unsigned int image_bytes_length, const char *image_bytes, unsigned  int* out_already_sent_bytes) {
 	char controlPacket[MAX_CTRL_P];
 	int sizeControlPacket;
 	char infoPacket[MAX_INFO_P];
