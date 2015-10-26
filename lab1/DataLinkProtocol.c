@@ -758,9 +758,10 @@ int llopen(int fd, app_status_type status)
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-#define DEBUG_LLREAD_WARN_UNEXPECTED_MSG 0
-#define LLREAD_AUXREADBUFFER_SIZE 128
-#define LLREAD_AUXDATABUFFER_SIZE 500
+#define DEBUG_LLREAD_WARN_UNEXPECTED_MSG 1
+#define LLREAD_AUXREADBUFFER_SIZE 131085
+#define LLREAD_AUXDATABUFFER_SIZE 1310850	//valor maximo necessario para 1 mensagem com dados: 131085 = (255 * 256 + 255 + 4 + 1) * 2 + 5 
+// = (L2 * 256 + L1 + 4bytes_overhead_app_protocol + 1byte_bcc2_data_link_protocol) * 2_stuffing + 5bytes_overhead_data_link_protocol
 //buffer must be dynamic!
 int llread(int fd, char** buffer)
 {

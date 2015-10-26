@@ -38,7 +38,7 @@
 //MAIN FUNCS
 //================================================================================================================
 
-int getControlPacket(char control, unsigned int size, unsigned char nameSize,const char *name, char *controlPacket) {
+int getControlPacket(char control, unsigned int size, unsigned char nameSize, const char *name, char *controlPacket) {
 	char fileSize[32];
 	unsigned int n = 0;
 	while (size != 0) {
@@ -60,8 +60,8 @@ int getControlPacket(char control, unsigned int size, unsigned char nameSize,con
 int getInfoPacket(unsigned char N, unsigned int infoSize, char *info, char *infoPacket) {
 	infoPacket[0] = CD;
 	infoPacket[1] = N;
-	infoPacket[2] = infoSize / 256;
-	infoPacket[3] = infoSize % 256;
+	infoPacket[2] = (unsigned char) (infoSize / 256);
+	infoPacket[3] = (unsigned char) (infoSize % 256);
 	unsigned int i;
 	for (i = 0; i < infoSize; i++) infoPacket[4 + i] = info[i];
 	return 4 + L2 * 256 + L1;	// 1 byte for C, 1 byte for N, 2 bytes for L2 and L1, L2 * 256 + L1 bytes for info
@@ -120,6 +120,7 @@ int sendFile(int fd, unsigned char fileNameSize, const char *fileName, unsigned 
 
 	//(unsigned int)image_bytes_length: this casting is not the ideal solution but works for now
 	sizeControlPacket = getControlPacket(START, (unsigned int)image_bytes_length, fileNameSize, fileName, controlPacket); // START control packet
+	
 	if (sendControlPacket(fd, controlPacket, sizeControlPacket) != OK)
 		return -1;
 
@@ -220,7 +221,7 @@ int receiveFile(int fd, char* out_imagename, char** out_imagebuffer, unsigned in
 		while (receivePacket(fd, &packet, &sizePacket) == OK) {
 			if (packet[0] == CD) {
 				if ( ((unsigned char) packet[1]) == N) {
-					infoSize = packet[2] * 256 + packet[3];
+					infoSize = (((unsigned int) packet[2]) & 0x00ff) * 256 + (((unsigned int) packet[3]) & 0x00ff);
 					for (i = 0; i < infoSize; i++)
 					{
 						if (fileSize <= (*out_already_received_imgbytes) )
