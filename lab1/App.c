@@ -125,14 +125,12 @@ void config(char baud, char recon, char timeo, int packetSize)
 	int reconect_tries = -1;
 	switch (recon) {
 	case 'a':
-		reconect_tries = 0; break;
-	case 'b':
 		reconect_tries = 1; break;
-	case 'c':
+	case 'b':
 		reconect_tries = 3; break;
-	case 'd':
+	case 'c':
 		reconect_tries = 5; break;
-	case 'e':
+	case 'd':
 		reconect_tries = 7; break;
 	default: break;
 	}

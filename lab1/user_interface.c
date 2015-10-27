@@ -88,8 +88,8 @@ int select_config(void(*apply_options) (char, char, char, int))
 	printf("\ns)B230400        t)B460800\n=>");
 	boudOpt = getAnswer(20);
 
-	printf("\nSelect max Reconect Tries: \na)0 \nb)1 \nc)3 \nd)5 \ne)7\n");
-	reconectOpt = getAnswer(5);
+	printf("\nSelect max Reconect Tries: \na)1 \nb)3 \nc)5 \nd)7\n");
+	reconectOpt = getAnswer(4);
 
 /*	printf("\nSelect timeout interval: \na)2 secs \nb)3 secs \nc)5 secs \nd)8 secs \n=>");
 	timetoutOpt = getAnswer(4);
