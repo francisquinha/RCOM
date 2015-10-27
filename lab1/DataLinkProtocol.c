@@ -778,91 +778,99 @@ int llread(int fd, char** buffer)
 	//bool RECEIVE = YES;//used to cycle
 	//- - - - - - - - - -
 	//receive stuff
-	while (TRUE)//RECEIVE)
+	timeouts_done = 0;
+	while (timeouts_done < link_layer_data.numTransmissions)
 	{
-		/*clear buf*/memset(auxReadBuf, 0, LLREAD_AUXREADBUFFER_SIZE);
-		res = read(fd, auxReadBuf, LLREAD_AUXREADBUFFER_SIZE);
-
-		//UPDATE STATE MACHINE - UPDATE STATE MACHINE - UPDATE STATE MACHINE
-		int i = 0;
-		//int lastStart = 0;
-		for (; i < res; ++i)
-		{
-			prevstate = state;
-			update_state_machine(APP_STATUS_RECEIVER, APP_STATUS_TRANSMITTER, MESSAGE_I, auxReadBuf[i], &state);
-			//if (state == STATE_MACHINE_START;) lastStart = i;
-
-			//receive data to auxReceiveDataBuf
-			if (
-				(prevstate == STATE_MACHINE_BCC_RCV || prevstate == STATE_MACHINE_ESCAPE)
-				&& (state == STATE_MACHINE_BCC_RCV || state == STATE_MACHINE_ESCAPE)
-				&& received_C_type == MESSAGE_I)
+		//startAlarm();
+		STOP = FALSE;
+		while (STOP == FALSE) {
+			/*clear buf*/memset(auxReadBuf, 0, LLREAD_AUXREADBUFFER_SIZE);
+			res = read(fd, auxReadBuf, LLREAD_AUXREADBUFFER_SIZE);
+	
+			//UPDATE STATE MACHINE - UPDATE STATE MACHINE - UPDATE STATE MACHINE
+			int i = 0;
+			//int lastStart = 0;
+			for (; i < res; ++i)
 			{
-				auxReceiveDataBuf[auxReceiveDataBuf_length] = auxReadBuf[i];
-				++auxReceiveDataBuf_length;
-			}
-
-			if (state == STATE_MACHINE_STOP){
-
-				if (received_C_type == MESSAGE_I)//RECEIVED DATA; SEND RR or REJ; destuff and retrieve DATA
+				prevstate = state;
+				update_state_machine(APP_STATUS_RECEIVER, APP_STATUS_TRANSMITTER, MESSAGE_I, auxReadBuf[i], &state);
+				//if (state == STATE_MACHINE_START;) lastStart = i;
+	
+				//receive data to auxReceiveDataBuf
+				if (
+					(prevstate == STATE_MACHINE_BCC_RCV || prevstate == STATE_MACHINE_ESCAPE)
+					&& (state == STATE_MACHINE_BCC_RCV || state == STATE_MACHINE_ESCAPE)
+					&& received_C_type == MESSAGE_I)
 				{
-					if (auxReceiveDataBuf_length == 0)
+					auxReceiveDataBuf[auxReceiveDataBuf_length] = auxReadBuf[i];
+					++auxReceiveDataBuf_length;
+				}
+	
+				if (state == STATE_MACHINE_STOP){
+	
+					if (received_C_type == MESSAGE_I)//RECEIVED DATA; SEND RR or REJ; destuff and retrieve DATA
 					{
-						printf("\nllread:empty I message received! (? ? ?)");
-						return -1;
-					}
-
-					auxReceiveDataBuf_length = apply_destuffing(auxReceiveDataBuf, auxReceiveDataBuf_length);
-					
-					if (validateBCC2(auxReceiveDataBuf,auxReceiveDataBuf_length)==OK)
-					{
-						NR = received_C == I0? 1:0;
-
-						--auxReceiveDataBuf_length;//leave BCC2 out of data
-						write_UorS(APP_STATUS_TRANSMITTER, MESSAGE_RR, NR, fd);
-						//note: the original pointer must be updated so a pointer to the pointer must be used
-						if ((*buffer = (char*)malloc(auxReceiveDataBuf_length)) == NULL)
+						if (auxReceiveDataBuf_length == 0)
 						{
-							perror("llread:");
+							printf("\nllread:empty I message received! (? ? ?)");
+							stopAlarm();							
 							return -1;
 						}
-						//memset(auxReadBuf, 0, LLREAD_AUXREADBUFFER_SIZE);
-						memcpy(*buffer, auxReceiveDataBuf, auxReceiveDataBuf_length);
-
-						/*update Occurrences_Log*/++occ_log.num_of_Is;
-
-						return auxReceiveDataBuf_length;
+	
+						auxReceiveDataBuf_length = apply_destuffing(auxReceiveDataBuf, auxReceiveDataBuf_length);
+						
+						if (validateBCC2(auxReceiveDataBuf,auxReceiveDataBuf_length)==OK)
+						{
+							NR = received_C == I0? 1:0;
+	
+							--auxReceiveDataBuf_length;//leave BCC2 out of data
+							write_UorS(APP_STATUS_TRANSMITTER, MESSAGE_RR, NR, fd);
+							//note: the original pointer must be updated so a pointer to the pointer must be used
+							if ((*buffer = (char*)malloc(auxReceiveDataBuf_length)) == NULL)
+							{
+								perror("llread:");
+								stopAlarm();							
+								return -1;
+							}
+							//memset(auxReadBuf, 0, LLREAD_AUXREADBUFFER_SIZE);
+							memcpy(*buffer, auxReceiveDataBuf, auxReceiveDataBuf_length);
+	
+							/*update Occurrences_Log*/++occ_log.num_of_Is;
+							stopAlarm();							
+							return auxReceiveDataBuf_length;
+						}
+						else
+						{
+							write_UorS(APP_STATUS_TRANSMITTER, MESSAGE_REJ, (received_C == I0 ? 0 : 1), fd);
+							state = STATE_MACHINE_START;
+							/*update Occurrences_Log*/++occ_log.num_of_REJs;
+							auxReceiveDataBuf_length = 0;
+						}
+					}
+					//RECEIVED DISC ; SEND DISC BACK
+					else if (received_C_type == MESSAGE_DISC)
+					{
+						write_UorS(APP_STATUS_RECEIVER, MESSAGE_DISC, 0, fd);
+						stopAlarm();							
+						return -2;//should notify the upper layer
+					}
+					//RECEIVED SET ; SEND UA BACK
+					else if (received_C_type == MESSAGE_SET)
+					{
+						write_UorS(APP_STATUS_TRANSMITTER, MESSAGE_UA, 0, fd);
+						state = STATE_MACHINE_START;
+						auxReceiveDataBuf_length = 0;
 					}
 					else
 					{
-						write_UorS(APP_STATUS_TRANSMITTER, MESSAGE_REJ, (received_C == I0 ? 0 : 1), fd);
-						state = STATE_MACHINE_START;
-						/*update Occurrences_Log*/++occ_log.num_of_REJs;
+						DEBUG_SECTION(DEBUG_LLREAD_WARN_UNEXPECTED_MSG, printf("\nllread:received unexpected msg of type %d", received_C_type););
+						state = STATE_MACHINE_START; 
 						auxReceiveDataBuf_length = 0;
+						//return OK;
 					}
 				}
-				//RECEIVED DISC ; SEND DISC BACK
-				else if (received_C_type == MESSAGE_DISC)
-				{
-					write_UorS(APP_STATUS_RECEIVER, MESSAGE_DISC, 0, fd);
-					return -2;//should notify the upper layer
-				}
-				//RECEIVED SET ; SEND UA BACK
-				else if (received_C_type == MESSAGE_SET)
-				{
-					write_UorS(APP_STATUS_TRANSMITTER, MESSAGE_UA, 0, fd);
-					state = STATE_MACHINE_START;
-					auxReceiveDataBuf_length = 0;
-				}
-				else
-				{
-					DEBUG_SECTION(DEBUG_LLREAD_WARN_UNEXPECTED_MSG, printf("\nllread:received unexpected msg of type %d", received_C_type););
-					state = STATE_MACHINE_START; 
-					auxReceiveDataBuf_length = 0;
-					//return OK;
-				}
+	
 			}
-
 		}
 	}
 	//- - - - - - - - - -
