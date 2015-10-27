@@ -94,9 +94,8 @@ int select_config(void(*apply_options) (char, char, char, int))
 	printf("\nSelect timeout interval: \na)2 secs \nb)3 secs \nc)5 secs \nd)8 secs \n=>");
 	timetoutOpt = getAnswer(4);
 
-	//not sure about what should be the max size of the packet.
-	printf("\nInput packet size (without stuffing from 1 to 200??? not yet implemented!!!):\n");
-	packetSize = getIntPositiveRange(1, 200);
+	printf("\nInput packet size (number of file bytes per packet 1 - 65535):\n");
+	packetSize = getIntPositiveRange(1, 65535);
 
 	apply_options(boudOpt, reconectOpt, timetoutOpt, packetSize);
 

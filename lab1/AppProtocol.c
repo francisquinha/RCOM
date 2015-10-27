@@ -8,36 +8,6 @@
 #include "AppProtocol.h"
 #include "FileFuncs.h"
 
-
-//================================================================================================================
-//AUX FUNCS
-//================================================================================================================
-
-/*ESTOU A PRESSUPOR QUE O ARRAY DATA-BUFFER E DINAMICO (USA ALLOCS)*/
-/*int update_received_data(char* data_buffer, int data_buffer_length, char* newdata_buffer, int newdata_buffer_length) {
-	if (data_buffer_length > 0)
-	{
-	if ((data_buffer = (char*)malloc(newdata_buffer_length)) == NULL)
-	{
-	perror("update_received_data:");
-	return -1;
-	}
-	data_buffer_length = newdata_buffer_length;
-	memmov(data_buffer, newdata_buffer, newdata_buffer_length);
-	}
-	else
-	{
-	data_buffer = (char*)realloc(data_buffer, data_buffer_length + newdata_buffer_length);
-	memmov(data_buffer + data_buffer_length, newdata_buffer, newdata_buffer_length);
-	data_buffer_length += newdata_buffer_length;
-	}
-	return OK;
-	}
-	*/
-//================================================================================================================
-//MAIN FUNCS
-//================================================================================================================
-
 int getControlPacket(char control, unsigned int size, unsigned char nameSize, const char *name, char *controlPacket) {
 	char fileSize[32];
 	unsigned int n = 0;
@@ -64,7 +34,7 @@ int getInfoPacket(unsigned char N, unsigned int infoSize, char *info, char *info
 	infoPacket[3] = (unsigned char) (infoSize % 256);
 	unsigned int i;
 	for (i = 0; i < infoSize; i++) infoPacket[4 + i] = info[i];
-	return 4 + L2 * 256 + L1;	// 1 byte for C, 1 byte for N, 2 bytes for L2 and L1, L2 * 256 + L1 bytes for info
+	return 4 + infoSize;	// 1 byte for C, 1 byte for N, 2 bytes for L2 and L1, L2 * 256 + L1 bytes for info
 }
 
 int sendControlPacket(int fd, char *controlPacket, int sizeControlPacket) {
@@ -85,45 +55,19 @@ int sendInfoPacket(int fd, char *infoPacket, int sizeInfoPacket) {
 	return -1;
 }
 
-int sendFile(int fd, unsigned char fileNameSize, const char *fileName, unsigned int image_bytes_length, const char *image_bytes, unsigned  int* out_already_sent_bytes) {
+int sendFile(unsigned char l2, unsigned char l1, int fd, unsigned char fileNameSize, const char *fileName, unsigned int image_bytes_length, const char *image_bytes, unsigned  int* out_already_sent_bytes) {
 	char controlPacket[MAX_CTRL_P];
 	int sizeControlPacket;
 	char infoPacket[MAX_INFO_P];
 	int sizeInfoPacket;
-	char info[L2 * 256 + L1]; 		// maximum size of info
 	unsigned int infoSize;
-	unsigned int maxInfoSize = L2 * 256 + L1;
+	unsigned int maxInfoSize = l2 * 256 + l1;
+	printf("packetSize: %u\n", maxInfoSize);
+	char info[maxInfoSize]; 		// maximum size of info
 	unsigned char N = 0;
-	/*struct stat st;
-	stat(fileName, &st);
-	unsigned int fileSize = st.st_size;		// get file size from file statistics
-	printf("File size: %d\n", fileSize);
-	FILE *file;
-	file = fopen(fileName, "r");
-	sizeControlPacket = getControlPacket(START, fileSize, fileNameSize, fileName, controlPacket); // START control packet
-	if (sendControlPacket(fd, controlPacket, sizeControlPacket) == OK) {
-	int fileChar;
-	while (1) {
-	infoSize = 0;
-	while ((fileChar = fgetc(file)) != EOF && infoSize < maxInfoSize) {
-	info[infoSize] = (char) fileChar;
-	infoSize++;
-	}
-	if (infoSize == 0) break;
-	sizeInfoPacket = getInfoPacket(N, infoSize, info, infoPacket);
-	if (sendInfoPacket(fd, infoPacket, sizeInfoPacket) == OK) N++;
-	else {
-	fclose(file);
-	return -1;
-	}
-	}*/
-
-	//(unsigned int)image_bytes_length: this casting is not the ideal solution but works for now
-	sizeControlPacket = getControlPacket(START, (unsigned int)image_bytes_length, fileNameSize, fileName, controlPacket); // START control packet
-	
+	sizeControlPacket = getControlPacket(START, (unsigned int)image_bytes_length, fileNameSize, fileName, controlPacket); // START control packet	
 	if (sendControlPacket(fd, controlPacket, sizeControlPacket) != OK)
 		return -1;
-
 	//printf("\n--fileName;%s\nimglength:%l\n", fileName, image_bytes_length);
 	long i = 0;
 	while (1) {
@@ -140,7 +84,6 @@ int sendFile(int fd, unsigned char fileNameSize, const char *fileName, unsigned 
 			N++;
 		}
 		else {
-			//fclose(file);
 			return -1;
 		}
 	}
@@ -149,18 +92,6 @@ int sendFile(int fd, unsigned char fileNameSize, const char *fileName, unsigned 
 		return OK;
 
 	return -1;
-	/*
-	controlPacket[0] = CE; // END control packet
-	if (sendControlPacket(fd, controlPacket, sizeControlPacket) == OK) {
-	fclose(file);
-	return OK;
-	}
-	else {
-	fclose(file);
-	return -1;
-	}
-	}
-	else return -1;	*/
 }
 
 int receivePacket(int fd, char **packet, int *sizePacket) {

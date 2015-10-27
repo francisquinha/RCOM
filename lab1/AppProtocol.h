@@ -22,7 +22,7 @@
 
 //int sendInfoPacket(int fd, char *infoPacket, int sizeInfoPacket);
 
-int sendFile(int fd, unsigned char fileNameSize, const char *fileName, unsigned  int image_bytes_length, const char *image_bytes, unsigned  int* out_already_sent_bytes);
+int sendFile(unsigned char l2, unsigned char l1, int fd, unsigned char fileNameSize, const char *fileName, unsigned  int image_bytes_length, const char *image_bytes, unsigned  int* out_already_sent_bytes);
 
 /**
 @param out_imagename will get the name of the file to be used later. must be a 255 char array

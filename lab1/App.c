@@ -29,6 +29,8 @@ volatile int STOP=FALSE;
 struct applicationLayer {
 	int fd; /*Descritor correspondente à porta série*/
 	int status; /*TRANSMITTER 0 | RECEIVER 1*/
+	unsigned char l2;	/* info packet size = l2 * 256 + l1 */
+	unsigned char l1;	/* defaults are L2 and L1 defined in AppProtocol.h */	
 };
 
 struct applicationLayer app;
@@ -66,7 +68,14 @@ int connect()
 
 }
 
-void config(char baud, char recon, char timeo, int frame)
+void setPacketSize(int packetSize) {
+	app.l2 = (unsigned char) (packetSize / 256);
+//	printf("l2: %u\n", app.l2);
+	app.l1 = (unsigned char) (packetSize % 256);
+//	printf("l1: %u\n", app.l1);
+}
+
+void config(char baud, char recon, char timeo, int packetSize)
 {
 	int baudrate = -1;
 	switch (baud) {
@@ -140,24 +149,26 @@ void config(char baud, char recon, char timeo, int frame)
 		timeout = 8; break;
 	default: break;
 	}
-
+	
 	set_basic_definitions(timeout, reconect_tries, 0, baudrate);
-	//missing frame
+	
+	setPacketSize(packetSize);
+
 }
 
 int sendImage() {
-  
+	/*
     void* args[]={&show_display, &(app.status) ,&image_bytes_length, &image_already_bytes };
     show_display=YES;
 	if(pthread_create(&display_thread, NULL, show_progress, (void*)args) != OK)
 	  printf("\nProccess state display thread failed to init.\n");
+	*/
 	
-	
-	sendFile(app.fd, image_name_length, image_name, image_bytes_length, image_bytes, &image_already_bytes);
-	
+	sendFile(app.l2, app.l1, app.fd, image_name_length, image_name, image_bytes_length, image_bytes, &image_already_bytes);
+	/*
 	show_display=NO;
 	pthread_join(display_thread, NULL);
-	
+	*/
 	return OK;
 }
 
@@ -254,6 +265,9 @@ int main(int argc, char** argv)
 
 	if (strcmp("t", argv[2]) == 0) app.status = APP_STATUS_TRANSMITTER;
 	else app.status = APP_STATUS_RECEIVER;
+	
+	app.l2 = L2;	/* info packet size = l2 * 256 + l1 */
+	app.l1 = L1; 	/* defaults are L2 and L1 defined in AppProtocol.h */
 
 	image_bytes_length = 0;
 	set_basic_definitions(3, 3, argv[1], BAUDRATE);
