@@ -166,6 +166,7 @@ int sendImage() {
 */
 	//send
 	int ret = 0;
+	image_already_bytes = 0;
 	ret = sendFile(app.l2, app.l1, app.fd, image_name_length, image_name, image_bytes_length, image_bytes, &image_already_bytes);
 
 	show_display = NO;//join after to avoid delays
@@ -185,6 +186,7 @@ int receiveImage() {
 */
 	//receive
 	int ret = 0;
+	image_already_bytes = 0;
 	ret = receiveFile(app.fd, image_name, &image_bytes, &image_bytes_length, &image_already_bytes);
 
 	//if(ret==-1) can_reconect=YES;
