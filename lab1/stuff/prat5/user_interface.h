@@ -1,13 +1,6 @@
 #ifndef USER_INTERFACE
 #define USER_INTERFACE
 
-typedef struct 
-{
-	int estimate_recBytesPerSec; //only counts data bytes
-	int total_excepted;
-	int total_received_or_sent;
-}Emission_data;
-
 char main_menu(bool receiver);
 
 /*@brief display menu configuration
@@ -17,9 +10,8 @@ int select_config(void(*apply_options) (char, char, char, int));
 
 
 /*@brief displays emission data. Speed of emission, amount of data received, etc...
-* @param msg message to be displayed at the top
 */
-void show_progress(char* msg, Emission_data* data);
+void* show_progress(void* args);
 
 
 void show_prog_stats(unsigned long num_of_Is,

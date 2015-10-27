@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <pthread.h>
 
 #include "utilities.h"
 #include "user_interface.h"
@@ -35,6 +36,9 @@ struct applicationLayer app;
 occurrences_Log_Ptr datalink_log;
 
 bool conection_open = FALSE;
+
+pthread_t display_thread;
+bool show_display=NO;
 
 //bool image_loaded = NO; //check with image bytes length nstead
 unsigned int image_already_bytes = 0;//num of image's bytes sent or received
@@ -142,8 +146,18 @@ void config(char baud, char recon, char timeo, int frame)
 }
 
 int sendImage() {
-	//char fileName[10] = "apple.txt";
+  
+    void* args[]={&show_display, &(app.status) ,&image_bytes_length, &image_already_bytes };
+    show_display=YES;
+	if(pthread_create(&display_thread, NULL, show_progress, (void*)args) != OK)
+	  printf("\nProccess state display thread failed to init.\n");
+	
+	
 	sendFile(app.fd, image_name_length, image_name, image_bytes_length, image_bytes, &image_already_bytes);
+	
+	show_display=NO;
+	pthread_join(display_thread, NULL);
+	
 	return OK;
 }
 
