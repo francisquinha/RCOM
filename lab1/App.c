@@ -205,6 +205,8 @@ int reconnect()
 
 int main(int argc, char** argv)
 {
+    srand((unsigned) time(&t)); // seed for random numbers for random error generator
+	
 	if ((argc < 3) ||
 		((strcmp("/dev/ttyS0", argv[1]) != 0) &&
 		(strcmp("/dev/ttyS4", argv[1]) != 0))

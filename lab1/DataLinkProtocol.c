@@ -477,6 +477,25 @@ void write_UorS(app_status_type adressStatus, message_type msg_type, int SorR, i
 	}
 }
 
+#define CABE_PROB 100		// significa que em cada 100 cabecalhos havera um erro, em media, 0 se nao quisermos erros
+#define DATA_PROB 100		// significa que em cada 100 campos de dados havera um erro, em media, 0 se nao quisermos erros
+
+randomErrorGenerator(char* trama, int data_size) {	
+	if (ERROR_PROB > 0) {
+		int cabe_error = rand() % CABE_PROB;
+		int data_error = rand() % DATA_PROB;
+		int trama_byte;
+		if (cabe_error == 0) {
+			trama_byte = rand() % 3 + 1;			// escolher erro entre A, C e BCC1
+			trama[trama_byte]++;					// o erro é incrementar o byte escolhido
+		}
+		if (data_error == 0) {
+			trama_byte = rand() % data_size + 4;	// escolher o byte de erro na zona dos dados da trama
+			trama[trama_byte]++;					// o erro é incrementar o byte escolhido
+		}
+	}
+}
+
 #define DEBUG_WRITE_I 0
 //data must come in without stuffing
 int write_I(int SorR, int fd, char* data, int data_size)
@@ -499,6 +518,8 @@ int write_I(int SorR, int fd, char* data, int data_size)
 	char finalMessage2Send[(data_size+1)*2];//char* finalMessage2Send = (char*)malloc(data_size + 1);
 	memcpy(finalMessage2Send, data, data_size);
 	finalMessage2Send[data_size] = genBCC2(data, data_size);
+
+	randomErrorGenerator(finalMessage2Send, data_size);
 
 	DEBUG_SECTION(DEBUG_REJ_WITHWRONG_BCCS,
 		gen0bcc = gen0bcc? FALSE: TRUE;);
