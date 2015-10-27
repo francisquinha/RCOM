@@ -40,14 +40,14 @@ occurrences_Log_Ptr datalink_log;
 bool conection_open = FALSE;
 
 pthread_t display_thread;
-bool show_display=NO;
+bool show_display;
 
 //bool image_loaded = NO; //check with image bytes length nstead
-unsigned int image_already_bytes = 0;//num of image's bytes sent or received
+unsigned int image_already_bytes;//num of image's bytes sent or received
 char* image_bytes;
-unsigned int image_bytes_length = 0;
+unsigned int image_bytes_length;
 char image_name[255]; //name is not path!!!
-unsigned char image_name_length=0;
+unsigned char image_name_length = 0;
 
 //=======================================================================
 // PROGRAM FUNCS
@@ -149,101 +149,71 @@ void config(char baud, char recon, char timeo, int packetSize)
 		timeout = 8; break;
 	default: break;
 	}
-	
+
 	set_basic_definitions(timeout, reconect_tries, 0, baudrate);
-	
+
 	setPacketSize(packetSize);
 
 }
 
+//return -1 if failed to send complete image, -2 if not even start was sent
 int sendImage() {
-	/*
-    void* args[]={&show_display, &(app.status) ,&image_bytes_length, &image_already_bytes };
-    show_display=YES;
-	if(pthread_create(&display_thread, NULL, show_progress, (void*)args) != OK)
-	  printf("\nProccess state display thread failed to init.\n");
-	*/
-	
-	sendFile(app.l2, app.l1, app.fd, image_name_length, image_name, image_bytes_length, image_bytes, &image_already_bytes);
-	/*
-	show_display=NO;
-	pthread_join(display_thread, NULL);
-	*/
-	return OK;
+	//display 
+	void* args[] = { &show_display, &(app.status), &image_bytes_length, &image_already_bytes };
+	//show_display = YES;
+/*	if (pthread_create(&display_thread, NULL, show_progress, (void*)args) != OK)
+		printf("\nProccess state display thread failed to init.\n");
+*/
+	//send
+	int ret = 0;
+	ret = sendFile(app.l2, app.l1, app.fd, image_name_length, image_name, image_bytes_length, image_bytes, &image_already_bytes);
+
+	show_display = NO;//join after to avoid delays
+
+	//if(ret==-1) can_reconect=YES;
+
+	return ret;
 }
 
+//return 0 if ok, -1 if image was not received, -2 start faled, -3 if connection failed on disk
 int receiveImage() {
-	if (receiveFile(app.fd, image_name, &image_bytes, &image_bytes_length, &image_already_bytes) != OK) return -1;
-	printf("\nImage was completely received.\n");
-	if (save2File(image_bytes, image_bytes_length, image_name) != OK) return -1;
-	printf("\nImage was saved sucessfully.\n");
-	return OK;
+	//display 
+	void* args[] = { &show_display, &(app.status), &image_bytes_length, &image_already_bytes };
+	//show_display = YES;
+/*	if (pthread_create(&display_thread, NULL, show_progress, (void*)args) != OK)
+		printf("\nProccess state display thread failed to init.\n");
+*/
+	//receive
+	int ret = 0;
+	ret = receiveFile(app.fd, image_name, &image_bytes, &image_bytes_length, &image_already_bytes);
+
+	//if(ret==-1) can_reconect=YES;
+
+	show_display = NO;//join after to avoid delays
+
+	//receive disk(do this before saving image to avoid delays)
+	char* packet; int llread_result = 0;
+	llread_result = llread(app.fd, &packet);
+	if (llread_result != -2)//read returns -2 when receives disk
+	{
+		if (llread_result > 0) free(packet);
+		ret = -3;
+	}
+
+	return ret;
 }
 
 
 int reconnect()
 {
 	if (image_already_bytes == 0 || image_already_bytes == image_bytes_length)
-	{ 
+	{
 		if (app.status) printf("\nNot possible:There is nothing to re-send");
 		else printf("\nNot possible:There is no data already received or all the data as already been received.");
 		return OK;
 	}
 
 	return OK;
-}
-
-int testread()
-{
-	char *receive;
-	int rec_size = llread(app.fd, &receive);
-
-	//catch info
-	//char endchar = receive[rec_size - 1];
-	//receive[rec_size - 1] = 0;
-	printf("\n");
-	//printf("%s%c - %d", receive, endchar, rec_size);test string
-	int i = 0;
-	for (; i < rec_size; ++i)
-		printf(PRINTBYTETOBINARY " - ", BYTETOBINARY(receive[i]));
-	printf("%d", rec_size);
-	//gets(receive);
-	if (rec_size>0)free(receive);
-
-	//catch DISC
-	rec_size = llread(app.fd, &receive);
-	if (rec_size == -2) printf("\ngot disk");
-
-	return 0;
-}
-
-int testwriter()
-{
-	/*set_basic_definitions(3, 3, argv[1], BAUDRATE);
-	if (open_tio(&app.fd, 0, 0) != OK)
-	{
-	printf("\nERROR:Couldnot open terminal\n");
-	exit(1);
-	}
-	*/
-	//if (llopen(app.fd, APP_STATUS_TRANSMITTER) == 0)
-	//{
-	//sleep(1);
-	/*char controlPacket[MAX_CTRL_P];
-	int sizeControlPacket;
-	unsigned int fileSize = 123456789;
-	unsigned char fileNameSize = 4;
-	char fileName[4] = "ola";
-	//sizeControlPacket = getControlPacket(START, fileSize, fileNameSize, fileName, controlPacket); // START control packet
-	if (sendControlPacket(app.fd, controlPacket, sizeControlPacket) == OK) {
-		printf("\ndone");
-		//llclose(app.fd);
-	}*/
-
-	//close_tio(app.fd);
-	//}
-
-	return 0;
 }
 
 
@@ -284,38 +254,57 @@ int main(int argc, char** argv)
 			}
 			else if (connect() == 0)
 			{
-				 conection_open = TRUE;
+				conection_open = TRUE;
+
 				if (
-					( app.status == APP_STATUS_TRANSMITTER ?
+					(app.status == APP_STATUS_TRANSMITTER ?
 					sendImage() : receiveImage()) == 0)
 				{
+					show_display = NO;
 					llclose(app.fd);
-					//if (llclose() == OK)
-					//{
+
+					//save file if receiver
+					if (app.status == APP_STATUS_RECEIVER){
+						if (save2File(image_bytes, image_bytes_length, image_name) != OK){
+//							pthread_join(display_thread, NULL);
+							printf("\nImage was not saved sucessfully.\n");
+							return -1;
+						}
+						printf("\nImage was saved sucessfully.\n");
+					}
+
 				}
 				close_tio(app.fd);
 				conection_open = FALSE;
-				//sleep(9);
+
+				show_display = NO;
+//				pthread_join(display_thread, NULL);
 			}
 			break;
+
 		case 'b':printf("\nNOT IMPLEMENTED");//reconnect();
 			break;
+
 		case 'c':select_config(config);
 			break;
+
 		case 'd':
 			if (app.status == APP_STATUS_TRANSMITTER)
 			{
 				if (image_bytes_length > 0) free(image_bytes);
-				image_bytes_length = selectNload_image(&image_bytes, image_name,&image_name_length);
+				image_bytes_length = selectNload_image(&image_bytes, image_name, &image_name_length);
 			}
 			else printf("\nNOT IMPLEMENTED");
 			break;
+
 		case 'e':
 			datalink_log = get_occurrences_log();
 			show_prog_stats(datalink_log->num_of_Is, datalink_log->total_num_of_timeouts, datalink_log->num_of_REJs, app.status);
 			break;
+
 		case 'f':printf("\nNow exiting...\n"); sleep(1);
 			break;
+
 		default: printf("\nNo valid command recognized."); sleep(1); break;
 		}
 	}

@@ -844,8 +844,8 @@ int llread(int fd, char** buffer)
 				//RECEIVED DISC ; SEND DISC BACK
 				else if (received_C_type == MESSAGE_DISC)
 				{
-					write_UorS(APP_STATUS_RECEIVER/*???*/, MESSAGE_DISC, 0, fd);
-					return -2;//should notify the upper layer somehow
+					write_UorS(APP_STATUS_RECEIVER, MESSAGE_DISC, 0, fd);
+					return -2;//should notify the upper layer
 				}
 				//RECEIVED SET ; SEND UA BACK
 				else if (received_C_type == MESSAGE_SET)

@@ -13,7 +13,7 @@ int getIntPositiveRange(int start, int end) {
 	int done = NO;
 
 	while (!done) {
-		printf("(%d,%d)", start, end);
+		//printf("(%d,%d)", start, end);
 
 		gets(get);
 		//fgets(get, 50, stdin); 
@@ -94,6 +94,7 @@ int select_config(void(*apply_options) (char, char, char, int))
 	printf("\nSelect timeout interval: \na)2 secs \nb)3 secs \nc)5 secs \nd)8 secs \n=>");
 	timetoutOpt = getAnswer(4);
 
+	//not sure about what should be the max size of the packet.
 	printf("\nInput packet size (number of file bytes per packet 1 - 65535):\n");
 	packetSize = getIntPositiveRange(1, 65535);
 
@@ -109,15 +110,15 @@ void* show_progress(void* args)
   void** rec = (void**) args;
   bool* loop = (bool*) rec[0];
   int* appstatus= (int*)rec[1];
-  int* total_excepted= (int*)rec[2];
-  int* total_received_or_sent= (int*)rec[3];
-  printf("\nloop:%d\n",*loop);
+  volatile unsigned int* total_excepted = (unsigned int*)rec[2];
+  volatile unsigned int* total_received_or_sent = (unsigned int*)rec[3];
+  
 	const int NUMBER_OF_BARS_IN_PROGRESS_BAR = 20;
 	const char progress_bar_character = '#';
 	char progress_icon = 0;
 	
 	while(*loop){
-	
+		
 	  usleep(40000);/*micro secs*/
 	  /*still printin conect and whatnot*/
 	 if(*total_received_or_sent==0) continue;

@@ -8,6 +8,10 @@
 #include "AppProtocol.h"
 #include "FileFuncs.h"
 
+//================================================================================================================
+//MAIN FUNCS
+//================================================================================================================
+
 int getControlPacket(char control, unsigned int size, unsigned char nameSize, const char *name, char *controlPacket) {
 	char fileSize[32];
 	unsigned int n = 0;
@@ -55,19 +59,23 @@ int sendInfoPacket(int fd, char *infoPacket, int sizeInfoPacket) {
 	return -1;
 }
 
-int sendFile(unsigned char l2, unsigned char l1, int fd, unsigned char fileNameSize, const char *fileName, unsigned int image_bytes_length, const char *image_bytes, unsigned  int* out_already_sent_bytes) {
+int sendFile(unsigned char l2, unsigned char l1, int fd, unsigned char fileNameSize, const char *fileName, unsigned int image_bytes_length, const char *image_bytes, unsigned int* out_already_sent_bytes) {
 	char controlPacket[MAX_CTRL_P];
 	int sizeControlPacket;
 	char infoPacket[MAX_INFO_P];
 	int sizeInfoPacket;
 	unsigned int infoSize;
 	unsigned int maxInfoSize = l2 * 256 + l1;
-	printf("packetSize: %u\n", maxInfoSize);
-	char info[maxInfoSize]; 		// maximum size of info
+	//printf("packet size: %u\n", maxInfoSize);
+	char info[maxInfoSize];
 	unsigned char N = 0;
-	sizeControlPacket = getControlPacket(START, (unsigned int)image_bytes_length, fileNameSize, fileName, controlPacket); // START control packet	
+
+	//(unsigned int)image_bytes_length: this casting is not the ideal solution but works for now
+	sizeControlPacket = getControlPacket(START, (unsigned int)image_bytes_length, fileNameSize, fileName, controlPacket); // START control packet
+	
 	if (sendControlPacket(fd, controlPacket, sizeControlPacket) != OK)
-		return -1;
+		return -2;
+
 	//printf("\n--fileName;%s\nimglength:%l\n", fileName, image_bytes_length);
 	long i = 0;
 	while (1) {
@@ -111,8 +119,14 @@ int receiveFile(int fd, char* out_imagename, char** out_imagebuffer, unsigned in
 	unsigned char fileNameSize;
 	unsigned int fileSize;
 	if (receivePacket(fd, &packet, &sizePacket) == OK) {
-		if (packet[0] != CS) return -1;
-		if (packet[1] != TSIZE) return -1;
+		if (packet[0] != CS) {
+			free(packet);
+				return -2;
+		}
+		if (packet[1] != TSIZE){
+			free(packet);
+			return -2;
+		}
 
 		unsigned char sizeFileSize = packet[2];
 		fileSize = 0;
@@ -124,14 +138,16 @@ int receiveFile(int fd, char* out_imagename, char** out_imagebuffer, unsigned in
 			fileSize += (0x00ff&((unsigned int)packet[3 + i])) * multiply;
 			multiply *= 256;
 		}
-		//return -1;
+
 		*out_already_received_imgbytes = 0;
 		*out_image_buffer_length = fileSize;
 		*out_imagebuffer = (char*)malloc(fileSize);
 		DEBUG_SECTION(DEBUG_RECEIVE_STEPS,
 			printf("\nfileSize: %d\n", fileSize););
 
-		if (packet[3 + sizeFileSize] != TNAME)return -1;
+		if (packet[3 + sizeFileSize] != TNAME) {
+			free(packet); return -2;
+		}
 
 		fileNameSize = packet[4 + sizeFileSize];
 		for (i = 0; i < fileNameSize; i++)
@@ -143,10 +159,7 @@ int receiveFile(int fd, char* out_imagename, char** out_imagebuffer, unsigned in
 		DEBUG_SECTION(DEBUG_RECEIVE_STEPS,
 			printf("\nfileName: %s\n", out_imagename););
 
-		/*FILE *file;//------------
-		file = fopen(fileName, "w"); // new clean file
-		fclose(file);
-		file = fopen(fileName, "a"); // append*/
+		free(packet);
 
 		while (receivePacket(fd, &packet, &sizePacket) == OK) {
 			if (packet[0] == CD) {
@@ -157,24 +170,25 @@ int receiveFile(int fd, char* out_imagename, char** out_imagebuffer, unsigned in
 						if (fileSize <= (*out_already_received_imgbytes) )
 						{
 							printf("\nERROR: receiveFile(...) received more data bytes than expected\n");
+							free(packet);
 							return -1;
 						}
 						(*out_imagebuffer)[(*out_already_received_imgbytes)] = packet[4 + i];
 						(*out_already_received_imgbytes)++;//counts received bytes
-						//fputc(packet[4 + i], file);//-----------
 					}
 					N++;
 				}
 				else {
 					printf("\nERROR: receiveFile(...) not valid N\n");
+					free(packet);
 					return -1;
 				}
 			}
 			else if (packet[0] == CE) {
-				//fclose(file);//------------
-				if (packet[1] != TSIZE) { printf("\nERROR: receiveFile(...) got CE with non valid TSIZE\n"); return -1; }
 
-				if (packet[2] != sizeFileSize) { printf("\nERROR: receiveFile(...) got CE with non  valid sizeFileSize\n"); return -1; }
+				if (packet[1] != TSIZE) { printf("\nERROR: receiveFile(...) got CE with non valid TSIZE\n"); free(packet); return -1; }
+
+				if (packet[2] != sizeFileSize) { printf("\nERROR: receiveFile(...) got CE with non  valid sizeFileSize\n"); free(packet); return -1; }
 
 				unsigned int finalFileSize = 0;
 				multiply = 1;
@@ -183,24 +197,31 @@ int receiveFile(int fd, char* out_imagename, char** out_imagebuffer, unsigned in
 					multiply *= 256;
 				}
 
-				if (finalFileSize != fileSize) { printf("\nERROR: receiveFile(...) got CE with non  valid fileSize\n"); return -1; }
-				if (packet[3 + sizeFileSize] != TNAME)  { printf("\nERROR: receiveFile(...) got CE with non  valid TNAME\n"); return -1; }
+				if (finalFileSize != fileSize) { printf("\nERROR: receiveFile(...) got CE with non  valid fileSize\n"); free(packet); return -1; }
+				if (packet[3 + sizeFileSize] != TNAME)  { printf("\nERROR: receiveFile(...) got CE with non  valid TNAME\n"); free(packet); return -1; }
 				if (packet[4 + sizeFileSize] == fileNameSize) {
 					for (i = 0; i < fileNameSize; i++)
 						if (packet[5 + sizeFileSize + i] != fileName[i]) return -1;
+					free(packet);
 					return OK;
 				}
 				else {
 					printf("\nERROR: receiveFile(...) END file name != START file name\n");
+					free(packet);
 					return -1;
 				}
-			}//-------
+			}
 			else{
 				printf("\nERROR: receiveFile(...) end CE not received\n");
+				free(packet);
 				return -1;
 			}
-		}
 
+			free(packet);
+
+		}//---(receeive packets loop) endwhile---
+		free(packet);
+		return -1;
 	}
 	printf("\nERROR:receiveFile(...) ???\n");
 	return -1;

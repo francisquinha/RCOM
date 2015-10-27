@@ -23,11 +23,7 @@ struct linkLayer{
 };
 
 //should be relative to a single transmission
-//could be used to restore a lost conection???
 struct occurrences_Log{
-	//unsigned long total_bytes_received;
-	//int num_of_disconnections;
-	//int total_num_of_errors_found;
 
 	unsigned long num_of_Is;//sent if host(only counts when confirmation is received) | received by client
 	unsigned long total_num_of_timeouts;
