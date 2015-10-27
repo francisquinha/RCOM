@@ -2,11 +2,63 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h> 
 
 #include "utilities.h"
 #include "DataLinkProtocol.h"
 #include "AppProtocol.h"
 #include "FileFuncs.h"
+
+//================================================================================================================
+//AUX DISPLAY
+//================================================================================================================
+//will call show progress if packet send/received and if at least <UPDATE_DISPLAY_MIN_TIME_INTERVAL> seconds have elapsed
+time_t start, end;//get elapsed time to avoid spamming interface
+double timedif;//avoid interface spam
+#define UPDATE_DISPLAY_MIN_TIME_INTERVAL 0.3f
+int progress_icon_state = 0;
+const int NUMBER_OF_BARS_IN_PROGRESS_BAR = 20;
+const char progress_bar_character = '#';
+char progress_icon = 0;
+void show_progress(int appstatus,unsigned int image_already_bytes, unsigned int image_bytes_length)
+{
+
+		switch (progress_icon_state){
+		case 0: progress_icon = '~'; break;
+		case 1: progress_icon = '\\'; break;
+		case 2: progress_icon = '|'; break;
+		case 3: progress_icon = '/'; break;
+		default: progress_icon = ' ';
+		}
+		progress_icon_state = (progress_icon_state + 1) % 4;
+
+		//-  - - - - - - - - - - - - - - - - - - - - - - - - -
+		system("clear");
+
+
+		/*if (data->estimate_recBytesPerSec > 1000)
+		printf("\n Rate:%d KB/sec", data->estimate_recBytesPerSec / 1000);
+		else
+		printf("\n Rate:%d B/sec", data->estimate_recBytesPerSec);
+		*/
+
+		if (appstatus) printf("Received ");
+		else printf("Sent ");
+
+		printf("\n %dKB of %dKB", (image_already_bytes) / 1000, (image_bytes_length) / 1000);
+
+		printf("\n-----------------------------------------");
+		printf("\n      PROGRESS %c", progress_icon);
+		printf("\n<");
+		int number_of_block_2_print = image_already_bytes / (image_bytes_length / NUMBER_OF_BARS_IN_PROGRESS_BAR);
+		int num_of_blanks_2_print = NUMBER_OF_BARS_IN_PROGRESS_BAR - number_of_block_2_print;
+		for (; number_of_block_2_print > 0; --number_of_block_2_print) printf("%c", progress_bar_character);
+		for (; num_of_blanks_2_print > 0; --num_of_blanks_2_print) printf(" ");
+		printf(">\n");
+	//}
+
+	//return 0;
+}
 
 //================================================================================================================
 //MAIN FUNCS
@@ -59,7 +111,10 @@ int sendInfoPacket(int fd, char *infoPacket, int sizeInfoPacket) {
 	return -1;
 }
 
+
+
 int sendFile(unsigned char l2, unsigned char l1, int fd, unsigned char fileNameSize, const char *fileName, unsigned int image_bytes_length, const char *image_bytes, unsigned int* out_already_sent_bytes) {
+	timedif = 0;
 	char controlPacket[MAX_CTRL_P];
 	int sizeControlPacket;
 	char infoPacket[MAX_INFO_P];
@@ -79,6 +134,9 @@ int sendFile(unsigned char l2, unsigned char l1, int fd, unsigned char fileNameS
 	//printf("\n--fileName;%s\nimglength:%l\n", fileName, image_bytes_length);
 	long i = 0;
 	while (1) {
+
+		time(&start);//avoid interface spam
+
 		infoSize = 0;
 		while (i < image_bytes_length && infoSize < maxInfoSize) {
 			info[infoSize] = image_bytes[i];
@@ -90,6 +148,15 @@ int sendFile(unsigned char l2, unsigned char l1, int fd, unsigned char fileNameS
 		if (sendInfoPacket(fd, infoPacket, sizeInfoPacket) == OK) {
 			*out_already_sent_bytes+=infoSize;
 			N++;
+
+			//interface stuff
+			time(&end);//avoid interface spam
+			timedif += difftime(end, start);
+			if (timedif >= UPDATE_DISPLAY_MIN_TIME_INTERVAL){
+				timedif = 0;
+				show_progress(1, *out_already_sent_bytes, image_bytes_length);
+			}
+
 		}
 		else {
 			return -1;
@@ -111,6 +178,7 @@ int receivePacket(int fd, char **packet, int *sizePacket) {
 
 #define DEBUG_RECEIVE_STEPS 1
 int receiveFile(int fd, char* out_imagename, char** out_imagebuffer, unsigned int* out_image_buffer_length, unsigned int* out_already_received_imgbytes) {
+	timedif = 0;
 	char* packet;
 	int sizePacket;
 	unsigned int infoSize;
@@ -160,10 +228,11 @@ int receiveFile(int fd, char* out_imagename, char** out_imagebuffer, unsigned in
 			printf("\nfileName: %s\n", out_imagename););
 
 		free(packet);
-
+		time(&start);//avoid interface spam
 		while (receivePacket(fd, &packet, &sizePacket) == OK) {
 			if (packet[0] == CD) {
 				if ( ((unsigned char) packet[1]) == N) {
+
 					infoSize = (((unsigned int) packet[2]) & 0x00ff) * 256 + (((unsigned int) packet[3]) & 0x00ff);
 					for (i = 0; i < infoSize; i++)
 					{
@@ -177,6 +246,15 @@ int receiveFile(int fd, char* out_imagename, char** out_imagebuffer, unsigned in
 						(*out_already_received_imgbytes)++;//counts received bytes
 					}
 					N++;
+
+					//interface stuff
+					time(&end);//avoid interface spam
+					timedif += difftime(end, start);
+					if (timedif >= UPDATE_DISPLAY_MIN_TIME_INTERVAL){
+						timedif = 0;
+						show_progress(1, *out_already_received_imgbytes, *out_image_buffer_length);
+					}
+
 				}
 				else {
 					printf("\nERROR: receiveFile(...) not valid N\n");
@@ -219,6 +297,7 @@ int receiveFile(int fd, char* out_imagename, char** out_imagebuffer, unsigned in
 
 			free(packet);
 
+			time(&start);//avoid interface spam
 		}//---(receeive packets loop) endwhile---
 		return -1;
 	}

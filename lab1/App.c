@@ -16,11 +16,7 @@
 
 #define BAUDRATE B38400 //default baudrate
 #define _POSIX_SOURCE 1 // POSIX compliant source 
-/*#define FALSE 0
-#define TRUE 1
 
-volatile int STOP=FALSE;
-*/
 
 //=======================================================================
 // PROGRAM VARIABLES
@@ -39,7 +35,7 @@ occurrences_Log_Ptr datalink_log;
 
 bool conection_open = FALSE;
 
-pthread_t display_thread;
+//pthread_t display_thread;
 bool show_display;
 
 //bool image_loaded = NO; //check with image bytes length nstead
@@ -156,18 +152,11 @@ void config(char baud, char recon, char timeo, int packetSize)
 
 //return -1 if failed to send complete image, -2 if not even start was sent
 int sendImage() {
-	//display 
-	void* args[] = { &show_display, &(app.status), &image_bytes_length, &image_already_bytes };
-	//show_display = YES;
-/*	if (pthread_create(&display_thread, NULL, show_progress, (void*)args) != OK)
-		printf("\nProccess state display thread failed to init.\n");
-*/
+
 	//send
 	int ret = 0;
 	image_already_bytes = 0;
 	ret = sendFile(app.l2, app.l1, app.fd, image_name_length, image_name, image_bytes_length, image_bytes, &image_already_bytes);
-
-	show_display = NO;//join after to avoid delays
 
 	//if(ret==-1) can_reconect=YES;
 
@@ -176,20 +165,13 @@ int sendImage() {
 
 //return 0 if ok, -1 if image was not received, -2 start faled, -3 if connection failed on disk
 int receiveImage() {
-	//display 
-	void* args[] = { &show_display, &(app.status), &image_bytes_length, &image_already_bytes };
-	//show_display = YES;
-/*	if (pthread_create(&display_thread, NULL, show_progress, (void*)args) != OK)
-		printf("\nProccess state display thread failed to init.\n");
-*/
+
 	//receive
 	int ret = 0;
 	image_already_bytes = 0;
 	ret = receiveFile(app.fd, image_name, &image_bytes, &image_bytes_length, &image_already_bytes);
 
 	//if(ret==-1) can_reconect=YES;
-
-	show_display = NO;//join after to avoid delays
 
 	//receive disk(do this before saving image to avoid delays)
 	char* packet; int llread_result = 0;
@@ -266,7 +248,7 @@ int main(int argc, char** argv)
 					//save file if receiver
 					if (app.status == APP_STATUS_RECEIVER){
 						if (save2File(image_bytes, image_bytes_length, image_name) != OK){
-//							pthread_join(display_thread, NULL);
+							
 							printf("\nImage was not saved sucessfully.\n");
 							return -1;
 						}
@@ -278,7 +260,7 @@ int main(int argc, char** argv)
 				conection_open = FALSE;
 
 				show_display = NO;
-//				pthread_join(display_thread, NULL);
+				
 			}
 			break;
 

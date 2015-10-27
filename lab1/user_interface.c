@@ -103,63 +103,7 @@ int select_config(void(*apply_options) (char, char, char, int))
 	return 0;
 }
 
-//do not spam this method
-int progress_icon_state = 0;
-void* show_progress(void* args)
-{
-  void** rec = (void**) args;
-  bool* loop = (bool*) rec[0];
-  int* appstatus= (int*)rec[1];
-  volatile unsigned int* total_excepted = (unsigned int*)rec[2];
-  volatile unsigned int* total_received_or_sent = (unsigned int*)rec[3];
-  
-	const int NUMBER_OF_BARS_IN_PROGRESS_BAR = 20;
-	const char progress_bar_character = '#';
-	char progress_icon = 0;
-	
-	while(*loop){
-		
-	  usleep(40000);/*micro secs*/
-	  /*still printin conect and whatnot*/
-	 if(*total_received_or_sent==0) continue;
 
-	 
-	switch (progress_icon_state){
-	case 0: progress_icon = '~'; break;
-	case 1: progress_icon = '\\'; break;
-	case 2: progress_icon = '|'; break;
-	case 3: progress_icon = '/'; break;
-	default: progress_icon = ' ';
-	}
-	progress_icon_state = (progress_icon_state + 1) % 4;
-
-	//-  - - - - - - - - - - - - - - - - - - - - - - - - -
-	system("clear");
-
-	 
-	/*if (data->estimate_recBytesPerSec > 1000)
-		printf("\n Rate:%d KB/sec", data->estimate_recBytesPerSec / 1000);
-	else
-		printf("\n Rate:%d B/sec", data->estimate_recBytesPerSec);
-	*/
-	
-	if (*appstatus) printf("Received ");
-	else printf("Sent ");
-	  
-	printf("\n %dKB of %dKB", (*total_received_or_sent) / 1000, (*total_excepted) / 1000);
-
-	printf("\n-----------------------------------------");
-	printf("\n      PROGRESS %c", progress_icon);
-	printf("\n<");
-	int number_of_block_2_print = *total_received_or_sent / (*total_excepted / NUMBER_OF_BARS_IN_PROGRESS_BAR);
-	int num_of_blanks_2_print = NUMBER_OF_BARS_IN_PROGRESS_BAR - number_of_block_2_print;
-	for (; number_of_block_2_print > 0; --number_of_block_2_print) printf("%c", progress_bar_character);
-	for (; num_of_blanks_2_print > 0; --num_of_blanks_2_print) printf(" ");
-	printf(">\n");
-	}
-	
-	return 0;
-}
 
 
 void show_prog_stats(unsigned long num_of_Is,

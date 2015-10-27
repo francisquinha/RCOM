@@ -9,9 +9,7 @@ char main_menu(bool receiver);
 int select_config(void(*apply_options) (char, char, char, int));
 
 
-/*@brief displays emission data. Speed of emission, amount of data received, etc...
-*/
-void* show_progress(void* args);
+//void* show_progress(void* args);
 
 
 void show_prog_stats(unsigned long num_of_Is,
