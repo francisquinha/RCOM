@@ -161,7 +161,7 @@ void getMessage(app_status_type status, message_type message, int R, char* msg) 
 #if (1)
 //===============================================================================
 bool port_name_was_set = NO;
-void set_basic_definitions(int timeout_in_seconds, int number_of_tries_when_failing, char* port, int baudrate)
+void set_basic_definitions(int number_of_tries_when_failing, char* port, int baudrate, int packetSize)
 {
 	DEBUG_SECTION(DEBUG_PRINT_SECTION_NUM,
 		printf("\n-section1-");
@@ -169,6 +169,14 @@ void set_basic_definitions(int timeout_in_seconds, int number_of_tries_when_fail
 	);
 
 	signal(SIGALRM, timeout_alarm_handler);
+	
+	int realbauds[20] = {0, 50, 75, 110, 134, 150, 200, 300, 600, 1200, 1800, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800};	
+	
+	int timeout_in_seconds = ((packetSize + 4 + 1) * 2 + 5) / (realbauds[baudrate] / 8) + 1;
+	printf("size: %d\n", packetSize);
+	printf("baudrate: %d\n", realbauds[baudrate]);
+	printf("def_baudrate: %d\n", realbauds[B38400]);
+	printf("timeout: %d\n", timeout_in_seconds);
 	link_layer_data.timeout = timeout_in_seconds;
 	link_layer_data.numTransmissions = number_of_tries_when_failing;
 	if (port_name_was_set == NO) { strcpy(link_layer_data.port, port); port_name_was_set = YES; }
@@ -781,8 +789,8 @@ int llread(int fd, char** buffer)
 	timeouts_done = 0;
 	while (timeouts_done < link_layer_data.numTransmissions)
 	{
-		//startAlarm();
-		STOP = FALSE;
+		startAlarm();
+		//STOP = FALSE;
 		while (STOP == FALSE) {
 			/*clear buf*/memset(auxReadBuf, 0, LLREAD_AUXREADBUFFER_SIZE);
 			res = read(fd, auxReadBuf, LLREAD_AUXREADBUFFER_SIZE);

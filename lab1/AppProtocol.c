@@ -220,7 +220,6 @@ int receiveFile(int fd, char* out_imagename, char** out_imagebuffer, unsigned in
 			free(packet);
 
 		}//---(receeive packets loop) endwhile---
-		free(packet);
 		return -1;
 	}
 	printf("\nERROR:receiveFile(...) ???\n");

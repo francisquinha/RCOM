@@ -91,10 +91,10 @@ int select_config(void(*apply_options) (char, char, char, int))
 	printf("\nSelect max Reconect Tries: \na)0 \nb)1 \nc)3 \nd)5 \ne)7\n");
 	reconectOpt = getAnswer(5);
 
-	printf("\nSelect timeout interval: \na)2 secs \nb)3 secs \nc)5 secs \nd)8 secs \n=>");
+/*	printf("\nSelect timeout interval: \na)2 secs \nb)3 secs \nc)5 secs \nd)8 secs \n=>");
 	timetoutOpt = getAnswer(4);
+*/
 
-	//not sure about what should be the max size of the packet.
 	printf("\nInput packet size (number of file bytes per packet 1 - 65535):\n");
 	packetSize = getIntPositiveRange(1, 65535);
 

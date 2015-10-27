@@ -136,7 +136,7 @@ void config(char baud, char recon, char timeo, int packetSize)
 		reconect_tries = 7; break;
 	default: break;
 	}
-
+	/*
 	int timeout = -1;
 	switch (timeo) {
 	case 'a':
@@ -149,8 +149,8 @@ void config(char baud, char recon, char timeo, int packetSize)
 		timeout = 8; break;
 	default: break;
 	}
-
-	set_basic_definitions(timeout, reconect_tries, 0, baudrate);
+*/
+	set_basic_definitions(/*timeout,*/ reconect_tries, 0, baudrate, packetSize);
 
 	setPacketSize(packetSize);
 
@@ -242,7 +242,7 @@ int main(int argc, char** argv)
 	app.l1 = L1; 	/* defaults are L2 and L1 defined in AppProtocol.h */
 
 	image_bytes_length = 0;
-	set_basic_definitions(3, 3, argv[1], BAUDRATE);
+	set_basic_definitions(3, argv[1], BAUDRATE, L2 * 256 + L1);
 
 	char anws = ' ';
 	while (anws != 'f'){

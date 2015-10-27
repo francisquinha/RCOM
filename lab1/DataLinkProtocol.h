@@ -45,7 +45,7 @@ typedef char message_type;
 #define MESSAGE_REJ		5
 #define MESSAGE_I		6
 
-void set_basic_definitions(int timeout_in_seconds, int number_of_tries_when_failing, char* port, int boudrate);
+void set_basic_definitions(/*int timeout_in_seconds*/int number_of_tries_when_failing, char* port, int boudrate, int packetSize);
 
 /*int pack_data(char data);*/
 
