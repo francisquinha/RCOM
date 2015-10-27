@@ -135,9 +135,8 @@ int sendFile(int fd, unsigned char fileNameSize, const char *fileName, unsigned 
 		}
 		if (infoSize == 0) break;
 		sizeInfoPacket = getInfoPacket(N, infoSize, info, infoPacket);
-		if (sendInfoPacket(fd, infoPacket, sizeInfoPacket) == OK)
-		{
-			++out_already_sent_bytes;
+		if (sendInfoPacket(fd, infoPacket, sizeInfoPacket) == OK) {
+			*out_already_sent_bytes+=infoSize;
 			N++;
 		}
 		else {
