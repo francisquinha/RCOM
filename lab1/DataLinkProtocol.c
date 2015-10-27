@@ -170,12 +170,14 @@ void set_basic_definitions(int number_of_tries_when_failing, char* port, int bau
 
 	signal(SIGALRM, timeout_alarm_handler);
 	
-	int realbauds[20] = {0, 50, 75, 110, 134, 150, 200, 300, 600, 1200, 1800, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800};	
+	int realbauds[20] = {0, 50, 75, 110, 134, 150, 200, 300, 600, 1200, 1800, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800};
+	int realBaudrate;
+	if (baudrate <= 15) realBaudrate = realbauds[baudrate];
+	else realBaudrate = realbauds[baudrate - 4081];
 	
-	int timeout_in_seconds = ((packetSize + 4 + 1) * 2 + 5) / (realbauds[baudrate] / 8) + 1;
+	int timeout_in_seconds = ((packetSize + 4 + 1) * 2 + 5) / (realBaudrate / 8) + 1;
 	printf("size: %d\n", packetSize);
-	printf("baudrate: %d\n", realbauds[baudrate]);
-	printf("def_baudrate: %d\n", realbauds[B38400]);
+	printf("baudrate: %d\n", realBaudrate);
 	printf("timeout: %d\n", timeout_in_seconds);
 	link_layer_data.timeout = timeout_in_seconds;
 	link_layer_data.numTransmissions = number_of_tries_when_failing;
