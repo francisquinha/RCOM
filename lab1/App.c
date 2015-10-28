@@ -246,10 +246,13 @@ int main(int argc, char** argv)
 					//save file if receiver
 					if (app.status == APP_STATUS_RECEIVER){
 						if (save2File(image_bytes, image_bytes_length, image_name) != OK){
-							
+							free(image_bytes);
+							image_bytes_length = 0;
 							printf("\nImage was not saved sucessfully.\n");
 							return -1;
 						}
+						free(image_bytes);
+						image_bytes_length = 0;
 						printf("\nImage was saved sucessfully.\n");
 					}
 
