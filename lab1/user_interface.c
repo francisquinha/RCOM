@@ -121,8 +121,8 @@ void show_prog_stats(unsigned long num_of_Is,
 	printf("\nTotal number of timeouts: %lu", total_num_of_timeouts);
 
 	if (appstatus/*receiver*/)
-		printf("\nTotak number of REJs received: %lu", num_of_REJs);
-	else /*transmitter*/printf("\nTotal number of REJs sent: %lu", num_of_REJs);
+		printf("\nTotak number of REJs sent: %lu", num_of_REJs);
+	else /*transmitter*/printf("\nTotal number of REJs received: %lu", num_of_REJs);
 
 	printf("\n- - - - - - - - - - - - - - -\nPress Enter key to return to pevious menu...\n");
 

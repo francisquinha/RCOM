@@ -477,8 +477,8 @@ void write_UorS(app_status_type adressStatus, message_type msg_type, int SorR, i
 	}
 }
 
-#define CABE_PROB 100		// significa que em cada 100 cabecalhos havera um erro, em media, 0 se nao quisermos erros
-#define DATA_PROB 100		// significa que em cada 100 campos de dados havera um erro, em media, 0 se nao quisermos erros
+#define CABE_PROB 100		// significa que em cada CABE_PROB cabecalhos havera um erro, em media. 0 se nao quisermos erros
+#define DATA_PROB 100		// significa que em cada DATA_PROB campos de dados havera um erro, em media. 0 se nao quisermos erros
 
 void randomErrorGenerator(char* trama, int data_size) {	
 	int trama_byte;
