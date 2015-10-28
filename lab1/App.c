@@ -51,14 +51,8 @@ unsigned char image_name_length = 0;
 
 int connect()
 {
-	if (open_tio(&app.fd, 0, 0) != OK)
-	{
-		printf("\nERROR: Could not open terminal\n");
-		exit(1);
-	}
 
-
-	if (llopen(app.fd, app.status) < 0) return -1;
+	if ((app.fd = llopen(app.status)) < 0) return -1;
 
 	return 0;
 
@@ -260,7 +254,7 @@ int main(int argc, char** argv)
 					}
 
 				}
-				close_tio(app.fd);
+				else llclose(app.fd); //// nao sabemos se isto deve ficar assim porque o llclose espera um disc que nao vai receber
 				conection_open = FALSE;
 
 				show_display = NO;
@@ -296,7 +290,7 @@ int main(int argc, char** argv)
 	}
 
 	//devia de ser feito um exit handler com isto para caso haja uma terminaçao inesperada
-	if (conection_open) close_tio(app.fd);
+	//if (conection_open) close_tio(app.fd); //nao podemos fazer isto porque AppProtocol nao conhece close_tio
 	if (image_bytes_length > 0) free(image_bytes);
 
 	return 0;

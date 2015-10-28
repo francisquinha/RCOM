@@ -13,6 +13,28 @@
 #include "utilities.h"
 #include "DataLinkProtocol.h"
 
+//#define MAX_FRAME_SIZE 64
+struct linkLayer{
+	char port[20]; /*Dispositivo /dev/ttySx, x = 0, 4*/
+	int baudRate; /*Velocidade de transmissão*/
+	unsigned int sequenceNumber; /*Número de sequência da trama: 0, 1*/
+	int timeout; /*Valor do temporizador: 1 s*/
+	 int numTransmissions; /*Número de tentativas em caso de
+								   falha*/
+	 //int Iframe_numdatabytes;
+	//char frame[MAX_FRAME_SIZE]; /*trama*/
+};
+
+
+typedef char message_type;
+#define MESSAGE_SET		1
+#define MESSAGE_DISC	2
+#define MESSAGE_UA		3
+#define MESSAGE_RR		4
+#define MESSAGE_REJ		5
+#define MESSAGE_I		6
+
+
 //X=X=X=X   general debug stuff
 #if (1)
 //===============================================================================
@@ -667,7 +689,7 @@ int llopen_transmitter(int fd)
 	}
 	//or else
 	printf("\nllopen: Connection established.\n");
-	return OK;//replace with fd later
+	return OK;
 }
 
 #endif /*LLOPEN AUXS*/
@@ -776,26 +798,41 @@ int llclose_transmitter(int fd)
 #if (1)
 //===============================================================================
 
-int llopen(int fd, app_status_type status)
+int llopen(app_status_type status)
 {
+	int fd;
+	
+	if (open_tio(&fd, 0, 0) != OK) {
+		printf("\nERROR: Could not open terminal\n");
+		return -1;
+	}
+
 	occ_log.num_of_Is = 0;
 	occ_log.total_num_of_timeouts= 0;
 	occ_log.num_of_REJs			 = 0;
 	if (status == APP_STATUS_TRANSMITTER)
 	{
 		app_status = APP_STATUS_TRANSMITTER;
-		return llopen_transmitter(fd);
+		if( llopen_transmitter(fd) != OK) {
+			close_tio(fd);
+			return -1;
+		};
 	}
 	else if (status == APP_STATUS_RECEIVER)
 	{
 		app_status = APP_STATUS_RECEIVER;
-		return llopen_receiver(fd);
+		if( llopen_receiver(fd) != OK) {
+			close_tio(fd);
+			return -1;
+		};
 	}
 	else
 	{
 		printf("\nWARNING(llo):invalid app_status found on llopen().\n");
+		close_tio(fd);
 		return 1;
 	}
+	return fd;
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1016,9 +1053,12 @@ int llwrite(int fd, char * buffer, int length)
 
 int llclose(int fd)
 {
-	if (app_status == APP_STATUS_RECEIVER)			return llclose_receiver(fd);
-	else if (app_status == APP_STATUS_TRANSMITTER)  return llclose_transmitter(fd);
-	else return -1;
+	int ret;
+	if (app_status == APP_STATUS_RECEIVER)			ret = llclose_receiver(fd);
+	else if (app_status == APP_STATUS_TRANSMITTER)  ret = llclose_transmitter(fd);
+	else ret = -1;
+	close_tio(fd);
+	return ret;
 }
 
 #endif//==========================================================================
