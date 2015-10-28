@@ -477,26 +477,31 @@ void write_UorS(app_status_type adressStatus, message_type msg_type, int SorR, i
 	}
 }
 
-#define CABE_PROB 100		// significa que em cada CABE_PROB cabecalhos havera um erro, em media. 0 se nao quisermos erros
+#define CABE_PROB 100	// significa que em cada CABE_PROB cabecalhos havera um erro, em media. 0 se nao quisermos erros
 #define DATA_PROB 100		// significa que em cada DATA_PROB campos de dados havera um erro, em media. 0 se nao quisermos erros
 
-void randomErrorGenerator(char* trama, int data_size) {	
+void randomErrorCabe(char* msg) {	
 	int trama_byte;
 	if (CABE_PROB > 0) {
 		int cabe_error = rand() % CABE_PROB;
 		if (cabe_error == 0) {
 			trama_byte = rand() % 3 + 1;			// escolher erro entre A, C e BCC1
-			trama[trama_byte]++;					// o erro é incrementar o byte escolhido
+			msg[trama_byte]++;						// o erro é incrementar o byte escolhido
 		}
 	}
+}
+
+void randomErrorData(char* trama, int data_size) {	
+	int trama_byte;
 	if (DATA_PROB > 0) {
 		int data_error = rand() % DATA_PROB;
 		if (data_error == 0) {
-			trama_byte = rand() % data_size + 4;	// escolher o byte de erro na zona dos dados da trama
+			trama_byte = rand() % data_size;		// escolher o byte de erro na zona dos dados da trama
 			trama[trama_byte]++;					// o erro é incrementar o byte escolhido
 		}
 	}
 }
+
 
 #define DEBUG_WRITE_I 0
 //data must come in without stuffing
@@ -504,6 +509,9 @@ int write_I(int SorR, int fd, char* data, int data_size)
 {
 	char msg[4];
 	getMessage(APP_STATUS_TRANSMITTER, MESSAGE_I, SorR, msg);
+	
+	randomErrorCabe(msg);
+	
 	if (write(fd, msg, 4) != 4)
 	{
 		perror("write_I():");
@@ -521,7 +529,7 @@ int write_I(int SorR, int fd, char* data, int data_size)
 	memcpy(finalMessage2Send, data, data_size);
 	finalMessage2Send[data_size] = genBCC2(data, data_size);
 
-	randomErrorGenerator(finalMessage2Send, data_size);
+	randomErrorData(finalMessage2Send, data_size);
 
 	DEBUG_SECTION(DEBUG_REJ_WITHWRONG_BCCS,
 		gen0bcc = gen0bcc? FALSE: TRUE;);
