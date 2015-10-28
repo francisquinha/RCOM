@@ -241,7 +241,7 @@ int main(int argc, char** argv)
 					sendImage() : receiveImage()) == 0)
 				{
 					show_display = NO;
-					llclose(app.fd);
+					llclose(app.fd, 0);	// normal close
 
 					//save file if receiver
 					if (app.status == APP_STATUS_RECEIVER){
@@ -257,7 +257,7 @@ int main(int argc, char** argv)
 					}
 
 				}
-				else llclose(app.fd); //// nao sabemos se isto deve ficar assim porque o llclose espera um disc que nao vai receber
+				else llclose(app.fd, 1); // hard close
 				conection_open = FALSE;
 
 				show_display = NO;

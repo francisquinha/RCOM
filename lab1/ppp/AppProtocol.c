@@ -126,7 +126,7 @@ int sendFile(unsigned char l2, unsigned char l1, int fd, unsigned char fileNameS
 	unsigned char N = 0;
 
 	//(unsigned int)image_bytes_length: this casting is not the ideal solution but works for now
-	sizeControlPacket = getControlPacket(START, (unsigned int)image_bytes_length, fileNameSize, fileName, controlPacket); // START control packet
+	sizeControlPacket = getControlPacket(START, (unsigned int)(image_bytes_length - *out_already_sent_bytes), fileNameSize, fileName, controlPacket); // START control packet
 	
 	if (sendControlPacket(fd, controlPacket, sizeControlPacket) != OK)
 		return -2;

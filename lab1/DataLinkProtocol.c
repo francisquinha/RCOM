@@ -1051,14 +1051,20 @@ int llwrite(int fd, char * buffer, int length)
 }
 
 
-int llclose(int fd)
+int llclose(int fd, int hard)
 {
-	int ret;
-	if (app_status == APP_STATUS_RECEIVER)			ret = llclose_receiver(fd);
-	else if (app_status == APP_STATUS_TRANSMITTER)  ret = llclose_transmitter(fd);
-	else ret = -1;
-	close_tio(fd);
-	return ret;
+	if (!hard) {
+		int ret;
+		if (app_status == APP_STATUS_RECEIVER)			ret = llclose_receiver(fd);
+		else if (app_status == APP_STATUS_TRANSMITTER)  ret = llclose_transmitter(fd);
+		else ret = -1;
+		close_tio(fd);
+		return ret;
+	}
+	else {
+		close_tio(fd);
+		return OK;
+	}
 }
 
 #endif//==========================================================================

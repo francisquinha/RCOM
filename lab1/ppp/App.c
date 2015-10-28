@@ -157,7 +157,7 @@ int sendImage(bool reconnect) {
 	//send
 	int ret = 0;
 	if (reconnect == FALSE) image_already_bytes = 0;
-	ret = sendFile(app.l2, app.l1, app.fd, image_name_length, image_name, image_bytes_length - image_already_bytes, image_bytes, &image_already_bytes);
+	ret = sendFile(app.l2, app.l1, app.fd, image_name_length, image_name, image_bytes_length, image_bytes, &image_already_bytes);
 
 	if (ret == -1 ) can_reconect = YES;
 	else can_reconect = NO;
