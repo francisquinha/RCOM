@@ -13,7 +13,7 @@ int getIntPositiveRange(int start, int end) {
 	int done = NO;
 
 	while (!done) {
-		printf("(%d,%d)", start, end);
+		//printf("(%d,%d)", start, end);
 
 		gets(get);
 		//fgets(get, 50, stdin); 
@@ -88,78 +88,22 @@ int select_config(void(*apply_options) (char, char, char, int))
 	printf("\ns)B230400        t)B460800\n=>");
 	boudOpt = getAnswer(20);
 
-	printf("\nSelect max Reconect Tries: \na)0 \nb)1 \nc)3 \nd)5 \ne)7\n");
-	reconectOpt = getAnswer(5);
+	printf("\nSelect max Reconect Tries: \na)1 \nb)3 \nc)5 \nd)7\n");
+	reconectOpt = getAnswer(4);
 
-	printf("\nSelect timeout interval: \na)2 secs \nb)3 secs \nc)5 secs \nd)8 secs \n=>");
+/*	printf("\nSelect timeout interval: \na)2 secs \nb)3 secs \nc)5 secs \nd)8 secs \n=>");
 	timetoutOpt = getAnswer(4);
+*/
 
-	//not sure about what should be the max size of the packet.
-	printf("\nInput packet size (without stuffing from 1 to 200??? not yet implemented!!!):\n");
-	packetSize = getIntPositiveRange(1, 200);
+	printf("\nInput packet size (number of file bytes per packet 1 - 65535):\n");
+	packetSize = getIntPositiveRange(1, 65535);
 
 	apply_options(boudOpt, reconectOpt, timetoutOpt, packetSize);
 
 	return 0;
 }
 
-//do not spam this method
-int progress_icon_state = 0;
-void* show_progress(void* args)
-{
-  void** rec = (void**) args;
-  bool* loop = (bool*) rec[0];
-  int* appstatus= (int*)rec[1];
-  volatile unsigned int* total_excepted = (unsigned int*)rec[2];
-  volatile unsigned int* total_received_or_sent = (unsigned int*)rec[3];
-  
-	const int NUMBER_OF_BARS_IN_PROGRESS_BAR = 20;
-	const char progress_bar_character = '#';
-	char progress_icon = 0;
-	
-	while(*loop){
-		
-	  usleep(40000);/*micro secs*/
-	  /*still printin conect and whatnot*/
-	 if(*total_received_or_sent==0) continue;
 
-	 
-	switch (progress_icon_state){
-	case 0: progress_icon = '~'; break;
-	case 1: progress_icon = '\\'; break;
-	case 2: progress_icon = '|'; break;
-	case 3: progress_icon = '/'; break;
-	default: progress_icon = ' ';
-	}
-	progress_icon_state = (progress_icon_state + 1) % 4;
-
-	//-  - - - - - - - - - - - - - - - - - - - - - - - - -
-	system("clear");
-
-	 
-	/*if (data->estimate_recBytesPerSec > 1000)
-		printf("\n Rate:%d KB/sec", data->estimate_recBytesPerSec / 1000);
-	else
-		printf("\n Rate:%d B/sec", data->estimate_recBytesPerSec);
-	*/
-	
-	if (*appstatus) printf("Received ");
-	else printf("Sent ");
-	  
-	printf("\n %dKB of %dKB", (*total_received_or_sent) / 1000, (*total_excepted) / 1000);
-
-	printf("\n-----------------------------------------");
-	printf("\n      PROGRESS %c", progress_icon);
-	printf("\n<");
-	int number_of_block_2_print = *total_received_or_sent / (*total_excepted / NUMBER_OF_BARS_IN_PROGRESS_BAR);
-	int num_of_blanks_2_print = NUMBER_OF_BARS_IN_PROGRESS_BAR - number_of_block_2_print;
-	for (; number_of_block_2_print > 0; --number_of_block_2_print) printf("%c", progress_bar_character);
-	for (; num_of_blanks_2_print > 0; --num_of_blanks_2_print) printf(" ");
-	printf(">\n");
-	}
-	
-	return 0;
-}
 
 
 void show_prog_stats(unsigned long num_of_Is,
@@ -177,8 +121,8 @@ void show_prog_stats(unsigned long num_of_Is,
 	printf("\nTotal number of timeouts: %lu", total_num_of_timeouts);
 
 	if (appstatus/*receiver*/)
-		printf("\nTotak number of REJs received: %lu", num_of_REJs);
-	else /*transmitter*/printf("\nTotal number of REJs sent: %lu", num_of_REJs);
+		printf("\nTotak number of REJs sent: %lu", num_of_REJs);
+	else /*transmitter*/printf("\nTotal number of REJs received: %lu", num_of_REJs);
 
 	printf("\n- - - - - - - - - - - - - - -\nPress Enter key to return to pevious menu...\n");
 
