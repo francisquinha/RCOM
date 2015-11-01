@@ -1,0 +1,161 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%												    %
+%	PROTOCOLO LIGACAO DADOS						    %
+%												    %
+%	Novembro 2015								    %
+%												    %
+%	Angela Cardodo e Bruno Madeira					%
+%   											    %	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[11pt,a4paper,reqno]{report}
+\linespread{1.5}
+
+\usepackage[active]{srcltx}    
+\usepackage{graphicx}
+\usepackage{amsthm,amsfonts,amsmath,amssymb,indentfirst,mathrsfs,amscd}
+\usepackage[mathscr]{eucal}
+\usepackage[active]{srcltx} %inverse search
+\usepackage{tensor}
+\usepackage[utf8x]{inputenc}
+\usepackage[portuges]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{enumitem}
+\setlist{nolistsep}
+\usepackage{comment} 
+\usepackage{tikz}
+\usepackage[numbers,square, comma, sort&compress]{natbib}
+\usepackage[nottoc,numbib]{tocbibind}
+%\numberwithin{figure}{section}
+\numberwithin{equation}{section}
+\usepackage{scalefnt}
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+%\usepackage{tweaklist}
+%\renewcommand{\itemhook}{\setlength{\topsep}{0pt}%
+%	\setlength{\itemsep}{0pt}}
+%\renewcommand{\enumhook}{\setlength{\topsep}{0pt}%
+%	\setlength{\itemsep}{0pt}}
+%\usepackage[colorlinks]{hyperref}
+\usepackage{MnSymbol}
+%\usepackage[pdfpagelabels,pagebackref,hypertexnames=true,plainpages=false,naturalnames]{hyperref}
+\usepackage[naturalnames]{hyperref}
+\usepackage{enumitem}
+\usepackage{titling}
+\newcommand{\subtitle}[1]{%
+	\posttitle{%
+	\par\end{center}
+	\begin{center}\large#1\end{center}
+	\vskip0.5em}%
+}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\usepackage{caption}
+\usepackage{etoolbox}% http://ctan.org/pkg/etoolbox
+\usepackage{complexity}
+
+\usepackage[official]{eurosym}
+
+\def\Cpp{C\raisebox{0.5ex}{\tiny\textbf{++}}}
+
+\makeatletter
+\def\@makechapterhead#1{%
+  %%%%\vspace*{50\p@}% %%% removed!
+  {\parindent \z@ \raggedright \normalfont
+    \ifnum \c@secnumdepth >\m@ne
+        \huge\bfseries \@chapapp\space \thechapter
+        \par\nobreak
+        \vskip 20\p@
+    \fi
+    \interlinepenalty\@M
+    \Huge \bfseries #1\par\nobreak
+    \vskip 40\p@
+  }}
+\def\@makeschapterhead#1{%
+  %%%%%\vspace*{50\p@}% %%% removed!
+  {\parindent \z@ \raggedright
+    \normalfont
+    \interlinepenalty\@M
+    \Huge \bfseries  #1\par\nobreak
+    \vskip 40\p@
+  }}
+\makeatother
+
+\usepackage[toc,page]{appendix}
+
+\addto\captionsportuges{%
+  \renewcommand\appendixname{Anexo}
+  \renewcommand\appendixpagename{Anexos}
+}
+
+\addto\captionsportuges{%
+  \renewcommand\abstractname{Sumário}
+}
+
+\begin{document}
+
+\input{./title.tex}
+
+%%%%%%%%%%%
+% SUMARIO %
+%%%%%%%%%%%
+\begin{abstract}
+	bla bla bla
+\end{abstract}
+
+\tableofcontents
+
+%%%%%%%%%%%%%%
+% INTRODUCAO %
+%%%%%%%%%%%%%%
+\chapter{Introdução}
+
+%%%%%%%%%%%%%%%%%%%%
+% ESTRUTURA CODIGO %
+%%%%%%%%%%%%%%%%%%%%
+\chapter{Estrutura do código}
+
+%%%%%%%%%%%%%
+% CASOS USO %
+%%%%%%%%%%%%%
+\chapter{Casos de uso principais}
+
+%%%%%%%%%%%%%%%%%%
+% LIGACAO LOGICA %
+%%%%%%%%%%%%%%%%%%
+\chapter{Protocolo de ligação lógica}
+
+%%%%%%%%%%%%%
+% APLICACAO %
+%%%%%%%%%%%%%
+\chapter{Protocolo de aplicação}
+
+%%%%%%%%%%%%%
+% VALIDACAO %
+%%%%%%%%%%%%%
+\chapter{Validação}
+
+%%%%%%%%%%%%%%%
+% VALORIZACAO %
+%%%%%%%%%%%%%%%
+\chapter{Elementos de valorização}
+
+%%%%%%%%%%%%%%
+% CONCLUSOES %
+%%%%%%%%%%%%%%
+\chapter{Conclusões}
+
+%%%%%%%%%%%%%%%%
+% BIBLIOGRAPHY %
+%%%%%%%%%%%%%%%%
+\bibliographystyle{IEEEtran}
+\bibliography{rabb,refs}
+
+\begin{appendices}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% APENDICE - CODIGO FONTE %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Código Fonte}
+
+\end{appendices}
+
+\end{document}
