@@ -1,0 +1,16 @@
+<map id="llclose" name="llclose">
+<area shape="rect" id="node2" href="$_data_link_protocol_8c.html#aeb460620fe2245b4a7c69dca326b8aba" title="llclose_receiver" alt="" coords="121,174,234,201"/>
+<area shape="rect" id="node12" href="$_data_link_protocol_8c.html#ae5a38eb4c5ded3a0a10fa2488f5ec158" title="llclose_transmitter" alt="" coords="113,124,242,150"/>
+<area shape="rect" id="node15" href="$_data_link_protocol_8c.html#a5a80102345b55b2906f6de5b74872837" title="close_tio" alt="" coords="140,225,215,252"/>
+<area shape="rect" id="node3" href="$_data_link_protocol_8c.html#a49297b2b7505288d30cfe8a7e5ed19eb" title="startAlarm" alt="" coords="293,124,376,150"/>
+<area shape="rect" id="node4" href="$_data_link_protocol_8c.html#ae6b9522ed0e0617707ec39205ac3d66b" title="update_state_machine" alt="" coords="427,124,584,150"/>
+<area shape="rect" id="node11" href="$_data_link_protocol_8c.html#a7ae58fc4d576671de97e4eab7d92d8ce" title="stopAlarm" alt="" coords="293,174,376,201"/>
+<area shape="rect" id="node5" href="$_data_link_protocol_8c.html#a6a7b7f464b479f94feff8d9a00b18641" title="getA" alt="" coords="758,73,807,100"/>
+<area shape="rect" id="node6" href="$_data_link_protocol_8c.html#aaa901ccedf05fba90552bdacbd11d3e9" title="getC" alt="" coords="757,124,808,150"/>
+<area shape="rect" id="node10" href="$_data_link_protocol_8c.html#afa532baada4350c6ed5b8193170b419d" title="getBCC1" alt="" coords="633,124,709,150"/>
+<area shape="rect" id="node7" href="$_data_link_protocol_8c.html#a1e4dbedff6dab62b362ac8ce0c34db2b" title="getI" alt="" coords="867,73,911,100"/>
+<area shape="rect" id="node8" href="$_data_link_protocol_8c.html#a61563a2133275f81530af205df721370" title="getRR" alt="" coords="859,124,919,150"/>
+<area shape="rect" id="node9" href="$_data_link_protocol_8c.html#abaa3708a048ddc5767862379efc6a548" title="getREJ" alt="" coords="857,174,922,201"/>
+<area shape="rect" id="node13" href="$_data_link_protocol_8c.html#a91dbcb5921f187a9984cc67ea03398fc" title="write_UorS" alt="" coords="291,22,379,49"/>
+<area shape="rect" id="node14" href="$_data_link_protocol_8c.html#a15fda084e7c867a3bbec56c610d51328" title="getMessage" alt="" coords="458,22,553,49"/>
+</map>

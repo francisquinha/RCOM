@@ -1,0 +1,5 @@
+<map id="config" name="config">
+<area shape="rect" id="node2" href="$_data_link_protocol_8c.html#a224fe6e5e5dac90f16f0a69196631a0f" title="set_basic_definitions" alt="" coords="113,5,258,32"/>
+<area shape="rect" id="node4" href="$_app_8c.html#a8e15d7a1b572d121a014c7dbe5f0c405" title="setPacketSize" alt="" coords="132,56,239,83"/>
+<area shape="rect" id="node3" href="$_data_link_protocol_8c.html#abc2de636b525f3c7fb5c49058c0e9814" title="timeout_alarm_handler" alt="" coords="307,5,466,32"/>
+</map>

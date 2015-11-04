@@ -1,0 +1,24 @@
+<map id="sendImage" name="sendImage">
+<area shape="rect" id="node2" href="$_app_protocol_8c.html#a4b94281ba90edbd7830b34f849d13a7d" title="sendFile" alt="" coords="141,183,213,209"/>
+<area shape="rect" id="node3" href="$_app_protocol_8c.html#a2b801ed1acf22e8bfa83ca4b94387ff1" title="getControlPacket" alt="" coords="267,81,391,108"/>
+<area shape="rect" id="node4" href="$_app_protocol_8c.html#a123485ea53d189897094d75d75e7c9db" title="sendControlPacket" alt="" coords="262,183,397,209"/>
+<area shape="rect" id="node21" href="$_app_protocol_8c.html#a181cbaf5a7dc6ebcbe16544b869fad0c" title="getInfoPacket" alt="" coords="277,233,381,260"/>
+<area shape="rect" id="node22" href="$_app_protocol_8c.html#a210995acca3c01cc05ab4f44fae52612" title="sendInfoPacket" alt="" coords="273,132,386,159"/>
+<area shape="rect" id="node23" href="$_app_protocol_8c.html#a5e7b721b0e6dfd145cd681f4fcc6563f" title="show_progress" alt="" coords="273,284,385,311"/>
+<area shape="rect" id="node5" href="$_data_link_protocol_8c.html#a7566fe39434784a0bc29e8b0e64485fc" title="llwrite" alt="" coords="445,157,501,184"/>
+<area shape="rect" id="node6" href="$_data_link_protocol_8c.html#ab455e0521aa499284c844ee6f8e26598" title="write_I" alt="" coords="560,132,621,159"/>
+<area shape="rect" id="node18" href="$_data_link_protocol_8c.html#a49297b2b7505288d30cfe8a7e5ed19eb" title="startAlarm" alt="" coords="549,183,632,209"/>
+<area shape="rect" id="node19" href="$_data_link_protocol_8c.html#ae6b9522ed0e0617707ec39205ac3d66b" title="update_state_machine" alt="" coords="680,5,837,32"/>
+<area shape="rect" id="node20" href="$_data_link_protocol_8c.html#a7ae58fc4d576671de97e4eab7d92d8ce" title="stopAlarm" alt="" coords="549,233,632,260"/>
+<area shape="rect" id="node7" href="$_data_link_protocol_8c.html#a15fda084e7c867a3bbec56c610d51328" title="getMessage" alt="" coords="711,157,806,184"/>
+<area shape="rect" id="node14" href="$_data_link_protocol_8c.html#a0897e8adf83062f90d9c40d7150a65da" title="randomErrorCabe" alt="" coords="694,259,823,285"/>
+<area shape="rect" id="node15" href="$_data_link_protocol_8c.html#adac0fd13500fe1f22cd9c00f46b13c05" title="genBCC2" alt="" coords="719,56,799,83"/>
+<area shape="rect" id="node16" href="$_data_link_protocol_8c.html#ad02f9034be15b43af6a10458ac425729" title="randomErrorData" alt="" coords="696,107,821,133"/>
+<area shape="rect" id="node17" href="$_data_link_protocol_8c.html#a5e3fb24a4fa1e5809512f2231866446c" title="apply_stuffing" alt="" coords="707,208,811,235"/>
+<area shape="rect" id="node8" href="$_data_link_protocol_8c.html#a6a7b7f464b479f94feff8d9a00b18641" title="getA" alt="" coords="1011,81,1061,108"/>
+<area shape="rect" id="node9" href="$_data_link_protocol_8c.html#aaa901ccedf05fba90552bdacbd11d3e9" title="getC" alt="" coords="1011,132,1061,159"/>
+<area shape="rect" id="node13" href="$_data_link_protocol_8c.html#afa532baada4350c6ed5b8193170b419d" title="getBCC1" alt="" coords="886,132,962,159"/>
+<area shape="rect" id="node10" href="$_data_link_protocol_8c.html#a1e4dbedff6dab62b362ac8ce0c34db2b" title="getI" alt="" coords="1121,81,1165,108"/>
+<area shape="rect" id="node11" href="$_data_link_protocol_8c.html#a61563a2133275f81530af205df721370" title="getRR" alt="" coords="1113,132,1173,159"/>
+<area shape="rect" id="node12" href="$_data_link_protocol_8c.html#abaa3708a048ddc5767862379efc6a548" title="getREJ" alt="" coords="1110,183,1175,209"/>
+</map>
