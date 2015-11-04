@@ -92,6 +92,7 @@
 \usepackage{verbatim}
 \usepackage{color}
 \definecolor{darkgray}{rgb}{0.41, 0.41, 0.41}
+\definecolor{green}{rgb}{0.0, 0.5, 0.0}
 \usepackage{listings}
 \lstset{language=C++, 
     basicstyle=\linespread{0.8}\ttfamily,
@@ -239,18 +240,17 @@ foram realizados testes nas máquinas virtuais usadas para desenvolver a aplica�
 %%%%%%%%%%%%%%%
 \chapter{Elementos de valorização}
 
-TODO: identificação dos elementos de valorização implementados; descrição da estratégia de implementação com apresentação de pequenos extratos de código
+A camada de ligação de dados regista o número de tramas do tipo I e REJs recebidas/enviadas e o número de ocorrencias de timeouts de uma transmissão. A informação fica registada numa variável do tipo {\it occurrences\_Log} e pode ser acedida pela componente de interface através do método {\it get\_occurrences\_log}.
 
-registo de ocurrencias
+\hfill \break
+O utilizador pode definir qual o {\it baudrate} a usar, o {\it packetSize} (numero de bytes máximos que envia da imagem em cada trama I antes de se realizar o stuffing) e o número máximo de tentativas consecutivas de reconexão.
+Uma vez escolhidas as opções o intervalo de duração de um timeout é calculado em função do {\it baudrate} e do {\it packetSize} escolhidos pelo utilizador como se pode verificar no anexo \ref{setbasicdefinitions}. Na nossa implementação o receptor pode e deve configurar o {\it baudrate} e {\it packetSize} iguais aos do transmissor, pois, apesar de estes não serem usados na prática pelo receptor, são necessários para calcular um intervalo de timeout que seja fiável face às definições do transmissor.
 
-opcoes para o utilizador-
-bitrate,
-tamanho de info a mandar,
-numero de tentativas de reconexao
+\hfill \break
+São gerados erros aleatoriamente nas tramas enviadas pelo transmissor. São gerados erros no cabeçalho e de nos dados. Estes ocorrem de forma independente e são gerados respectivamente pelas funções {\it randomErrorCabe} e {\it randomErrorData}. A frequência destes erros é defina a partir das constantes {\it CABE\_PROB} e {\it DATA\_PROB} que representam quantas tramas são enviadas por cada um que apresenta um erro do tipo correspondente. Pode ser verificada a função {\it randomErrorData} no anexo \ref{randomErrorData}. A {\it randomErrorCabe} não foi incluida em anexo uma vez que é bastante semelhante à {\it randomErrorData}.
 
-geraçao de erros
-
-interface - tem um intervalo minimo de atualizacao de modo a evitar interferir com a recepçao de dados
+\hfill \break
+Na AppProtocol.c, quando a aplicação está enviar/receber uma imagem, trata imprimir na consola a quantidade de bytes enviados/recebidos e quantos faltam para receber/enviar a imagem na totalidade. Este display (impressão na consola) é actualizado cada vez que um pacote é enviado/recebido na totalidade se já tiver passado um tempo mínimo definido na constante {\it UPDATE\_DISPLAY\_MIN\_TIME\_INTERVAL} desde a ultima actualização de display de modo a evitar que ocorra com elevada frequência o que poderia tornar difícil a sua leitura ou afectar a leitura/recepção de tramas.
 
 
 %%%%%%%%%%%%%%
@@ -311,6 +311,53 @@ int llopen(app_status_type status)
 	return fd;
 }
 \end{lstlisting}
+
+\section{Função set\_basic\_definitions em DataLinkProtocol.c }
+\label{setbasicdefinitions}
+\begin{lstlisting}
+void set_basic_definitions(int number_of_tries_when_failing, char* port, int baudrate, int packetSize)
+{
+	DEBUG_SECTION(DEBUG_PRINT_SECTION_NUM,
+		printf("\n-section1-");
+	sleep(1);
+	);
+
+	signal(SIGALRM, timeout_alarm_handler);
+	
+	int realbauds[20] = {0, 50, 75, 110, 134, 150, 200, 300, 600, 1200, 1800, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800};
+	int realBaudrate;
+	if (baudrate <= 15) realBaudrate = realbauds[baudrate];
+	else realBaudrate = realbauds[baudrate - 4081];
+	
+	int timeout_in_seconds = ((packetSize + 4 + 1) * 2 + 5) / (realBaudrate / 8) + 1;
+	printf("size: %d\n", packetSize);
+	printf("baudrate: %d\n", realBaudrate);
+	printf("timeout: %d\n", timeout_in_seconds);
+	link_layer_data.timeout = timeout_in_seconds;
+	link_layer_data.numTransmissions = number_of_tries_when_failing;
+	if (port_name_was_set == NO) { strcpy(link_layer_data.port, port); port_name_was_set = YES; }
+	link_layer_data.baudRate = baudrate;
+}
+\end{lstlisting}
+
+%-------------------------------------------------------------------------------------------------------------------------------------------------
+\section{Função randomErrorData em DataLinkProtocol.c }
+\label{randomErrorData}
+\begin{lstlisting}
+void randomErrorData(char* trama, int data_size) {	
+	int trama_byte;
+	if (DATA_PROB > 0) {
+		int data_error = rand() % DATA_PROB;
+		if (data_error == 0) {
+			trama_byte = rand() % data_size;	// escolher o byte de erro na zona dos dados da trama
+			trama[trama_byte]++;			// o erro e incrementar o byte escolhido
+		}
+	}
+}
+\end{lstlisting}
+%-------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 
 
 \chapter{Tipos de Tramas Usadas}
