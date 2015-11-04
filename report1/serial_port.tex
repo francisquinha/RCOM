@@ -15,7 +15,6 @@
 \usepackage{graphicx}
 \usepackage{amsthm,amsfonts,amsmath,amssymb,indentfirst,mathrsfs,amscd}
 \usepackage[mathscr]{eucal}
-\usepackage[active]{srcltx} %inverse search
 \usepackage{tensor}
 \usepackage[utf8x]{inputenc}
 \usepackage[portuges]{babel}
@@ -29,7 +28,7 @@
 %\numberwithin{figure}{section}
 \numberwithin{equation}{section}
 \usepackage{scalefnt}
-\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage[top=2.5cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
 %\usepackage{tweaklist}
 %\renewcommand{\itemhook}{\setlength{\topsep}{0pt}%
 %	\setlength{\itemsep}{0pt}}
@@ -87,28 +86,38 @@
 }
 
 \addto\captionsportuges{%
-  \renewcommand\abstractname{Sumário}
+  \renewcommand\abstractname{\huge Sumário}  
 }
+
+\usepackage{verbatim}
 
 \begin{document}
 
 \input{./title.tex}
 
+
 %%%%%%%%%%%
 % SUMARIO %
 %%%%%%%%%%%
 \begin{abstract}
+	
+TODO: Parágrafo sobre contexto.
+
+TODO: Parágrafo sobre conclusões.
 
 \end{abstract}
 
 \tableofcontents
+
 
 %%%%%%%%%%%%%%
 % INTRODUCAO %
 %%%%%%%%%%%%%%
 \chapter{Introdução}
 
-	Relatório relativo ao primeiro trabalho prático de Redes de Computadores que consiste na implementação de uma aplicação que transfere imagens entre dois computadores fazendo uso da porta-série. A aplicação deve usar um protocolo de ligação de dados {\it Stop N Wait ARQ}  híbrido que deve assegurar a fiabilidade  da transmissão mesmo em caso de desconexão. Deve também usar um protocolo de aplicação que é responsável pelo envio da imagem. O código desenvolvido deve ser estruturado em camadas, respeitando o princípio de encapsulamento, de modo a assegurar cada protocolo funciona de forma independente.
+TODO: Indicação dos objectivos do trabalho e do relatório; descrição da lógica do relatório com indicações sobre o tipo de informação que poderá ser encontrada em cada uma secções seguintes.
+
+Relatório relativo ao primeiro trabalho prático de Redes de Computadores que consiste na implementação de uma aplicação que transfere imagens entre dois computadores fazendo uso da porta-série. A aplicação deve usar um protocolo de ligação de dados {\it Stop N Wait ARQ}  híbrido que deve assegurar a fiabilidade  da transmissão mesmo em caso de desconexão. Deve também usar um protocolo de aplicação que é responsável pelo envio da imagem. O código desenvolvido deve ser estruturado em camadas, respeitando o princípio de encapsulamento, de modo a assegurar cada protocolo funciona de forma independente.
 	
 	O trabalho foi utilizando a linguagem de programação C num ambiente com um sistema operativo baseado em Linux. Para testes foi usada uma porta-seire XPTO???.
 	
@@ -121,51 +130,67 @@
 	O capítulo 7 apresenta os testes efectuados sobre a aplicação.
 	
 	O 
+	
+	
+%%%%%%%%%%%%%%%
+% ARQUITETURA %
+%%%%%%%%%%%%%%%
+\chapter{Arquitetura}
+
+TODO:blocos funcionais e interfaces
+
 
 %%%%%%%%%%%%%%%%%%%%
 % ESTRUTURA CODIGO %
 %%%%%%%%%%%%%%%%%%%%
 \chapter{Estrutura do código}
 
-enumerar ficheiros e estruturas
+TODO: APIs, principais estruturas de dados, principais funções e sua relação com a arquitetura
+
 
 %%%%%%%%%%%%%
 % CASOS USO %
 %%%%%%%%%%%%%
 \chapter{Casos de uso principais}
 
-???
+TODO: identificação; sequências de chamada de funções
 
-seq. de chamadas a funçoes (talvez fzr aqueles diagramas com o graphviz)
 
 %%%%%%%%%%%%%%%%%%
 % LIGACAO LOGICA %
 %%%%%%%%%%%%%%%%%%
 \chapter{Protocolo de ligação lógica}
 
+Para implementar o protocolo de ligação lógica, seguimos as indicações do enunciado do projeto. Sendo assim, usamos a variante \emph{Stop and Wait}, o que significa que o Emissor, após cada mensagem, aguarda uma resposta do Recetor antes de enviar a mensagem seguinte. Isto significa, entre outras coisas, que podemos utilizar uma numeração módulo 2 para as mensagens, dado que nunca temos mais do que 2 mensagens em jogo (aquela que foi enviada e a que se pretende enviar de seguida).
+
+O interface deste protocolo tem 5 funções:
+\begin{itemize}
+\item \verb|int llopen(app_status_type status)| - abre a porta de série para comunicação, o parâmetro indica se é o Emissor ou o Receptor quem chama a função, retorna o número da ligação de dados, ou -1 em caso de erro;
+\item \verb|int llclose(int fd, int hard)| - termina a ligação no final da comunicação, o parâmetro fd é o número da ligação, o parâmetro hard indica que estamos numa situação de terminar à força após um erro, retorna 0 ou -1 consoante seja bem sucedida ou ocorra erro;
+\item \verb|int llwrite(int fd, char *buffer, int length)| - dado um número de ligação e um array de dados com determinado comprimento, constrói a trama de acordo com as regras do protocolo e envia essa trama, retorna 0 ou -1 consoante seja bem sucedida ou ocorra erro;
+\item \verb|int llread(int fd, char **buffer)| - dado um número de ligação e um apontador para um array de dados, lê os dados da porta e coloca-os no array, retorna 0 ou -1 consoante seja bem sucedida ou ocorra erro;
+\item \verb|void set_basic_definitions(int nTries, char* port, int baudrate, int packetSize)| - consoante as preferências do utilizador, determina o número de tentativas em caso de timeout, a porta, o baudrate e o tamanho dos dados nos pacotes de dados, guardando estas informações na estrutura \verb|datalink|;
+\end{itemize}
+
+Estas funções utilizam a função \verb|update_state_machine| para determinar a cada instante o estado em que está. Ao chamar esta função são definidos os estados finais, e só depois disso, quando um estado final é atingido, é feito o reset à máquina de estados.
+
+Para obter a trama que pretende enviar é utilizada uma função \verb|getMessage| que tem como parâmetros o Emissor original, o tipo e o número da trama e o array de caracteres onde será colocada a flag e o cabeçalho da trama. Posteriormente a estes bytes, em tramas de Informação, serão adicionados os dados e o respetivo BCC2. Nas restantes tramas, é apenas reutilizada a flag que está na primeira posição do array. A sua especificação pode ser encontrada no Anexo~\ref{tramas}. 
+
+TODO:
+
 ligação de dados assíncrona
 vmin=0 e ???min=0 -> read retorna de imediato -> e usado um ciclo -> blablabla
-
-estrutura datalink? guarda as configuraçoes a usar
-
-funcao statemachine trata dos estados em qlq funcao llXPTO mas nao e autonoma, quem a chama tem q que definir qual os estados finais e tratar do reset quando um estado final e atingido mas a funcao nao e terminad.
 
 paridade usada foi XPTO, e possivel alterala no codigo
 
 alarm
 
-llopen()
-
-llread()
-
-llwrite()
-
-llclose() pde tratar do disk ou nao dependendo de como for chamada
-
 %%%%%%%%%%%%%
 % APLICACAO %
 %%%%%%%%%%%%%
 \chapter{Protocolo de aplicação}
+
+TODO: identificação dos principais aspectos funcionais; descrição da estratégia de implementação destes aspectos com apresentação de extractos de código
 
 foi implementada de acordo com o enunciado.
 
@@ -180,10 +205,13 @@ recebe info
 envia end
 recebe end
 
+
 %%%%%%%%%%%%%
 % VALIDACAO %
 %%%%%%%%%%%%%
 \chapter{Validação}
+
+TODO: descrição dos testes efectuados com apresentação quantificada dos resultados, se possível
 
 foram realizados testes nas aulas práticas e fora destas usando uma porta-série.
 
@@ -191,10 +219,13 @@ foram realizados testes nas máquinas virtuais usadas para desenvolver a aplica�
 
 ??? +
 
+
 %%%%%%%%%%%%%%%
 % VALORIZACAO %
 %%%%%%%%%%%%%%%
 \chapter{Elementos de valorização}
+
+TODO: identificação dos elementos de valorização implementados; descrição da estratégia de implementação com apresentação de pequenos extratos de código
 
 registo de ocurrencias
 
@@ -207,10 +238,14 @@ geraçao de erros
 
 interface - tem um intervalo minimo de atualizacao de modo a evitar interferir com a recepçao de dados
 
+
 %%%%%%%%%%%%%%
 % CONCLUSOES %
 %%%%%%%%%%%%%%
 \chapter{Conclusões}
+
+TODO: síntese da informação apresentada nas secções anteriores; reflexão sobre os objectivos de aprendizagem alcançados
+
 
 %%%%%%%%%%%%%%%%
 % BIBLIOGRAPHY %
@@ -224,6 +259,41 @@ interface - tem um intervalo minimo de atualizacao de modo a evitar interferir c
 % APENDICE - CODIGO FONTE %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Código Fonte}
+
+
+\chapter{Tipos de Tramas Usadas}
+\label{tramas}
+
+As tramas que utilizamos podem ser de três tipos:
+\begin{itemize}
+	\item Informação (I) - transportam dados;
+	\item Supervisão (S) - são usadas para iniciar e terminar a transmissão, assim como para responder a tramas do tipo I;
+	\item Não Numeradas (U) - são usadas para responder a tramas de início e fim de transmissão.
+\end{itemize}
+
+Todas as tramas são delimitadas pelas \emph{Flags} F - 01111110. Além disso, independentemente do tipo da trama, o cabeçalho é sempre o mesmo conjunto de 3 bytes:
+\begin{enumerate}
+	\item A - Campo de Endereço - 00000011 em comandos enviados pelo Emissor e respostas enviadas pelo Receptor, 00000001 na situação inversa;
+	\item C - Campo de Controlo:
+		\begin{itemize}
+			\item tramas I - 00S00000, onde S é o bit que identifica a trama;
+			\item tramas SET (\emph{set up}) - 00000111;
+			\item tramas DISC (\emph{disconnect})- 00001011;
+			\item tramas UA (\emph{unnumbered acknowledgment}) - 00000011;
+			\item tramas RR (\emph{positive acknowledgment}) - 00R00001, onde R identifica a trama;
+			\item tramas REJ (\emph{negative acknowledgment}) - 00R00101, onde R identifica a trama;
+		\end{itemize}
+	\item BCC1 (\emph{Block Check Character}) - Campo de Proteção do Cabeçalho - é obtido realizando a disjunção exclusiva bit a bit de A e C.
+\end{enumerate} 
+
+Se se tratar de uma trama I, após o cabeçalho temos:
+\begin{itemize}
+	\item $\text{D}_{\text{1}}, \text{D}_{\text{2}}, \ldots, \text{D}_{\text{N}}$ - bytes de dados;
+	\item BCC2 - Campo de Proteção dos Dados - calculado de forma que exista um número par de 1s em cada bit dos dados, incluindo o BCC2.
+\end{itemize}
+
+As restantes tramas apenas têm o respetivo cabeçalho delimitado por flags.
+
 
 \end{appendices}
 
