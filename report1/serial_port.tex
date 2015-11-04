@@ -98,7 +98,7 @@
 % SUMARIO %
 %%%%%%%%%%%
 \begin{abstract}
-	bla bla bla
+
 \end{abstract}
 
 \tableofcontents
@@ -108,35 +108,104 @@
 %%%%%%%%%%%%%%
 \chapter{Introdução}
 
+	Relatório relativo ao primeiro trabalho prático de Redes de Computadores que consiste na implementação de uma aplicação que transfere imagens entre dois computadores fazendo uso da porta-série. A aplicação deve usar um protocolo de ligação de dados {\it Stop N Wait ARQ}  híbrido que deve assegurar a fiabilidade  da transmissão mesmo em caso de desconexão. Deve também usar um protocolo de aplicação que é responsável pelo envio da imagem. O código desenvolvido deve ser estruturado em camadas, respeitando o princípio de encapsulamento, de modo a assegurar cada protocolo funciona de forma independente.
+	
+	O trabalho foi utilizando a linguagem de programação C num ambiente com um sistema operativo baseado em Linux. Para testes foi usada uma porta-seire XPTO???.
+	
+	Este relatório visa reportar qual o estado final da aplicação desenvolvia, clarificar detalhes do processo de implementação/código e a opinião dos estudantes face ao projecto realizado.
+	
+	Do capítulo 2 ao 4 são expostas as estruturas e os mecanismos implementados na concepção da aplicação sem incidir em detalhes específicos destes.
+	
+	Os capítulos 5 e 6 incidem sobre as particularidades da implementação dos protocolos usados.
+	
+	O capítulo 7 apresenta os testes efectuados sobre a aplicação.
+	
+	O 
+
 %%%%%%%%%%%%%%%%%%%%
 % ESTRUTURA CODIGO %
 %%%%%%%%%%%%%%%%%%%%
 \chapter{Estrutura do código}
+
+enumerar ficheiros e estruturas
 
 %%%%%%%%%%%%%
 % CASOS USO %
 %%%%%%%%%%%%%
 \chapter{Casos de uso principais}
 
+???
+
+seq. de chamadas a funçoes (talvez fzr aqueles diagramas com o graphviz)
+
 %%%%%%%%%%%%%%%%%%
 % LIGACAO LOGICA %
 %%%%%%%%%%%%%%%%%%
 \chapter{Protocolo de ligação lógica}
+
+ligação de dados assíncrona
+vmin=0 e ???min=0 -> read retorna de imediato -> e usado um ciclo -> blablabla
+
+estrutura datalink? guarda as configuraçoes a usar
+
+funcao statemachine trata dos estados em qlq funcao llXPTO mas nao e autonoma, quem a chama tem q que definir qual os estados finais e tratar do reset quando um estado final e atingido mas a funcao nao e terminad.
+
+paridade usada foi XPTO, e possivel alterala no codigo
+
+alarm
+
+llopen()
+
+llread()
+
+llwrite()
+
+llclose() pde tratar do disk ou nao dependendo de como for chamada
 
 %%%%%%%%%%%%%
 % APLICACAO %
 %%%%%%%%%%%%%
 \chapter{Protocolo de aplicação}
 
+foi implementada de acordo com o enunciado.
+
+a aplicação guarda o tamanho de imagem e o numero de pacotes ja enviados/recebidos
+
+envia Start
+recebe Start
+
+envia info pode enviar pacotes de tamanho maximo definido pelo utilizador
+recebe info
+
+envia end
+recebe end
+
 %%%%%%%%%%%%%
 % VALIDACAO %
 %%%%%%%%%%%%%
 \chapter{Validação}
 
+foram realizados testes nas aulas práticas e fora destas usando uma porta-série.
+
+foram realizados testes nas máquinas virtuais usadas para desenvolver a aplicação.
+
+??? +
+
 %%%%%%%%%%%%%%%
 % VALORIZACAO %
 %%%%%%%%%%%%%%%
 \chapter{Elementos de valorização}
+
+registo de ocurrencias
+
+opcoes para o utilizador-
+bitrate,
+tamanho de info a mandar,
+numero de tentativas de reconexao
+
+geraçao de erros
+
+interface - tem um intervalo minimo de atualizacao de modo a evitar interferir com a recepçao de dados
 
 %%%%%%%%%%%%%%
 % CONCLUSOES %
