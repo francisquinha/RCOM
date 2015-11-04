@@ -9,7 +9,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[11pt,a4paper,reqno]{report}
-\linespread{1.5}
+\linespread{1.2}
 
 \usepackage[active]{srcltx}    
 \usepackage{graphicx}
@@ -90,6 +90,20 @@
 }
 
 \usepackage{verbatim}
+\usepackage{color}
+\definecolor{darkgray}{rgb}{0.41, 0.41, 0.41}
+\usepackage{listings}
+\lstset{language=C++, 
+    basicstyle=\linespread{0.8}\ttfamily,
+    keywordstyle=\color{blue}\ttfamily,
+	showstringspaces=false,
+    stringstyle=\color{red}\ttfamily,
+    commentstyle=\color{green}\ttfamily,
+	identifierstyle=\color{darkgray}\ttfamily,
+    morecomment=[l][\color{magenta}]{\#},
+	tabsize=4,
+    breaklines=true
+}
 
 \begin{document}
 
@@ -259,6 +273,44 @@ TODO: síntese da informação apresentada nas secções anteriores; reflexão s
 % APENDICE - CODIGO FONTE %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Código Fonte}
+
+\begin{lstlisting}
+int llopen(app_status_type status)
+{
+	int fd;
+
+	if (open_tio(&fd, 0, 0) != OK) {
+		printf("\nERROR: Could not open terminal\n");
+		return -1;
+	}
+	occ_log.num_of_Is = 0;
+	occ_log.total_num_of_timeouts= 0;
+	occ_log.num_of_REJs			 = 0;
+	if (status == APP_STATUS_TRANSMITTER)
+	{
+		app_status = APP_STATUS_TRANSMITTER;
+		if( llopen_transmitter(fd) != OK) {
+			close_tio(fd);
+			return -1;
+		};
+	}
+	else if (status == APP_STATUS_RECEIVER)
+	{
+		app_status = APP_STATUS_RECEIVER;
+		if( llopen_receiver(fd) != OK) {
+			close_tio(fd);
+			return -1;
+		};
+	}
+	else
+	{
+		printf("\nWARNING(llo):invalid app_status found on llopen().\n");
+		close_tio(fd);
+		return 1;
+	}
+	return fd;
+}
+\end{lstlisting}
 
 
 \chapter{Tipos de Tramas Usadas}
