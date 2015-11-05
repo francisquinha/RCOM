@@ -140,7 +140,7 @@ Este relatório incide sobre projecto desenvolvido para o primeiro trabalho prá
 %%%%%%%%%%%%%%%
 % ARQUITETURA %
 %%%%%%%%%%%%%%%
-\chapter{Arquitetura e Estrutura de Código}
+\chapter{Arquitetura, Estrutura de Código e Casos de uso}
 
 \section{Arquitectura}
 
@@ -164,14 +164,14 @@ Pode verificar-se no diagrama de módulos, disponível no anexo \ref{modulediagr
 %TODO: APIs, principais estruturas de dados, principais funções e sua relação com a arquitetura
 Seguidamente são apresentadas as principais estruturas e funções desenvolvidas em cada módulo sendo algumas ocultadas uma vez que são referidas em maior detalhe nos capítulos relativos aos protocolos implementados.
 
-\section{Estruturas de dados}
+\subsection{Estruturas de dados}
 \begin{itemize}
 \item \verb|applicationLayer|: declarada na \verb|App.c| contem informações básicas ao programa como o seu status (transmissor/receptor) por exemplo. 	
 \item \verb|linkLayer|:declarada no \verb|DataLinkProtocol.c| serve para guardar as definições básicas da camada de ligação de dados como qual a porta série a ser usada.	
 \item \verb|occurrences\_Log|:declarada no \verb|DataLinkProtocol.h| serve para registar ocorrências como o número de REJs recebidos.	
 \end{itemize}
 
-\section{Funções privadas da DataLinkProtocol}
+\subsection{Funções privadas da DataLinkProtocol}
 \begin{itemize}
 \item \verb|genBCC2| e \verb|validateBCC2| tratam respectivamente de gerar e de validar o BCC2.
 \item \verb|write_UorS| e \verb|write_I| responsáveis pelo envio de tramas.
@@ -183,7 +183,7 @@ Seguidamente são apresentadas as principais estruturas e funções desenvolvida
 \item \verb|startAlarm| e \verb|stopAlarm| gerem o uso do alarme em conjunto com as funções invocadoras.
 \end{itemize}
 
-\section{Funções privadas da AppProtocol.c}
+\subsection{Funções privadas da AppProtocol.c}
 \begin{itemize}
 \item \verb|receivePacket| trata da recepção de um único pacote que pode ser de controlo ou de dados.
 \item \verb|getControlPacket| e \verb|getInfoPacket| responsáveis, respectivamente, pela criação de um único pacote de controlo e de dados.
@@ -191,14 +191,14 @@ Seguidamente são apresentadas as principais estruturas e funções desenvolvida
 \item \verb|show_progress| responsável por mostrar ao utilizador o estado actual da transferência/recepção do ficheiro.
 \end{itemize}
 
-\section{Funções disponibilizadas por FileFuncs.h}
+\subsection{Funções disponibilizadas por FileFuncs.h}
 \begin{itemize}
 \item \verb|getFileBytes| e \verb|save2File| são responsáveis respectivamente pela escrita e e leitura dos ficheiros.
 \end{itemize}
 
 %not impotant put only if it fits in a single page _>>>\subsection{Funções de user\_interface.c}
 
-\section{Funções da App.c}
+\subsection{Funções da App.c}
 \begin{itemize}
 %nao considerei o connect nem o setPacketSize mt importantes
 \item \verb|receiveImage| e \verb|sendImage| chamam as funções do Protocolo de Aplicação com os ajustes necessários de modo a enviar/receber uma imagem.
@@ -209,7 +209,8 @@ Seguidamente são apresentadas as principais estruturas e funções desenvolvida
 %%%%%%%%%%%%%
 % CASOS USO %
 %%%%%%%%%%%%%
-\chapter{Casos de uso principais}
+%\chapter{Casos de uso principais}
+\section{Casos de Uso}
 
 A aplicação desenvolvida deve ser chamada na linha de comandos recebendo como argumentos a porta de série a usar (/dev/ttyS0 ou /dev/ttyS4) e um caracter indicador(t ou r) se a aplicação deve correr em modo transmissor ou receptor.
 
