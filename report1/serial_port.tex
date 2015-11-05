@@ -119,28 +119,24 @@
 %%%%%%%%%%%
 \begin{abstract}
 	
-TODO: Parágrafo sobre contexto.
-Relatório no âmbito da disciplina de Redes de Computadores relativo ao trabalho prático sobre Protocolos de Ligação e Dados.
+Relatório relativo ao primeiro trabalho prático da unidade curricular Redes de Computadores do curso Mestrado Integrado em Engenharia Informática e Computação que consiste na implementação de uma aplicação que transfere imagens entre dois computadores fazendo uso da porta-série. O principal  objectivo do trabalho é colocar em prática  alguns dos conceitos leccionados na cadeira relativos a protocolos de ligação de dados.
 
-TODO: Parágrafo sobre conclusões.
+O relatório apresenta o estado final do projecto e as considerações dos estudantes responsáveis pela sua implementação face ao resultado obtido.
 
 \end{abstract}
 
 \tableofcontents
-
 
 %%%%%%%%%%%%%%
 % INTRODUCAO %
 %%%%%%%%%%%%%%
 \chapter{Introdução}
 
-TODO: Indicação dos objectivos do trabalho e do relatório; descrição da lógica do relatório com indicações sobre o tipo de informação que poderá ser encontrada em cada uma secções seguintes.
-
-Relatório relativo ao primeiro trabalho prático de Redes de Computadores que consiste na implementação de uma aplicação que transfere imagens entre dois computadores fazendo uso da porta-série. A aplicação deve usar um protocolo de ligação de dados \emph{Stop N Wait ARQ} híbrido que deve assegurar a fiabilidade  da transmissão mesmo em caso de desconexão. Deve também usar um protocolo de aplicação que é responsável pelo envio da imagem. O código desenvolvido deve ser estruturado em camadas, respeitando o princípio de encapsulamento, de modo a assegurar cada protocolo funciona de forma independente.
+Este relatório incide sobre projecto desenvolvido para o primeiro trabalho prático de Redes de Computadores que consiste na implementação de uma aplicação que transfere imagens entre dois computadores fazendo uso da porta-série. A aplicação deve usar um protocolo de ligação de dados \emph{Stop N Wait ARQ} híbrido que deve assegurar a fiabilidade  da transmissão mesmo em caso de desconexão. Deve também usar um protocolo de aplicação que é responsável pelo envio da imagem. O código desenvolvido deve ser estruturado em camadas, respeitando o princípio de encapsulamento, de modo a assegurar cada protocolo funciona de forma independente.
 	
-	O trabalho foi utilizando a linguagem de programação C num ambiente com um sistema operativo baseado em Linux. Para testes foi usada uma porta-seire XPTO???.
+	O trabalho foi utilizando a linguagem de programação C num ambiente com um sistema operativo baseado em Linux. O código pode ser verificado em anexo e será referenciado em algumas secções do relatório.
 	
-	Este relatório visa reportar qual o estado final da aplicação desenvolvia, clarificar detalhes do processo de implementação/código e a opinião dos estudantes face ao projecto realizado.
+	Este relatório tem como objectivo reportar qual o estado final da aplicação desenvolvia, clarificar detalhes do processo de implementação/código e a opinião dos estudantes face ao projecto realizado.
 	
 	Do capítulo 2 ao 4 são expostas as estruturas e os mecanismos implementados na concepção da aplicação sem incidir em detalhes específicos destes.
 	Detalhes relativos à implementação dos protocolos são apresentados nos capítulos 5 e 6 e detalhes relativos à implementação de componntes extra são apresentados no capítulo 7.
@@ -150,9 +146,9 @@ Relatório relativo ao primeiro trabalho prático de Redes de Computadores que c
 %%%%%%%%%%%%%%%
 % ARQUITETURA %
 %%%%%%%%%%%%%%%
-\chapter{Arquitetura}
+\chapter{Arquitetura e Estrutura de Código}
 
-TODO:blocos funcionais e interfaces
+\section{Arquitectura}
 
 Cada módulo desenvolvido no projecto pode ser identificado pelos headers files do código fonte que são:
 \begin{itemize}
@@ -168,7 +164,8 @@ Pode verificar-se no diagrama de módulos, disponível no anexo \ref{modulediagr
 %%%%%%%%%%%%%%%%%%%%
 % ESTRUTURA CODIGO %
 %%%%%%%%%%%%%%%%%%%%
-\chapter{Estrutura do código}
+%\chapter{Estrutura do código}
+\section{Estrutura do código}
 
 %TODO: APIs, principais estruturas de dados, principais funções e sua relação com a arquitetura
 Seguidamente são apresentadas as principais estruturas e funções desenvolvidas em cada módulo sendo algumas ocultadas uma vez que são referidas em maior detalhe nos capítulos relativos aos protocolos implementados.
@@ -189,15 +186,15 @@ Seguidamente são apresentadas as principais estruturas e funções desenvolvida
 \item \verb|update_state_machine| função auxiliar que funciona como máquina de estados.
 \item \verb|llopen_receiver|, \verb|llopen_transmitter|, \verb|llclose_receiver| e \verb|llclose_transmitter| ajudam a organizar o código do llopen e llclose uma vez que a sua execução difere do receptor para o emissor.
 %\item \verb|timeout_alarm_handler|
-\item \verb|startAlarm| e \verb|stopAlarm|
+\item \verb|startAlarm| e \verb|stopAlarm| gerem o uso do alarme em conjunto com as funções invocadoras.
 \end{itemize}
 
 \subsection{Funções privadas da AppProtocol.c}
 \begin{itemize}
-\item \verb|receivePacket|
-\item \verb|getControlPacket| e \verb|getInfoPacket|
-\item \verb|sendControlPacket| e \verb|sendInfoPacket|
-\item \verb|show_progress|
+\item \verb|receivePacket| trata da recepção de um único pacote que pode ser de controlo ou de dados.
+\item \verb|getControlPacket| e \verb|getInfoPacket| responsáveis, respectivamente, pela criação de um único pacote de controlo e de dados.
+\item \verb|sendControlPacket| e \verb|sendInfoPacket| responsáveis, repectivamente, pela transmissão de um único pacote de controlo e de dados.
+\item \verb|show_progress| responsável por mostrar ao utilizador o estado actual da transferência/recepção do ficheiro.
 \end{itemize}
 
 \subsection{Funções disponibilizadas por FileFuncs.h}
@@ -210,8 +207,8 @@ Seguidamente são apresentadas as principais estruturas e funções desenvolvida
 \subsection{Funções da App.c}
 \begin{itemize}
 %nao considerei o connect nem o setPacketSize mt importantes
-\item \verb|receiveImage| e \verb|sendImage|
-\item \verb|config|
+\item \verb|receiveImage| e \verb|sendImage| chamam as funções do Protocolo de Aplicação com os ajustes necessários de modo a enviar/receber uma imagem.
+\item \verb|config| quando o utilizador termina a selecção de opções no interface esta função transmite-as para o Protocolo de Ligação de Dados.
 \end{itemize}
 
 
