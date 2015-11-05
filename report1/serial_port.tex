@@ -247,7 +247,6 @@ O protocolo de aplicação foi implementado no ficheiro \verb|AppProtocol.c|. e 
 O protocolo foi implementado de acordo com o enunciado e é responsável pelo envio de pacotes de controlo e de dados.
 Os pacotes de controlo são enviados antes e após o envio dos dados e têm como parâmetros  nome e tamanho (em bytes) da imagem.
 Quando a informação destes pacotes coincide não é realizado o output da imagem mesmo que todos os pacotes de dados tenham sido recebidos dado que não há garantias que pertençam  todos à mesma imagem ou que todos foram recebidos.
-Os pacotes de dados
 
 O envio/recepção de imagens atualiza uma variável, recebida por um apontador, externa ao Protocolo (definida num outro módulo), que indica os bytes já enviados/recebidos. Tal variável é usada atualmente dentro do protocolo para o display do estado de envio da imagem que inicialmente estava implementado no ficheiro \verb|user_interface.c|. Esta variável serviria também para tentar retransmitir uma imagem em caso de um envio falhar a meio. Este mecanismo de retransmissão não foi completado e o display foi movido pois o sua implementação inicial interferia com o envio/recepção de dados, a estrutura do código actual reflecte os planos inicialmente concebidos.
 
@@ -279,8 +278,9 @@ Na AppProtocol.c, quando a aplicação está enviar/receber uma imagem, trata im
 
 Foram realizados cerca de 10 testes ao longo das aulas práticas e fora destas usando uma porta-série.
 Foram realizados cerca de 30 testes nas máquinas virtuais usadas para desenvolver a aplicação no fim desta estar terminada.
+
 Relativamente à qualidade dos testes não foi usado nenhum auxiliar para verificar se as imagens recebidas eram iguais às enviadas nem nenhuma automatiação de testes, sendo estes todos realizados manualmente. 
-Foram usadas imagens de diferentes tamanhos variados entre os 263 bytes (a mais pequena) e 712K bytes (a maior).Os tipos de imagens também variavam entre os tipos gif, jpeg e png.
+Foram usadas imagens de diferentes tamanhos variados entre os 263 bytes (a mais pequena) e 712K bytes (a maior). Os tipos de imagens também variavam entre os tipos gif, jpeg e png.
 De todos os testes realizados foram bem sucedidos à excepção de 1 que apresentou um aviso inesperado e do qual não conseguimos apurar o problema.
 
 %%%%%%%%%%%%%%
