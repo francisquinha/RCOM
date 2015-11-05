@@ -212,15 +212,16 @@ Seguidamente são apresentadas as principais estruturas e funções desenvolvida
 \end{itemize}
 
 
-
 %%%%%%%%%%%%%
 % CASOS USO %
 %%%%%%%%%%%%%
 \chapter{Casos de uso principais}
 
-TODO: identificação; sequências de chamada de funções
-??? ??? ???
-O diagrama de chamada de funções pode ser consultado no anexo \ref{flux}.
+A aplicação desenvolvida deve ser chamada na linha de comandos recebendo como argumentos a porta de série a usar (/dev/ttyS0 ou /dev/ttyS4) e um caracter indicador(t ou r) se a aplicação deve correr em modo transmissor ou receptor.
+
+Uma vez invocado o programa será mostrado um menu ao utilizador. No transmissor pode escolher seleccionar uma imagem a enviar ou enviar uma que já tenha seleccionado. Do lado do receptor pode ser iniciada a recepção. Ambas as versões da aplicação têm um submenu de para seleccionar  opções, estas  serão abordadas numa outra secção do relatório.
+
+As funções invocadas no seguimento das escolhas do utilizador podem ser averiguadas no diagrama de chamada de funções que pode ser consultado no anexo \ref{flux}.
 
 %%%%%%%%%%%%%%%%%%
 % LIGACAO LOGICA %
