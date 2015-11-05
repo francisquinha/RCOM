@@ -132,7 +132,7 @@ TODO: Parágrafo sobre conclusões.
 
 TODO: Indicação dos objectivos do trabalho e do relatório; descrição da lógica do relatório com indicações sobre o tipo de informação que poderá ser encontrada em cada uma secções seguintes.
 
-Relatório relativo ao primeiro trabalho prático de Redes de Computadores que consiste na implementação de uma aplicação que transfere imagens entre dois computadores fazendo uso da porta-série. A aplicação deve usar um protocolo de ligação de dados {\it Stop N Wait ARQ}  híbrido que deve assegurar a fiabilidade  da transmissão mesmo em caso de desconexão. Deve também usar um protocolo de aplicação que é responsável pelo envio da imagem. O código desenvolvido deve ser estruturado em camadas, respeitando o princípio de encapsulamento, de modo a assegurar cada protocolo funciona de forma independente.
+Relatório relativo ao primeiro trabalho prático de Redes de Computadores que consiste na implementação de uma aplicação que transfere imagens entre dois computadores fazendo uso da porta-série. A aplicação deve usar um protocolo de ligação de dados \emph{Stop N Wait ARQ} híbrido que deve assegurar a fiabilidade  da transmissão mesmo em caso de desconexão. Deve também usar um protocolo de aplicação que é responsável pelo envio da imagem. O código desenvolvido deve ser estruturado em camadas, respeitando o princípio de encapsulamento, de modo a assegurar cada protocolo funciona de forma independente.
 	
 	O trabalho foi utilizando a linguagem de programação C num ambiente com um sistema operativo baseado em Linux. Para testes foi usada uma porta-seire XPTO???.
 	
@@ -240,17 +240,20 @@ foram realizados testes nas máquinas virtuais usadas para desenvolver a aplica�
 %%%%%%%%%%%%%%%
 \chapter{Elementos de valorização}
 
-A camada de ligação de dados regista o número de tramas do tipo I e REJs recebidas/enviadas e o número de ocorrencias de timeouts de uma transmissão. A informação fica registada numa variável do tipo {\it occurrences\_Log} e pode ser acedida pela componente de interface através do método {\it get\_occurrences\_log}.
+\section{Registo de ocorrências}
 
-\hfill \break
-O utilizador pode definir qual o {\it baudrate} a usar, o {\it packetSize} (numero de bytes máximos que envia da imagem em cada trama I antes de se realizar o stuffing) e o número máximo de tentativas consecutivas de reconexão.
-Uma vez escolhidas as opções o intervalo de duração de um timeout é calculado em função do {\it baudrate} e do {\it packetSize} escolhidos pelo utilizador como se pode verificar no anexo \ref{setbasicdefinitions}. Na nossa implementação o receptor pode e deve configurar o {\it baudrate} e {\it packetSize} iguais aos do transmissor, pois, apesar de estes não serem usados na prática pelo receptor, são necessários para calcular um intervalo de timeout que seja fiável face às definições do transmissor.
+A camada de ligação de dados regista o número de tramas do tipo I e REJs recebidas/enviadas e o número de ocorrências de timeouts de uma transmissão. A informação fica registada numa variável do tipo \verb|occurrences_Log| e pode ser acedida pela componente de interface através do método \verb|get_occurrences_log|.
 
-\hfill \break
-São gerados erros aleatoriamente nas tramas enviadas pelo transmissor. São gerados erros no cabeçalho e de nos dados. Estes ocorrem de forma independente e são gerados respectivamente pelas funções {\it randomErrorCabe} e {\it randomErrorData}. A frequência destes erros é defina a partir das constantes {\it CABE\_PROB} e {\it DATA\_PROB} que representam quantas tramas são enviadas por cada um que apresenta um erro do tipo correspondente. Pode ser verificada a função {\it randomErrorData} no anexo \ref{randomErrorData}. A {\it randomErrorCabe} não foi incluida em anexo uma vez que é bastante semelhante à {\it randomErrorData}.
+\section{Definições básicas}
 
-\hfill \break
-Na AppProtocol.c, quando a aplicação está enviar/receber uma imagem, trata imprimir na consola a quantidade de bytes enviados/recebidos e quantos faltam para receber/enviar a imagem na totalidade. Este display (impressão na consola) é actualizado cada vez que um pacote é enviado/recebido na totalidade se já tiver passado um tempo mínimo definido na constante {\it UPDATE\_DISPLAY\_MIN\_TIME\_INTERVAL} desde a ultima actualização de display de modo a evitar que ocorra com elevada frequência o que poderia tornar difícil a sua leitura ou afectar a leitura/recepção de tramas.
+O utilizador pode definir qual o \verb|baudrate| a usar, o \verb|packetSize| (numero de bytes máximos que envia da imagem em cada trama I antes de se realizar o stuffing) e o número máximo de tentativas consecutivas de reconexão.
+Uma vez escolhidas as opções o intervalo de duração de um timeout é calculado em função do \verb|baudrate| e do \verb|packetSize| escolhidos pelo utilizador como se pode verificar no anexo \ref{setbasicdefinitions}. Na nossa implementação o receptor pode e deve configurar o \verb|baudrate| e \verb|packetSize| iguais aos do transmissor, pois, apesar de estes não serem usados na prática pelo receptor, são necessários para calcular um intervalo de timeout que seja fiável face às definições do transmissor.
+
+\section{Gerador aleatório de erros}
+São gerados erros aleatoriamente nas tramas enviadas pelo transmissor. São gerados erros no cabeçalho e de nos dados. Estes ocorrem de forma independente e são gerados respectivamente pelas funções \verb|randomErrorCabe| e \verb|randomErrorData|. A frequência destes erros é defina a partir das constantes \verb|CABE_PROB| e \verb|DATA_PROB| que representam quantas tramas são enviadas por cada um que apresenta um erro do tipo correspondente. Pode ser verificada a função \verb|randomErrorData| no anexo \ref{randomErrorData}. A \verb|randomErrorCabe| não foi incluída em anexo uma vez que é bastante semelhante à \verb|randomErrorData|.
+
+\section{Representação do progresso}
+Na AppProtocol.c, quando a aplicação está enviar/receber uma imagem, trata imprimir na consola a quantidade de bytes enviados/recebidos e quantos faltam para receber/enviar a imagem na totalidade. Este display (impressão na consola) é actualizado cada vez que um pacote é enviado/recebido na totalidade se já tiver passado um tempo mínimo definido na constante \verb|UPDATE_DISPLAY_MIN_TIME_INTERVAL| desde a ultima actualização de display de modo a evitar que ocorra com elevada frequência o que poderia tornar difícil a sua leitura ou afectar a leitura/recepção de tramas.
 
 
 %%%%%%%%%%%%%%
@@ -312,7 +315,7 @@ int llopen(app_status_type status)
 }
 \end{lstlisting}
 
-\section{Função set\_basic\_definitions em DataLinkProtocol.c }
+\section{Função set\_basic\_definitions em DataLinkProtocol.c}
 \label{setbasicdefinitions}
 \begin{lstlisting}
 void set_basic_definitions(int number_of_tries_when_failing, char* port, int baudrate, int packetSize)
