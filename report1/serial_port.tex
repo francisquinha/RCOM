@@ -154,10 +154,16 @@ Relatório relativo ao primeiro trabalho prático de Redes de Computadores que c
 
 TODO:blocos funcionais e interfaces
 
-diagrma de ..classes.. (os diversos moduos .h e ligações a dizer q este usa aquele ou alo semelhante)
-blabla...
-...no final
-A \verb|utilities.h| foi criada com o intuito de ter métodos, estruturas e funcionalidades úteis a todos os módulos desenvolvidos. O seu uso principal no projecto é auxiliar o debug dos diversos modelos desenvolvidos.
+Cada módulo desenvolvido no projecto pode ser identificado pelos headers files do código fonte que são:
+\begin{itemize}
+\item \verb|DataLinkProtocol| implementa e disponibiliza funcionalidade da camada de ligação de dados. 
+\item \verb|AppProtocol|  implementa e disponibiliza funcionalidades da camada de aplicação relacionadas com o envio/recepção de pacotes.
+\item \verb|user_interface| implementa segmentos e disponibiliza funcionalidades ligadas ao interface de utilizador. 
+\item \verb|FileFuncs| disponibiliza funções para leitura e escrita de ficheiros. 
+\item \verb|App.c| onde está a função main e são chamadas as principais funções de outro módulos em conjunto com as operações adicionais necessárias. 
+\item \verb|utilities.h| foi criada com o intuito de ter métodos, estruturas e funcionalidades úteis a todos os módulos desenvolvidos. O seu uso principal no projecto é auxiliar o debug dos diversos modelos desenvolvidos.
+\end{itemize}
+Pode verificar-se no diagrama de módulos, disponível no anexo \ref{modulediagram}, as relações entre estes módulos.
 
 %%%%%%%%%%%%%%%%%%%%
 % ESTRUTURA CODIGO %
@@ -243,9 +249,12 @@ As outras 2 funções disponibilizadas pelo interface são \verb|set_basic_defin
 %%%%%%%%%%%%%
 \chapter{Protocolo de aplicação}
 
-O protocolo de aplicação foi implementado no ficheiro \verb|AppProtocol.c|. e apenas disponibiliza as funções \verb|sendFile| e \verb|receiveFile| para modulos externos. O protocolo foi implementado de acordo com o enunciado sendo que nos pacotes de controlo enviamos como parametros  nome e tamanho (em bytes) da imagem.
+O protocolo de aplicação foi implementado no ficheiro \verb|AppProtocol.c|. e apenas disponibiliza as funções \verb|sendFile| e \verb|receiveFile| para módulos externos. As duas funções são responsáveis pelo envio e recepção de uma imagem completa, sendo que a recepção e envio de pacotes individuais é tratada dentro de \verb|AppProtocol.c|.
 
-? ? ?
+O protocolo foi implementado de acordo com o enunciado e é responsável pelo envio de pacotes de controlo e de dados.
+Os pacotes de controlo são enviados antes e após o envio dos dados e têm como parâmetros  nome e tamanho (em bytes) da imagem.
+Quando a informação destes pacotes coincide não é realizado o output da imagem mesmo que todos os pacotes de dados tenham sido recebidos dado que não há garantias que pertençam  todos à mesma imagem ou que todos foram recebidos.
+Os pacotes de dados
 
 O envio/recepção de imagens atualiza uma variável, recebida por um apontador, externa ao Protocolo (definida num outro módulo), que indica os bytes já enviados/recebidos. Tal variável é usada atualmente dentro do protocolo para o display do estado de envio da imagem que inicialmente estava implementado no ficheiro \verb|user_interface.c|. Esta variável serviria também para tentar retransmitir uma imagem em caso de um envio falhar a meio. Este mecanismo de retransmissão não foi completado e o display foi movido pois o sua implementação inicial interferia com o envio/recepção de dados, a estrutura do código actual reflecte os planos inicialmente concebidos.
 
@@ -274,8 +283,6 @@ Na AppProtocol.c, quando a aplicação está enviar/receber uma imagem, trata im
 % VALIDACAO %
 %%%%%%%%%%%%%
 \chapter{Validação}
-
-TODO: descrição dos testes efectuados com apresentação quantificada dos resultados, se possível
 
 Foram realizados cerca de 10 testes ao longo das aulas práticas e fora destas usando uma porta-série.
 Foram realizados cerca de 30 testes nas máquinas virtuais usadas para desenvolver a aplicação no fim desta estar terminada.
@@ -435,7 +442,7 @@ As restantes tramas apenas têm o respetivo cabeçalho delimitado por flags.
 
 %---------------------------------------------------------------------------------------------------------------------------------------------
 
-\chapter{Diagrama de chamadas a funções (Fluxo)}
+\chapter{Diagrama de Módulos}
 \label{modulediagram}
 \centering
 \includegraphics[width=15cm]{rcom_module_diagram.png}
