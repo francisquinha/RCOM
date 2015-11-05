@@ -11,6 +11,9 @@
 \documentclass[11pt,a4paper,reqno]{report}
 \linespread{1.2}
 
+
+\usepackage{rotating}
+\usepackage{tikz}
 \usepackage[active]{srcltx}    
 \usepackage{graphicx}
 \usepackage{amsthm,amsfonts,amsmath,amssymb,indentfirst,mathrsfs,amscd}
@@ -28,7 +31,7 @@
 %\numberwithin{figure}{section}
 \numberwithin{equation}{section}
 \usepackage{scalefnt}
-\usepackage[top=2.5cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
+\usepackage[top=1cm, bottom=2cm, left=2cm, right=2cm]{geometry}
 %\usepackage{tweaklist}
 %\renewcommand{\itemhook}{\setlength{\topsep}{0pt}%
 %	\setlength{\itemsep}{0pt}}
@@ -154,13 +157,60 @@ Relatório relativo ao primeiro trabalho prático de Redes de Computadores que c
 
 TODO:blocos funcionais e interfaces
 
+diagrma de ..classes.. (os diversos moduos .h e ligações a dizer q este usa aquele ou alo semelhante)
+blabla...
+...no final
+A \verb|utilities.h| foi criada com o intuito de ter métodos, estruturas e funcionalidades úteis a todos os módulos desenvolvidos. O seu uso principal no projecto é auxiliar o debug dos diversos modelos desenvolvidos.
 
 %%%%%%%%%%%%%%%%%%%%
 % ESTRUTURA CODIGO %
 %%%%%%%%%%%%%%%%%%%%
 \chapter{Estrutura do código}
 
-TODO: APIs, principais estruturas de dados, principais funções e sua relação com a arquitetura
+%TODO: APIs, principais estruturas de dados, principais funções e sua relação com a arquitetura
+Seguidamente são apresentadas as principais estruturas e funções desenvolvidas em cada módulo sendo algumas ocultadas uma vez que são referidas em maior detalhe nos capítulos relativos aos protocolos implementados.
+
+\subsection{Estruturas de dados}
+\begin{itemize}
+\item \verb|applicationLayer|: declarada na \verb|App.c| contem informações básicas ao programa como o seu status (transmissor/receptor) por exemplo. 	
+\item \verb|linkLayer|:declarada no \verb|DataLinkProtocol.c| serve para guardar as definições básicas da camada de ligação de dados como qual a porta série a ser usada.	
+\item \verb|occurrences\_Log|:declarada no \verb|DataLinkProtocol.h| serve para registar ocorrências como o número de REJs recebidos.	
+\end{itemize}
+
+\subsection{Funções privadas da DataLinkProtocol}
+\begin{itemize}
+\item \verb|genBCC2| e \verb|validateBCC2| tratam respectivamente de gerar e de validar o BCC2.
+\item \verb|write_UorS| e \verb|write_I| responsáveis pelo envio de tramas.
+%getMessage e explicado no capitulo de protocolo
+\item \verb|apply_stuffing| e \verb|apply_destuffing| realizam o stuffing e destuffing dos dados nas tramas I.
+\item \verb|update_state_machine| função auxiliar que funciona como máquina de estados.
+\item \verb|llopen_receiver|, \verb|llopen_transmitter|, \verb|llclose_receiver| e \verb|llclose_transmitter| ajudam a organizar o código do llopen e llclose uma vez que a sua execução difere do receptor para o emissor.
+%\item \verb|timeout_alarm_handler|
+\item \verb|startAlarm| e \verb|stopAlarm|
+\end{itemize}
+
+\subsection{Funções privadas da AppProtocol.c}
+\begin{itemize}
+\item \verb|receivePacket|
+\item \verb|getControlPacket| e \verb|getInfoPacket|
+\item \verb|sendControlPacket| e \verb|sendInfoPacket|
+\item \verb|show_progress|
+\end{itemize}
+
+\subsection{Funções disponibilizadas por FileFuncs.h}
+\begin{itemize}
+\item \verb|getFileBytes| e \verb|save2File| são responsáveis respectivamente pela escrita e e leitura dos ficheiros.
+\end{itemize}
+
+%not impotant put only if it fits in a single page _>>>\subsection{Funções de user\_interface.c}
+
+\subsection{Funções da App.c}
+\begin{itemize}
+%nao considerei o connect nem o setPacketSize mt importantes
+\item \verb|receiveImage| e \verb|sendImage|
+\item \verb|config|
+\end{itemize}
+
 
 
 %%%%%%%%%%%%%
@@ -169,7 +219,8 @@ TODO: APIs, principais estruturas de dados, principais funções e sua relação
 \chapter{Casos de uso principais}
 
 TODO: identificação; sequências de chamada de funções
-
+??? ??? ???
+O diagrama de chamada de funções pode ser consultado no anexo \ref{flux}.
 
 %%%%%%%%%%%%%%%%%%
 % LIGACAO LOGICA %
@@ -178,48 +229,28 @@ TODO: identificação; sequências de chamada de funções
 
 Para implementar o protocolo de ligação lógica, seguimos as indicações do enunciado do projeto. Sendo assim, usamos a variante \emph{Stop and Wait}, o que significa que o Emissor, após cada mensagem, aguarda uma resposta do Recetor antes de enviar a mensagem seguinte. Isto significa, entre outras coisas, que podemos utilizar uma numeração módulo 2 para as mensagens, dado que nunca temos mais do que 2 mensagens em jogo (aquela que foi enviada e a que se pretende enviar de seguida).
 
-O interface deste protocolo tem 5 funções:
-\begin{itemize}
-\item \verb|int llopen(app_status_type status)| - abre a porta de série para comunicação, o parâmetro indica se é o Emissor ou o Receptor quem chama a função, retorna o número da ligação de dados, ou -1 em caso de erro;
-\item \verb|int llclose(int fd, int hard)| - termina a ligação no final da comunicação, o parâmetro fd é o número da ligação, o parâmetro hard indica que estamos numa situação de terminar à força após um erro, retorna 0 ou -1 consoante seja bem sucedida ou ocorra erro;
-\item \verb|int llwrite(int fd, char *buffer, int length)| - dado um número de ligação e um array de dados com determinado comprimento, constrói a trama de acordo com as regras do protocolo e envia essa trama, retorna 0 ou -1 consoante seja bem sucedida ou ocorra erro;
-\item \verb|int llread(int fd, char **buffer)| - dado um número de ligação e um apontador para um array de dados, lê os dados da porta e coloca-os no array, retorna 0 ou -1 consoante seja bem sucedida ou ocorra erro;
-\item \verb|void set_basic_definitions(int nTries, char* port, int baudrate, int packetSize)| - consoante as preferências do utilizador, determina o número de tentativas em caso de timeout, a porta, o baudrate e o tamanho dos dados nos pacotes de dados, guardando estas informações na estrutura \verb|datalink|;
-\end{itemize}
+O interface deste protocolo disponibiliza 6 funções. 
 
-Estas funções utilizam a função \verb|update_state_machine| para determinar a cada instante o estado em que está. Ao chamar esta função são definidos os estados finais, e só depois disso, quando um estado final é atingido, é feito o reset à máquina de estados.
+Quatro são as definidas pelo guião do trabalho (\verb|llopen|, \verb|llread|, \verb|llwrite|, \verb|llclose|) sendo que as únicas alterações efectuadas foram relativas à assinatura e funcionamento do \verb|llclose| de modo a permitir fechar a porta-série em caso de erro e no \verb|llopen|  que não recebe a porta a abrir. 
 
-Para obter a trama que pretende enviar é utilizada uma função \verb|getMessage| que tem como parâmetros o Emissor original, o tipo e o número da trama e o array de caracteres onde será colocada a flag e o cabeçalho da trama. Posteriormente a estes bytes, em tramas de Informação, serão adicionados os dados e o respetivo BCC2. Nas restantes tramas, é apenas reutilizada a flag que está na primeira posição do array. A sua especificação pode ser encontrada no Anexo~\ref{tramas}. 
+Estas 4 funções utilizam a função \verb|update_state_machine| para determinar a cada instante o estado em que está.
+Com a concepção desta função evitou-se alguma repetição de código mas foi necessário cuidado extra na implementação pois são necessárias trocas de informação entre esta e a função que a invoca. A \verb|update_state_machine| recebe qual o tipo de trama esperada que serve para dentificar a função que a invocou e atualizar os estados corretamente e guarda numa variável auxiliar, \verb|received_C_type|, o tipo de trama recebida. Quando a função invocadora detecta que se atingio o estado \verb|STATE_MACHINE_STOP| verifica o \verb|received_C_type| para saber  tipo de trama recebido e como deve proceder.
 
-TODO:
+Para obter a trama que se pretende enviar são usadas as funções \verb|write_UorS| e \verb|write_I| sendo estas respectivamente para o envio de tramas de Supervisão ou Não numeradas e para tramas de Informação. Elas fazem uso da função \verb|getMessage| que tem como parâmetros o Emissor original, o tipo e o número da trama e o array de caracteres onde será colocada a flag e o cabeçalho da trama. Posteriormente a estes bytes, em tramas de Informação, serão adicionados os dados e o respetivo BCC2. Nas restantes tramas, é apenas reutilizada a flag que está na primeira posição do array. A sua especificação pode ser encontrada no Anexo~\ref{tramas}.
 
-ligação de dados assíncrona
-vmin=0 e ???min=0 -> read retorna de imediato -> e usado um ciclo -> blablabla
+As outras 2 funções disponibilizadas pelo interface são \verb|set_basic_definitions| e \verb|get_occurrences_log| que servem respectivamente para guardar as opções escolhidas pelo utilizador e para receber o registo de ocorrências na camada da aplicação.
 
-paridade usada foi XPTO, e possivel alterala no codigo
-
-alarm
 
 %%%%%%%%%%%%%
 % APLICACAO %
 %%%%%%%%%%%%%
 \chapter{Protocolo de aplicação}
 
-TODO: identificação dos principais aspectos funcionais; descrição da estratégia de implementação destes aspectos com apresentação de extractos de código
+O protocolo de aplicação foi implementado no ficheiro \verb|AppProtocol.c|. e apenas disponibiliza as funções \verb|sendFile| e \verb|receiveFile| para modulos externos. O protocolo foi implementado de acordo com o enunciado sendo que nos pacotes de controlo enviamos como parametros  nome e tamanho (em bytes) da imagem.
 
-foi implementada de acordo com o enunciado.
+? ? ?
 
-a aplicação guarda o tamanho de imagem e o numero de pacotes ja enviados/recebidos
-
-envia Start
-recebe Start
-
-envia info pode enviar pacotes de tamanho maximo definido pelo utilizador
-recebe info
-
-envia end
-recebe end
-
+O envio/recepção de imagens atualiza uma variável, recebida por um apontador, externa ao Protocolo (definida num outro módulo), que indica os bytes já enviados/recebidos. Tal variável é usada atualmente dentro do protocolo para o display do estado de envio da imagem que inicialmente estava implementado no ficheiro \verb|user_interface.c|. Esta variável serviria também para tentar retransmitir uma imagem em caso de um envio falhar a meio. Este mecanismo de retransmissão não foi completado e o display foi movido pois o sua implementação inicial interferia com o envio/recepção de dados, a estrutura do código actual reflecte os planos inicialmente concebidos.
 
 %%%%%%%%%%%%%
 % VALIDACAO %
@@ -249,12 +280,12 @@ A camada de ligação de dados regista o número de tramas do tipo I e REJs rece
 O utilizador pode definir qual o \verb|baudrate| a usar, o \verb|packetSize| (numero de bytes máximos que envia da imagem em cada trama I antes de se realizar o stuffing) e o número máximo de tentativas consecutivas de reconexão.
 Uma vez escolhidas as opções o intervalo de duração de um timeout é calculado em função do \verb|baudrate| e do \verb|packetSize| escolhidos pelo utilizador como se pode verificar no anexo \ref{setbasicdefinitions}. Na nossa implementação o receptor pode e deve configurar o \verb|baudrate| e \verb|packetSize| iguais aos do transmissor, pois, apesar de estes não serem usados na prática pelo receptor, são necessários para calcular um intervalo de timeout que seja fiável face às definições do transmissor.
 
-\section{Gerador aleatório de erros}
+\section{Gerador aleatório de erros e REJs}
 São gerados erros aleatoriamente nas tramas enviadas pelo transmissor. São gerados erros no cabeçalho e de nos dados. Estes ocorrem de forma independente e são gerados respectivamente pelas funções \verb|randomErrorCabe| e \verb|randomErrorData|. A frequência destes erros é defina a partir das constantes \verb|CABE_PROB| e \verb|DATA_PROB| que representam quantas tramas são enviadas por cada um que apresenta um erro do tipo correspondente. Pode ser verificada a função \verb|randomErrorData| no anexo \ref{randomErrorData}. A \verb|randomErrorCabe| não foi incluída em anexo uma vez que é bastante semelhante à \verb|randomErrorData|.
+Tramas do tipo REJ foram implementadas. Quando o receptor consegue identificar ocorrencia de erro(s) no bloco de dados envia uma mensagem ao transmissor e este trata de reenviar a pacote novamente.
 
 \section{Representação do progresso}
 Na AppProtocol.c, quando a aplicação está enviar/receber uma imagem, trata imprimir na consola a quantidade de bytes enviados/recebidos e quantos faltam para receber/enviar a imagem na totalidade. Este display (impressão na consola) é actualizado cada vez que um pacote é enviado/recebido na totalidade se já tiver passado um tempo mínimo definido na constante \verb|UPDATE_DISPLAY_MIN_TIME_INTERVAL| desde a ultima actualização de display de modo a evitar que ocorra com elevada frequência o que poderia tornar difícil a sua leitura ou afectar a leitura/recepção de tramas.
-
 
 %%%%%%%%%%%%%%
 % CONCLUSOES %
@@ -396,6 +427,14 @@ Se se tratar de uma trama I, após o cabeçalho temos:
 
 As restantes tramas apenas têm o respetivo cabeçalho delimitado por flags.
 
+%--------------------------------------------------------------------------------------------------------------------------------------------
+
+\chapter{Diagrama de chamadas a funções (Fluxo)}
+\label{flux}
+\begin{sidewaysfigure}
+\centering
+\includegraphics[width=26cm]{_app_8c_a3c04138a5bfe5d72780bb7e82a18e627_cgraph.png}
+\end{sidewaysfigure}
 
 \end{appendices}
 
