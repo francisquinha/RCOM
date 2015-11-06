@@ -133,7 +133,7 @@ A aplicação usa o protocolo de ligação de dados \emph{Stop N Wait ARQ} híbr
 	
 O projeto utiliza a linguagem de programação C num ambiente com um sistema operativo baseado em Linux. Durante o desenvolvimento foram utilizadas máquinas virtuais, que simulam a ligação da porta de série, e máquinas reais, com uma ligação de porta de série por cabo. O código pode ser verificado em anexo e será referenciado em algumas secções do relatório.
 	
-Este relatório tem como objectivo reportar qual o estado final da aplicação desenvolvia, clarificar detalhes do processo de implementação/código e a opinião dos estudantes face ao projecto realizado. Nos Capítulos 2, 3 e 4 são expostas as estruturas e os mecanismos implementados na concepção da aplicação numa perspectiva macro. Os detalhes relativos à implementação dos protocolos são apresentados nos capítulos 5 e 6. Os detalhes relativos à implementação de componentes extra são apresentados no capítulo 7. O capítulo 8 é relativo à validação e testes efectuados.
+Este relatório tem como objectivo reportar qual o estado final da aplicação desenvolvia, clarificar detalhes do processo de implementação/código e a opinião dos estudantes face ao projecto realizado. No Capítulo 2 são expostas as estruturas e os mecanismos implementados na concepção da aplicação numa perspectiva macro. Os detalhes relativos à implementação dos protocolos são apresentados nos Capítulos 3 e 4. Os detalhes relativos à implementação de componentes extra são apresentados no Capítulo 5. O Capítulo 6 é relativo à validação e aos testes efectuados.
 	
 	
 %%%%%%%%%%%%%%%
@@ -229,7 +229,7 @@ O interface deste protocolo disponibiliza 6 funções. Quatro são as definidas 
 Estas 4 funções utilizam a função \verb|update_state_machine| para determinar a cada instante o estado em que está.
 Com a concepção desta função evitou-se alguma repetição de código, mas foi necessário cuidado extra na implementação pois existe troca de informação entre esta e a função que a invoca. De facto, a função \verb|update_state_machine| recebe o tipo de trama esperada, de forma a identificar a função que a invocou e atualizar os estados corretamente, e guarda numa variável auxiliar, \verb|received_C_type|, o tipo de trama recebida. Quando a função que a invocou detecta que se atingiu o estado \verb|STATE_MACHINE_STOP|, verifica o \verb|received_C_type| para saber qual tipo de trama recebido e como deve proceder.
 
-Para obter a trama que se pretende enviar são usadas as funções \verb|write_UorS|, para envio de tramas de Supervisão ou Não numeradas, e \verb|write_I|, para tramas de Informação. Elas fazem uso da função \verb|getMessage| que tem como parâmetros o Emissor original, o tipo e o número da trama e o array de caracteres onde será colocada a flag e o cabeçalho da trama. Posteriormente a estes bytes, em tramas de Informação, serão adicionados os dados e o respetivo BCC2. Nas restantes tramas, é apenas reutilizada a flag que está na primeira posição do array. A sua especificação pode ser encontrada no Anexo~\ref{tramas}.
+Para obter a trama que se pretende enviar são usadas as funções \verb|write_UorS|, para envio de tramas de Supervisão ou Não numeradas, e \verb|write_I|, para tramas de Informação. Elas fazem uso da função \verb|getMessage| que tem como parâmetros o Emissor original, o tipo e o número da trama e o array de caracteres onde será colocada a flag e o cabeçalho da trama. Posteriormente a estes bytes, em tramas de Informação, serão adicionados os dados e o respetivo BCC2. Em todas as tramas, é apenas reutilizada a flag que está na primeira posição do array. A sua especificação pode ser encontrada no Anexo~\ref{tramas}.
 
 As outras 2 funções disponibilizadas pelo interface são \verb|set_basic_definitions| e \verb|get_occurrences_log| que servem, respectivamente, para guardar as opções escolhidas pelo utilizador e para receber o registo de ocorrências na camada da aplicação.
 
@@ -254,19 +254,20 @@ O envio/recepção de imagens atualiza uma variável, recebida por um apontador,
 
 \section{Registo de ocorrências}
 
-A camada de ligação de dados regista o número de tramas do tipo I e REJs recebidas/enviadas e o número de ocorrências de timeouts de uma emissão. A informação fica registada numa variável do tipo \verb|occurrences_Log| e pode ser acedida pela componente de interface através do método \verb|get_occurrences_log|.
+A camada de ligação de dados regista o número de tramas do tipo I e REJs recebidas/enviadas e o número de ocorrências de timeouts de uma emissão. A informação fica registada numa variável do tipo \verb|occurrences_Log| e pode ser acedida pela componente de interface através do método \verb|get_occurrences_log|, como pode ser observado na Figura~\ref{logimg} no Anexo~\ref{imagens_app}.
 
 \section{Definições básicas}
 
 O utilizador pode definir qual o \verb|baudrate| a usar, o \verb|packetSize| (numero de bytes máximos que envia da imagem em cada trama I antes de se realizar o stuffing) e o número máximo de tentativas consecutivas de conexão.
-Uma vez escolhidas as opções, o intervalo de duração de um timeout é calculado em função do \verb|baudrate| e do \verb|packetSize| escolhidos pelo utilizador, como se pode verificar no anexo \ref{DATALINKPROTOCOLC} nas linhas 187 a 209. Na nossa implementação o receptor pode e deve configurar o \verb|baudrate| e \verb|packetSize| iguais aos do emissor, pois, apesar de estes não serem usados na prática pelo receptor, são necessários para calcular um intervalo de timeout que seja fiável face às definições do emissor.
+Uma vez escolhidas as opções, o intervalo de duração de um timeout é calculado em função do \verb|baudrate| e do \verb|packetSize| escolhidos pelo utilizador, como se pode verificar no anexo \ref{DATALINKPROTOCOLC} nas linhas 187 a 209. Na nossa implementação o receptor pode e deve configurar o \verb|baudrate| e \verb|packetSize| iguais aos do emissor, pois são necessários para calcular um intervalo de timeout que seja fiável face às definições do emissor.
 
 \section{Gerador aleatório de erros e REJs}
 São gerados erros aleatoriamente nas tramas enviadas pelo emissor. Estes erros podem ocorrer no cabeçalho ou nos dados da trama, com probabilidades independentes. Para tal, são usadas as funções \verb|randomErrorCabe| e \verb|randomErrorData|. A frequência destes erros é defina a partir das constantes \verb|CABE_PROB| e \verb|DATA_PROB| que representam quantas tramas são enviadas por cada um que apresenta um erro do tipo correspondente. Pode ser verificada a função \verb|randomErrorData| no anexo \ref{DATALINKPROTOCOLC} nas linhas 517 a 526. A função \verb|randomErrorCabe| está no mesmo anexo e é muito semelhante.
-Também foram implementadas tramas do tipo REJ. Quando o receptor consegue identificar ocorrência de erro(s) no bloco de dados envia uma mensagem ao emissor e este trata de reenviar a pacote novamente.
+
+Também foram implementadas tramas do tipo REJ. Quando o receptor consegue identificar ocorrência de erro(s) no bloco de dados envia uma mensagem ao emissor e este trata de reenviar a pacote novamente. Por exemplo, os REJ observados na Figura~\ref{logimg} no Anexo~\ref{imagens_app} são resultado de erros aleatórios nos dados. Já os \emph{timeouts}, na mesma figura, são devidos a erros no cabeçalho, dado que neste caso o recetor ignora a trama e o emissor fica à espera de uma resposta que não vem.
 
 \section{Representação do progresso}
-Na AppProtocol.c, quando a aplicação está enviar/receber uma imagem, trata de imprimir na consola a quantidade de bytes enviados/recebidos e quantos faltam para enviar/receber a imagem na totalidade. Este \emph{display} (impressão na consola) é actualizado de cada vez que um pacote é enviado/recebido na totalidade. Isto desde que já tenha passado o tempo mínimo definido na constante \verb|UPDATE_DISPLAY_MIN_TIME_INTERVAL| desde a ultima actualização de display, de modo a evitar que ocorra com elevada frequência, o que poderia tornar difícil a sua leitura ou afectar o envio/receção dos dados.
+Na AppProtocol.c, quando a aplicação está enviar/receber uma imagem, trata de imprimir na consola a quantidade de bytes enviados/recebidos e quantos faltam para enviar/receber a imagem na totalidade. Este \emph{display} (impressão na consola) é actualizado a cada pacote ou após o tempo mínimo definido na constante \verb|UPDATE_DISPLAY_MIN_TIME_INTERVAL|, de modo a evitar que ocorra com elevada frequência, o que poderia tornar difícil a sua leitura ou afectar o envio/receção dos dados. Um exemplo do progresso pode ser observado na Figura~\ref{progressimg} no Anexo~\ref{imagens_app}.
 
 %%%%%%%%%%%%%
 % VALIDACAO %
@@ -361,6 +362,24 @@ As restantes tramas apenas têm o respetivo cabeçalho delimitado por flags.
 \label{modulediagram}
 \centering
 \includegraphics[width=15cm]{rcom_module_diagram.png}
+
+\chapter{Imagens da aplicação}
+\label{imagens_app}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=12cm]{log.png}
+	\caption{Registo de ocorrências da aplicação}
+	\label{logimg}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=12cm]{progress.png}
+	\caption{Representação do progresso de envio/receção}
+	\label{progressimg}
+\end{figure}
+
 
 \end{appendices}
 
