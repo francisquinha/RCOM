@@ -243,7 +243,7 @@ O protocolo de aplicação foi implementado no ficheiro \verb|AppProtocol.c|. e 
 
 O protocolo foi implementado de acordo com o enunciado e é responsável pelo envio de pacotes de controlo e de dados.
 Os pacotes de controlo são enviados antes e após o envio dos dados e têm como parâmetros o nome e tamanho (em bytes) da imagem.
-Quando a informação destes pacotes não coincide, não é realizado o output da imagem, dado que não há garantias que pertençam todos à mesma imagem ou que todos foram recebidos.
+Quando a informação destes pacotes não coincide, não é realizado o output da imagem, dado não haver garantias que os pacotes de dados pertençam todos à mesma imagem ou que foram todos recebidos.
 
 O envio/recepção de imagens atualiza uma variável, recebida por um apontador, externa ao Protocolo (definida num outro módulo), que indica os bytes já enviados/recebidos. Tal variável é usada atualmente dentro do protocolo para o display do estado de envio da imagem, que inicialmente estava implementado no ficheiro \verb|user_interface.c|. Esta variável serviria também para tentar reenviar uma imagem em caso de um envio falhar a meio. Este mecanismo de reenvio não foi completado e o display foi movido pois o sua implementação inicial interferia com o envio/recepção de dados. A estrutura do código actual reflecte os planos inicialmente concebidos.
 
@@ -274,7 +274,7 @@ Na AppProtocol.c, quando a aplicação está enviar/receber uma imagem, trata de
 %%%%%%%%%%%%%
 \chapter{Validação}
 
-Foram realizados vários ao longo das aulas práticas e fora destas usando máquinas com uma ligação física por cabo da porta-série. Além disso, realizamos imensos testes nas máquinas virtuais, que foram usadas para desenvolver a aplicação.
+Foram realizados cerca de 10 testes ao longo das aulas práticas e fora destas usando máquinas com uma ligação física por cabo da porta-série. Além disso, realizamos aproximadamente 30 testes nas máquinas virtuais usadas para desenvolver a aplicação quando a implementação já se encontrava pronta para a entrega.
 
 Relativamente à qualidade dos testes não foi usado nenhum auxiliar para verificar se as imagens recebidas eram iguais às enviadas nem nenhuma automatização de testes, sendo estes todos realizados manualmente. Tivemos o cuidado de escolher imagens de tamanhos variados entre os 263 bytes (a mais pequena) e 712K bytes (a maior). Os tipos de imagens também variavam entre os tipos gif, jpeg e png.
 
