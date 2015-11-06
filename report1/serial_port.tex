@@ -31,7 +31,7 @@
 %\numberwithin{figure}{section}
 \numberwithin{equation}{section}
 \usepackage{scalefnt}
-\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage[top=2cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
 \usepackage{MnSymbol}
 %\usepackage[pdfpagelabels,pagebackref,hypertexnames=true,plainpages=false,naturalnames]{hyperref}
 \usepackage[naturalnames]{hyperref}
@@ -54,24 +54,24 @@
 
 \makeatletter
 \def\@makechapterhead#1{%
-  \vspace*{10\p@}%
+  \vspace*{2\p@}%
   {\parindent \z@ \raggedright \normalfont
     \ifnum \c@secnumdepth >\m@ne
 %        \huge\bfseries \@chapapp\space \thechapter
         \par\nobreak
-        \vskip 20\p@
+        \vskip 5\p@
     \fi
     \interlinepenalty\@M
     \Huge \bfseries \thechapter\space #1\par\nobreak
-    \vskip 40\p@
+    \vskip 20\p@
   }}
 \def\@makeschapterhead#1{%
-  \vspace*{10\p@}%
+  \vspace*{2\p@}%
   {\parindent \z@ \raggedright
     \normalfont
     \interlinepenalty\@M
     \Huge \bfseries  #1\par\nobreak
-    \vskip 40\p@
+%    \vskip 5\p@
   }}
 \makeatother
 
@@ -80,6 +80,7 @@
 \addto\captionsportuges{%
   \renewcommand\appendixname{Anexo}
   \renewcommand\appendixpagename{Anexos}
+  \renewcommand\appendixtocname{Anexos}
   \renewcommand\abstractname{\huge Sumário}  
 }
 
@@ -113,9 +114,9 @@
 %%%%%%%%%%%
 \begin{abstract}
 	
-Relatório relativo ao primeiro trabalho prático da unidade curricular Redes de Computadores do curso Mestrado Integrado em Engenharia Informática e Computação que consiste na implementação de uma aplicação que transfere imagens entre dois computadores fazendo uso da porta-série. O principal  objectivo do trabalho é colocar em prática  alguns dos conceitos leccionados na cadeira relativos a protocolos de ligação de dados.
+Relatório relativo ao primeiro projeto da unidade curricular Redes de Computadores do curso Mestrado Integrado em Engenharia Informática e Computação. O projeto consiste na implementação de uma aplicação que transfere imagens entre dois computadores fazendo uso da porta-série. O objectivo é colocar em prática alguns dos conceitos leccionados na unidade curricular relativos a protocolos de ligação de dados.
 
-O relatório apresenta o estado final do projecto e as considerações dos estudantes responsáveis pela sua implementação face ao resultado obtido.
+Este documento apresenta o estado final do projecto, assim como as considerações dos estudantes responsáveis pela sua implementação face ao resultado obtido.
 
 \end{abstract}
 
@@ -126,15 +127,13 @@ O relatório apresenta o estado final do projecto e as considerações dos estud
 %%%%%%%%%%%%%%
 \chapter{Introdução}
 
-Este relatório incide sobre projecto desenvolvido para o primeiro trabalho prático de Redes de Computadores que consiste na implementação de uma aplicação que transfere imagens entre dois computadores fazendo uso da porta-série. A aplicação deve usar um protocolo de ligação de dados \emph{Stop N Wait ARQ} híbrido que deve assegurar a fiabilidade  da transmissão mesmo em caso de desconexão. Deve também usar um protocolo de aplicação que é responsável pelo envio da imagem. O código desenvolvido deve ser estruturado em camadas, respeitando o princípio de encapsulamento, de modo a assegurar cada protocolo funciona de forma independente.
+No âmbito da unidade curricular Redes de Computadores, do Mestrado Integrado em Engenharia Informática, foi-nos proposta a realização de um projecto laboratorial, que consiste na implementação de uma aplicação que transfere imagens entre dois computadores fazendo uso da porta-série. 
+
+A aplicação usa o protocolo de ligação de dados \emph{Stop N Wait ARQ} híbrido, que deve assegurar a fiabilidade  da emissão mesmo em caso de desconexão. É também usado um protocolo de aplicação que é responsável pelo envio da imagem. O código desenvolvido está estruturado em camadas, respeitando o princípio de encapsulamento, de modo a assegurar que cada protocolo funciona de forma independente.
 	
-	O trabalho foi utilizando a linguagem de programação C num ambiente com um sistema operativo baseado em Linux. O código pode ser verificado em anexo e será referenciado em algumas secções do relatório.
+O projeto utiliza a linguagem de programação C num ambiente com um sistema operativo baseado em Linux. Durante o desenvolvimento foram utilizadas máquinas virtuais, que simulam a ligação da porta de série, e máquinas reais, com uma ligação de porta de série por cabo. O código pode ser verificado em anexo e será referenciado em algumas secções do relatório.
 	
-	Este relatório tem como objectivo reportar qual o estado final da aplicação desenvolvia, clarificar detalhes do processo de implementação/código e a opinião dos estudantes face ao projecto realizado.
-	
-	Do capítulo 2 ao 4 são expostas as estruturas e os mecanismos implementados na concepção da aplicação sem incidir em detalhes específicos destes.
-	Detalhes relativos à implementação dos protocolos são apresentados nos capítulos 5 e 6 e detalhes relativos à implementação de componntes extra são apresentados no capítulo 7.
-	O capítulo 8 é relativo à validação e testes efectuados.
+Este relatório tem como objectivo reportar qual o estado final da aplicação desenvolvia, clarificar detalhes do processo de implementação/código e a opinião dos estudantes face ao projecto realizado. Nos Capítulos 2, 3 e 4 são expostas as estruturas e os mecanismos implementados na concepção da aplicação numa perspectiva macro. Os detalhes relativos à implementação dos protocolos são apresentados nos capítulos 5 e 6. Os detalhes relativos à implementação de componentes extra são apresentados no capítulo 7. O capítulo 8 é relativo à validação e testes efectuados.
 	
 	
 %%%%%%%%%%%%%%%
@@ -144,16 +143,16 @@ Este relatório incide sobre projecto desenvolvido para o primeiro trabalho prá
 
 \section{Arquitectura}
 
-Cada módulo desenvolvido no projecto pode ser identificado pelos headers files do código fonte que são:
+Cada módulo desenvolvido no projecto pode ser identificado pelos \emph{header files} do código fonte que são:
 \begin{itemize}
-\item \verb|DataLinkProtocol| implementa e disponibiliza funcionalidade da camada de ligação de dados. 
-\item \verb|AppProtocol|  implementa e disponibiliza funcionalidades da camada de aplicação relacionadas com o envio/recepção de pacotes.
+\item \verb|DataLinkProtocol| implementa e disponibiliza as funcionalidades da camada de ligação de dados. 
+\item \verb|AppProtocol| implementa e disponibiliza as funcionalidades da camada de aplicação relacionadas com o envio/recepção de pacotes.
 \item \verb|user_interface| implementa segmentos e disponibiliza funcionalidades ligadas ao interface de utilizador. 
 \item \verb|FileFuncs| disponibiliza funções para leitura e escrita de ficheiros. 
 \item \verb|App.c| onde está a função main e são chamadas as principais funções de outro módulos em conjunto com as operações adicionais necessárias. 
 \item \verb|utilities.h| foi criada com o intuito de ter métodos, estruturas e funcionalidades úteis a todos os módulos desenvolvidos. O seu uso principal no projecto é auxiliar o debug dos diversos modelos desenvolvidos.
 \end{itemize}
-Pode verificar-se no diagrama de módulos, disponível no anexo \ref{modulediagram}, as relações entre estes módulos.
+Podem verificar-se no diagrama de módulos, disponível no anexo \ref{modulediagram}, as relações entre estes módulos.
 
 %%%%%%%%%%%%%%%%%%%%
 % ESTRUTURA CODIGO %
@@ -162,13 +161,13 @@ Pode verificar-se no diagrama de módulos, disponível no anexo \ref{modulediagr
 \section{Estrutura do código}
 
 %TODO: APIs, principais estruturas de dados, principais funções e sua relação com a arquitetura
-Seguidamente são apresentadas as principais estruturas e funções desenvolvidas em cada módulo sendo algumas ocultadas uma vez que são referidas em maior detalhe nos capítulos relativos aos protocolos implementados.
+Seguidamente são apresentadas as principais estruturas e funções desenvolvidas em cada módulo. Algumas funções estão omissas, dado que são referidas em maior detalhe nos capítulos relativos aos protocolos implementados.
 
 \subsection{Estruturas de dados}
 \begin{itemize}
-\item \verb|applicationLayer|: declarada na \verb|App.c| contem informações básicas ao programa como o seu status (transmissor/receptor) por exemplo. 	
-\item \verb|linkLayer|:declarada no \verb|DataLinkProtocol.c| serve para guardar as definições básicas da camada de ligação de dados como qual a porta série a ser usada.	
-\item \verb|occurrences\_Log|:declarada no \verb|DataLinkProtocol.h| serve para registar ocorrências como o número de REJs recebidos.	
+\item \verb|applicationLayer|: declarada na \verb|App.c| contem informações básicas ao programa, como o seu \emph{status} enquanto emissor ou receptor. 	
+\item \verb|linkLayer|: declarada no \verb|DataLinkProtocol.c| serve para guardar as definições básicas da camada de ligação de dados, como qual a porta série a ser usada.	
+\item \verb|occurrences_Log|: declarada no \verb|DataLinkProtocol.h| serve para registar ocorrências, como o número de REJs recebidos.	
 \end{itemize}
 
 \subsection{Funções privadas da DataLinkProtocol}
@@ -178,22 +177,22 @@ Seguidamente são apresentadas as principais estruturas e funções desenvolvida
 %getMessage e explicado no capitulo de protocolo
 \item \verb|apply_stuffing| e \verb|apply_destuffing| realizam o stuffing e destuffing dos dados nas tramas I.
 \item \verb|update_state_machine| função auxiliar que funciona como máquina de estados.
-\item \verb|llopen_receiver|, \verb|llopen_transmitter|, \verb|llclose_receiver| e \verb|llclose_transmitter| ajudam a organizar o código do llopen e llclose uma vez que a sua execução difere do receptor para o emissor.
+\item \verb|llopen_receiver|, \verb|llopen_transmitter|, \verb|llclose_receiver| e \verb|llclose_transmitter| ajudam a organizar o código de \verb|llopen| e \verb|llclose|, uma vez que a sua execução difere do receptor para o emissor.
 %\item \verb|timeout_alarm_handler|
-\item \verb|startAlarm| e \verb|stopAlarm| gerem o uso do alarme em conjunto com as funções invocadoras.
+\item \verb|startAlarm| e \verb|stopAlarm| gerem o uso do alarme em conjunto com as funções que as invocam.
 \end{itemize}
 
 \subsection{Funções privadas da AppProtocol.c}
 \begin{itemize}
-\item \verb|receivePacket| trata da recepção de um único pacote que pode ser de controlo ou de dados.
-\item \verb|getControlPacket| e \verb|getInfoPacket| responsáveis, respectivamente, pela criação de um único pacote de controlo e de dados.
-\item \verb|sendControlPacket| e \verb|sendInfoPacket| responsáveis, repectivamente, pela transmissão de um único pacote de controlo e de dados.
+\item \verb|receivePacket| trata da recepção de um pacote que pode ser de controlo ou de dados.
+\item \verb|getControlPacket| e \verb|getInfoPacket| responsáveis, respectivamente, pela criação de um pacote de controlo e de dados.
+\item \verb|sendControlPacket| e \verb|sendInfoPacket| responsáveis, respectivamente, pela emissão de um pacote de controlo e de dados.
 \item \verb|show_progress| responsável por mostrar ao utilizador o estado actual da transferência/recepção do ficheiro.
 \end{itemize}
 
 \subsection{Funções disponibilizadas por FileFuncs.h}
 \begin{itemize}
-\item \verb|getFileBytes| e \verb|save2File| são responsáveis respectivamente pela escrita e e leitura dos ficheiros.
+\item \verb|getFileBytes| e \verb|save2File| são responsáveis, respectivamente, pela escrita e e leitura dos ficheiros.
 \end{itemize}
 
 %not impotant put only if it fits in a single page _>>>\subsection{Funções de user\_interface.c}
@@ -201,8 +200,8 @@ Seguidamente são apresentadas as principais estruturas e funções desenvolvida
 \subsection{Funções da App.c}
 \begin{itemize}
 %nao considerei o connect nem o setPacketSize mt importantes
-\item \verb|receiveImage| e \verb|sendImage| chamam as funções do Protocolo de Aplicação com os ajustes necessários de modo a enviar/receber uma imagem.
-\item \verb|config| quando o utilizador termina a selecção de opções no interface esta função transmite-as para o Protocolo de Ligação de Dados.
+\item \verb|receiveImage| e \verb|sendImage| chamam as funções do Protocolo de Aplicação com os ajustes necessários, de modo a enviar/receber uma imagem.
+\item \verb|config| quando o utilizador termina a selecção de opções no interface, esta função transmite-as para o Protocolo de Ligação de Dados.
 \end{itemize}
 
 
@@ -212,9 +211,9 @@ Seguidamente são apresentadas as principais estruturas e funções desenvolvida
 %\chapter{Casos de uso principais}
 \section{Casos de Uso}
 
-A aplicação desenvolvida deve ser chamada na linha de comandos recebendo como argumentos a porta de série a usar (/dev/ttyS0 ou /dev/ttyS4) e um caracter indicador(t ou r) se a aplicação deve correr em modo transmissor ou receptor.
+A aplicação desenvolvida deve ser chamada na linha de comandos recebendo como argumentos a porta de série a usar (\verb|/dev/ttyS0| ou \verb|/dev/ttyS4|) e um caracter indicador(\verb|t| ou \verb|r|) se a aplicação deve correr em modo emissor ou receptor.
 
-Uma vez invocado o programa será mostrado um menu ao utilizador. No transmissor pode escolher seleccionar uma imagem a enviar ou enviar uma que já tenha seleccionado. Do lado do receptor pode ser iniciada a recepção. Ambas as versões da aplicação têm um submenu de para seleccionar  opções, estas  serão abordadas numa outra secção do relatório.
+Uma vez invocado o programa será mostrado um menu ao utilizador. No emissor pode escolher seleccionar uma imagem a enviar ou enviar uma que já tenha seleccionado. Do lado do receptor pode ser iniciada a recepção. Ambas as versões da aplicação têm um submenu de para seleccionar  opções, estas  serão abordadas numa outra secção do relatório.
 
 As funções invocadas no seguimento das escolhas do utilizador podem ser averiguadas no diagrama de chamada de funções que pode ser consultado no anexo \ref{flux}.
 
@@ -223,18 +222,16 @@ As funções invocadas no seguimento das escolhas do utilizador podem ser averig
 %%%%%%%%%%%%%%%%%%
 \chapter{Protocolo de ligação lógica}
 
-Para implementar o protocolo de ligação lógica, seguimos as indicações do enunciado do projeto. Sendo assim, usamos a variante \emph{Stop and Wait}, o que significa que o Emissor, após cada mensagem, aguarda uma resposta do Recetor antes de enviar a mensagem seguinte. Isto significa, entre outras coisas, que podemos utilizar uma numeração módulo 2 para as mensagens, dado que nunca temos mais do que 2 mensagens em jogo (aquela que foi enviada e a que se pretende enviar de seguida).
+Para implementar o protocolo de ligação lógica, seguimos as indicações do enunciado do projeto. Sendo assim, usamos a variante \emph{Stop N Wait}, o que significa que o Emissor, após cada mensagem, aguarda uma resposta do Recetor antes de enviar a mensagem seguinte. Isto significa, entre outras coisas, que podemos utilizar uma numeração módulo 2 para as mensagens, dado que nunca temos mais do que 2 mensagens em jogo (aquela que foi enviada e a que se pretende enviar de seguida).
 
-O interface deste protocolo disponibiliza 6 funções. 
-
-Quatro são as definidas pelo guião do trabalho (\verb|llopen|, \verb|llread|, \verb|llwrite|, \verb|llclose|) sendo que as únicas alterações efectuadas foram relativas à assinatura e funcionamento do \verb|llclose| de modo a permitir fechar a porta-série em caso de erro e no \verb|llopen|  que não recebe a porta a abrir. 
+O interface deste protocolo disponibiliza 6 funções. Quatro são as definidas pelo guião do trabalho (\verb|llopen|, \verb|llread|, \verb|llwrite|, \verb|llclose|). As únicas alterações efectuadas foram relativas à assinatura e funcionamento de \verb|llclose|, de modo a permitir fechar a porta-série em caso de erro, e no \verb|llopen|, que não recebe a porta a abrir. 
 
 Estas 4 funções utilizam a função \verb|update_state_machine| para determinar a cada instante o estado em que está.
-Com a concepção desta função evitou-se alguma repetição de código mas foi necessário cuidado extra na implementação pois são necessárias trocas de informação entre esta e a função que a invoca. A \verb|update_state_machine| recebe qual o tipo de trama esperada que serve para dentificar a função que a invocou e atualizar os estados corretamente e guarda numa variável auxiliar, \verb|received_C_type|, o tipo de trama recebida. Quando a função invocadora detecta que se atingio o estado \verb|STATE_MACHINE_STOP| verifica o \verb|received_C_type| para saber  tipo de trama recebido e como deve proceder.
+Com a concepção desta função evitou-se alguma repetição de código, mas foi necessário cuidado extra na implementação pois existe troca de informação entre esta e a função que a invoca. De facto, a função \verb|update_state_machine| recebe o tipo de trama esperada, de forma a identificar a função que a invocou e atualizar os estados corretamente, e guarda numa variável auxiliar, \verb|received_C_type|, o tipo de trama recebida. Quando a função que a invocou detecta que se atingiu o estado \verb|STATE_MACHINE_STOP|, verifica o \verb|received_C_type| para saber qual tipo de trama recebido e como deve proceder.
 
-Para obter a trama que se pretende enviar são usadas as funções \verb|write_UorS| e \verb|write_I| sendo estas respectivamente para o envio de tramas de Supervisão ou Não numeradas e para tramas de Informação. Elas fazem uso da função \verb|getMessage| que tem como parâmetros o Emissor original, o tipo e o número da trama e o array de caracteres onde será colocada a flag e o cabeçalho da trama. Posteriormente a estes bytes, em tramas de Informação, serão adicionados os dados e o respetivo BCC2. Nas restantes tramas, é apenas reutilizada a flag que está na primeira posição do array. A sua especificação pode ser encontrada no Anexo~\ref{tramas}.
+Para obter a trama que se pretende enviar são usadas as funções \verb|write_UorS|, para envio de tramas de Supervisão ou Não numeradas, e \verb|write_I|, para tramas de Informação. Elas fazem uso da função \verb|getMessage| que tem como parâmetros o Emissor original, o tipo e o número da trama e o array de caracteres onde será colocada a flag e o cabeçalho da trama. Posteriormente a estes bytes, em tramas de Informação, serão adicionados os dados e o respetivo BCC2. Nas restantes tramas, é apenas reutilizada a flag que está na primeira posição do array. A sua especificação pode ser encontrada no Anexo~\ref{tramas}.
 
-As outras 2 funções disponibilizadas pelo interface são \verb|set_basic_definitions| e \verb|get_occurrences_log| que servem respectivamente para guardar as opções escolhidas pelo utilizador e para receber o registo de ocorrências na camada da aplicação.
+As outras 2 funções disponibilizadas pelo interface são \verb|set_basic_definitions| e \verb|get_occurrences_log| que servem, respectivamente, para guardar as opções escolhidas pelo utilizador e para receber o registo de ocorrências na camada da aplicação.
 
 
 %%%%%%%%%%%%%
@@ -242,13 +239,13 @@ As outras 2 funções disponibilizadas pelo interface são \verb|set_basic_defin
 %%%%%%%%%%%%%
 \chapter{Protocolo de aplicação}
 
-O protocolo de aplicação foi implementado no ficheiro \verb|AppProtocol.c|. e apenas disponibiliza as funções \verb|sendFile| e \verb|receiveFile| para módulos externos. As duas funções são responsáveis pelo envio e recepção de uma imagem completa, sendo que a recepção e envio de pacotes individuais é tratada dentro de \verb|AppProtocol.c|.
+O protocolo de aplicação foi implementado no ficheiro \verb|AppProtocol.c|. e apenas disponibiliza as funções \verb|sendFile| e \verb|receiveFile| para módulos externos. Estas funções são responsáveis pelo envio e recepção de uma imagem completa, sendo que a recepção e envio de pacotes individuais é tratada dentro de \verb|AppProtocol.c|.
 
 O protocolo foi implementado de acordo com o enunciado e é responsável pelo envio de pacotes de controlo e de dados.
-Os pacotes de controlo são enviados antes e após o envio dos dados e têm como parâmetros  nome e tamanho (em bytes) da imagem.
-Quando a informação destes pacotes coincide não é realizado o output da imagem mesmo que todos os pacotes de dados tenham sido recebidos dado que não há garantias que pertençam  todos à mesma imagem ou que todos foram recebidos.
+Os pacotes de controlo são enviados antes e após o envio dos dados e têm como parâmetros o nome e tamanho (em bytes) da imagem.
+Quando a informação destes pacotes não coincide, não é realizado o output da imagem, dado que não há garantias que pertençam todos à mesma imagem ou que todos foram recebidos.
 
-O envio/recepção de imagens atualiza uma variável, recebida por um apontador, externa ao Protocolo (definida num outro módulo), que indica os bytes já enviados/recebidos. Tal variável é usada atualmente dentro do protocolo para o display do estado de envio da imagem que inicialmente estava implementado no ficheiro \verb|user_interface.c|. Esta variável serviria também para tentar retransmitir uma imagem em caso de um envio falhar a meio. Este mecanismo de retransmissão não foi completado e o display foi movido pois o sua implementação inicial interferia com o envio/recepção de dados, a estrutura do código actual reflecte os planos inicialmente concebidos.
+O envio/recepção de imagens atualiza uma variável, recebida por um apontador, externa ao Protocolo (definida num outro módulo), que indica os bytes já enviados/recebidos. Tal variável é usada atualmente dentro do protocolo para o display do estado de envio da imagem, que inicialmente estava implementado no ficheiro \verb|user_interface.c|. Esta variável serviria também para tentar reenviar uma imagem em caso de um envio falhar a meio. Este mecanismo de reenvio não foi completado e o display foi movido pois o sua implementação inicial interferia com o envio/recepção de dados. A estrutura do código actual reflecte os planos inicialmente concebidos.
 
 %%%%%%%%%%%%%%%
 % VALORIZACAO %
@@ -257,46 +254,46 @@ O envio/recepção de imagens atualiza uma variável, recebida por um apontador,
 
 \section{Registo de ocorrências}
 
-A camada de ligação de dados regista o número de tramas do tipo I e REJs recebidas/enviadas e o número de ocorrências de timeouts de uma transmissão. A informação fica registada numa variável do tipo \verb|occurrences_Log| e pode ser acedida pela componente de interface através do método \verb|get_occurrences_log|.
+A camada de ligação de dados regista o número de tramas do tipo I e REJs recebidas/enviadas e o número de ocorrências de timeouts de uma emissão. A informação fica registada numa variável do tipo \verb|occurrences_Log| e pode ser acedida pela componente de interface através do método \verb|get_occurrences_log|.
 
 \section{Definições básicas}
 
-O utilizador pode definir qual o \verb|baudrate| a usar, o \verb|packetSize| (numero de bytes máximos que envia da imagem em cada trama I antes de se realizar o stuffing) e o número máximo de tentativas consecutivas de reconexão.
-Uma vez escolhidas as opções o intervalo de duração de um timeout é calculado em função do \verb|baudrate| e do \verb|packetSize| escolhidos pelo utilizador como se pode verificar no anexo \ref{DATALINKPROTOCOLC} nas linhas 187 a 209. Na nossa implementação o receptor pode e deve configurar o \verb|baudrate| e \verb|packetSize| iguais aos do transmissor, pois, apesar de estes não serem usados na prática pelo receptor, são necessários para calcular um intervalo de timeout que seja fiável face às definições do transmissor.
+O utilizador pode definir qual o \verb|baudrate| a usar, o \verb|packetSize| (numero de bytes máximos que envia da imagem em cada trama I antes de se realizar o stuffing) e o número máximo de tentativas consecutivas de conexão.
+Uma vez escolhidas as opções, o intervalo de duração de um timeout é calculado em função do \verb|baudrate| e do \verb|packetSize| escolhidos pelo utilizador, como se pode verificar no anexo \ref{DATALINKPROTOCOLC} nas linhas 187 a 209. Na nossa implementação o receptor pode e deve configurar o \verb|baudrate| e \verb|packetSize| iguais aos do emissor, pois, apesar de estes não serem usados na prática pelo receptor, são necessários para calcular um intervalo de timeout que seja fiável face às definições do emissor.
 
 \section{Gerador aleatório de erros e REJs}
-São gerados erros aleatoriamente nas tramas enviadas pelo transmissor. São gerados erros no cabeçalho e de nos dados. Estes ocorrem de forma independente e são gerados respectivamente pelas funções \verb|randomErrorCabe| e \verb|randomErrorData|. A frequência destes erros é defina a partir das constantes \verb|CABE_PROB| e \verb|DATA_PROB| que representam quantas tramas são enviadas por cada um que apresenta um erro do tipo correspondente. Pode ser verificada a função \verb|randomErrorData| no anexo \ref{DATALINKPROTOCOLC} nas linhas 517 a 526. A \verb|randomErrorCabe| está no mesmo anexo e é muito semelhante.
-Tramas do tipo REJ foram implementadas. Quando o receptor consegue identificar ocorrencia de erro(s) no bloco de dados envia uma mensagem ao transmissor e este trata de reenviar a pacote novamente.
+São gerados erros aleatoriamente nas tramas enviadas pelo emissor. Estes erros podem ocorrer no cabeçalho ou nos dados da trama, com probabilidades independentes. Para tal, são usadas as funções \verb|randomErrorCabe| e \verb|randomErrorData|. A frequência destes erros é defina a partir das constantes \verb|CABE_PROB| e \verb|DATA_PROB| que representam quantas tramas são enviadas por cada um que apresenta um erro do tipo correspondente. Pode ser verificada a função \verb|randomErrorData| no anexo \ref{DATALINKPROTOCOLC} nas linhas 517 a 526. A função \verb|randomErrorCabe| está no mesmo anexo e é muito semelhante.
+Também foram implementadas tramas do tipo REJ. Quando o receptor consegue identificar ocorrência de erro(s) no bloco de dados envia uma mensagem ao emissor e este trata de reenviar a pacote novamente.
 
 \section{Representação do progresso}
-Na AppProtocol.c, quando a aplicação está enviar/receber uma imagem, trata imprimir na consola a quantidade de bytes enviados/recebidos e quantos faltam para receber/enviar a imagem na totalidade. Este display (impressão na consola) é actualizado cada vez que um pacote é enviado/recebido na totalidade se já tiver passado um tempo mínimo definido na constante \verb|UPDATE_DISPLAY_MIN_TIME_INTERVAL| desde a ultima actualização de display de modo a evitar que ocorra com elevada frequência o que poderia tornar difícil a sua leitura ou afectar a
+Na AppProtocol.c, quando a aplicação está enviar/receber uma imagem, trata de imprimir na consola a quantidade de bytes enviados/recebidos e quantos faltam para enviar/receber a imagem na totalidade. Este \emph{display} (impressão na consola) é actualizado de cada vez que um pacote é enviado/recebido na totalidade. Isto desde que já tenha passado o tempo mínimo definido na constante \verb|UPDATE_DISPLAY_MIN_TIME_INTERVAL| desde a ultima actualização de display, de modo a evitar que ocorra com elevada frequência, o que poderia tornar difícil a sua leitura ou afectar o envio/receção dos dados.
 
 %%%%%%%%%%%%%
 % VALIDACAO %
 %%%%%%%%%%%%%
 \chapter{Validação}
 
-Foram realizados cerca de 10 testes ao longo das aulas práticas e fora destas usando uma porta-série.
-Foram realizados cerca de 30 testes nas máquinas virtuais usadas para desenvolver a aplicação no fim desta estar terminada.
+Foram realizados vários ao longo das aulas práticas e fora destas usando máquinas com uma ligação física por cabo da porta-série. Além disso, realizamos imensos testes nas máquinas virtuais, que foram usadas para desenvolver a aplicação.
 
-Relativamente à qualidade dos testes não foi usado nenhum auxiliar para verificar se as imagens recebidas eram iguais às enviadas nem nenhuma automatiação de testes, sendo estes todos realizados manualmente. 
-Foram usadas imagens de diferentes tamanhos variados entre os 263 bytes (a mais pequena) e 712K bytes (a maior). Os tipos de imagens também variavam entre os tipos gif, jpeg e png.
-De todos os testes realizados foram bem sucedidos à excepção de 1 que apresentou um aviso inesperado e do qual não conseguimos apurar o problema.
+Relativamente à qualidade dos testes não foi usado nenhum auxiliar para verificar se as imagens recebidas eram iguais às enviadas nem nenhuma automatização de testes, sendo estes todos realizados manualmente. Tivemos o cuidado de escolher imagens de tamanhos variados entre os 263 bytes (a mais pequena) e 712K bytes (a maior). Os tipos de imagens também variavam entre os tipos gif, jpeg e png.
+
+Uma vez atingido um nível estável de desenvolvimento da aplicação, todos os testes realizados foram bem sucedidos, à excepção de 1 que apresentou um aviso inesperado e do qual não conseguimos apurar o problema, nem reproduzir.
 
 %%%%%%%%%%%%%%
 % CONCLUSOES %
 %%%%%%%%%%%%%%
 \chapter{Conclusões}
 
-Foi implementada com sucesso dentro do prazo establecido uma aplicação capaz de transferir imagens entre 2 computadores através de uma porta-série.
-A implementação foi realizada em camadas como sugerido e foram percebidos os conceitos e implicações práticas dos protocolos usados.
+Neste projecto, como acontece frequentemente em projetos desta natureza, há certamente melhorias a efetuar. Em todo o caso, consideramos que a aplicação foi implementada com sucesso dentro do prazo estabelecido. De facto, a aplicação é capaz de transferir imagens entre 2 computadores através de uma porta-série, sendo o envio bem sucedido mesmo em situações de quebra de ligação ou interferência, como ficou claro na demonstração do projeto.
+
+Adicionalmente, a implementação foi feita em camadas, tendo sido observados os princípios de encapsulamento. Consideramos ainda que os conceitos e implicações práticas dos protocolos usados ficaram claros.
 
 
 %%%%%%%%%%%%%%%%
 % BIBLIOGRAPHY %
 %%%%%%%%%%%%%%%%
-\bibliographystyle{IEEEtran}
-\bibliography{rabb,refs}
+%\bibliographystyle{IEEEtran}
+%\bibliography{rabb,refs}
 
 \begin{appendices}
 
@@ -322,8 +319,8 @@ A implementação foi realizada em camadas como sugerido e foram percebidos os c
 As tramas que utilizamos podem ser de três tipos:
 \begin{itemize}
 	\item Informação (I) - transportam dados;
-	\item Supervisão (S) - são usadas para iniciar e terminar a transmissão, assim como para responder a tramas do tipo I;
-	\item Não Numeradas (U) - são usadas para responder a tramas de início e fim de transmissão.
+	\item Supervisão (S) - são usadas para iniciar e terminar a emissão, assim como para responder a tramas do tipo I;
+	\item Não Numeradas (U) - são usadas para responder a tramas de início e fim de emissão.
 \end{itemize}
 
 Todas as tramas são delimitadas pelas \emph{Flags} F - 01111110. Além disso, independentemente do tipo da trama, o cabeçalho é sempre o mesmo conjunto de 3 bytes:
