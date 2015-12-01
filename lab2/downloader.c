@@ -13,6 +13,7 @@
 #include "utilities.h"
 
 //VARS AND STRUCTS --------------------------------------------------------------------------------------
+#define FTP_PORT	21
 #define MAX_STRING_SIZE 200
 struct /*???*/Info{
   char username[MAX_STRING_SIZE];
@@ -23,9 +24,6 @@ struct /*???*/Info{
   char ip[MAX_STRING_SIZE];
 };
 
-int control_socket_fd; 
-int data_socket_fd;
-
 //AUX FUNCS CODE --------------------------------------------------------------------------------------
 int parse(char *str, struct Info* info) {
   
@@ -34,11 +32,14 @@ int parse(char *str, struct Info* info) {
 		return 1;
 	}
 
-  //http://stackoverflow.com/questions/32822988/get-the-last-token-of-a-string-in-c
+  //get filename http://stackoverflow.com/questions/32822988/get-the-last-token-of-a-string-in-c
       char *last = strrchr(info->url_path, '/') ;
       if(last!=NULL) memcpy(info->filename, last+1, strlen(last)+1);
       else strcpy(info->filename,info->url_path);
-      
+     
+  //TODO remove filename form path
+  //...
+  
 	return 0;
 }
 
@@ -67,9 +68,9 @@ int main(int argc,char **argv)
   struct Info info;
   
   // ftp message composition: ftp://[<user>:<password>@]<host>/<url-path>
-  //ftp://[up201306619:thisisaverylongpassword9]gnomo.fe.up.pt/Music/test.txt
+  //ftp://[up201306619:thisisaverylongpassword9]gnomo.fe.up.pt/test.txt
   
-	// URL
+	// ---- URL stuff ----
 
 	//parse
 	if(parse(argv[1],&info)!=OK)
@@ -88,24 +89,29 @@ int main(int argc,char **argv)
 	// get ip
 	get_ip(&info);
 	
-	//done step 1...
+	// ---- FTP stuff -----
+		
+	ftp_connect( info.ip, FTP_PORT);
 
-	// FTP steps (got from watching prev works)
+	if(ftp_login(info.username, info.password)!=OK)// Send user n pass
+{ftp_abort(); return 1;}
+		
+	TODO /*falta remover filename do path*/ // change directory
+{ftp_abort(); return 1;}
 
-	// Verifying username and password
+	if(ftp_pasv()!=OK)// passive mode
+{ftp_abort(); return 1;}
 
-	// Sending credentials to server
+	if(ftp_retr(info.filename)!=OK)// ask to receive file
+{ftp_abort(); return 1;}
 
-	// Changing directory
+	if(ftp_download(info.filename)!=OK)// receive file
+{ftp_abort(); return 1;}
 
-	// Entry in passive mode
+	if(ftp_disconnect()!=OK)// disconnect from server
+{ftp_abort(); return 1;}
 
-	// Begins transmission of a file
-
-	// file transfer
-
-	// Disconnecting from server
-
+printf("\n downloader terminated ok! \n")
 
 	return 0;
 }
