@@ -1,6 +1,11 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+//#include <netdb.h>
+#include <strings.h>
+#include <stdio.h>
+
+
 #include "socket.h"
 
 int connect_socket_TCP(const char* ip, int port)

@@ -1,16 +1,24 @@
-#include <stdio.h>
+/*
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <signal.h>
+#include <signal.h>*/
+#include <string.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include <netdb.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
 #include <string.h>
 #include <errno.h> 
 #include <sys/types.h>
 #include "utilities.h"
+#include "ftp.h"
 
 //VARS AND STRUCTS --------------------------------------------------------------------------------------
 #define FTP_PORT	21
@@ -34,11 +42,15 @@ int parse(char *str, struct Info* info) {
 
   //get filename http://stackoverflow.com/questions/32822988/get-the-last-token-of-a-string-in-c
       char *last = strrchr(info->url_path, '/') ;
-      if(last!=NULL) memcpy(info->filename, last+1, strlen(last)+1);
-      else strcpy(info->filename,info->url_path);
-     
-  //TODO remove filename form path
-  //...
+      if(last!=NULL) 
+      {
+	memcpy(info->filename, last+1, strlen(last)+1);
+	memset(last,0,strlen(last)+1);
+      }
+      else {
+	strcpy(info->filename,info->url_path);
+	memset(info->url_path,0,sizeof(info->url_path));
+      }
   
 	return 0;
 }
@@ -47,11 +59,11 @@ int get_ip(struct Info* info) {
 	struct hostent* host;
 
 	if ((host = gethostbyname(info->host_name)) == NULL) {
-		herror("gethostbyname");
+		perror("gethostbyname");
 		return 1;
 	}
 
-	char* ip = inet_ntoa(*((struct in_addr *) host->h_addr));
+	char* ip = inet_ntoa(*((struct in_addr *)host->h_addr));
 	strcpy(info->ip, ip);
 
 	printf("Host name  : %s\n", host->h_name);
@@ -86,32 +98,51 @@ int main(int argc,char **argv)
 	printf("filename:%s\n",info.filename);
 	);
   
-	// get ip
+	//- - - - - -
 	get_ip(&info);
 	
 	// ---- FTP stuff -----
 		
-	ftp_connect( info.ip, FTP_PORT);
+printf("\n connecting... \n");
+	
+	if(ftp_connect(info.ip, FTP_PORT)!=OK)
+{ftp_abort(); return 1;}
+
+printf("\n logging in... \n");
 
 	if(ftp_login(info.username, info.password)!=OK)// Send user n pass
 {ftp_abort(); return 1;}
 		
-	TODO /*falta remover filename do path*/ // change directory
-{ftp_abort(); return 1;}
+
+		
+	if(strlen(info.url_path)>0) {
+	  printf("\n changing dir... \n");
+	  
+	  if(ftp_changedir(info.url_path)!=OK)// change directory
+	  {ftp_abort(); return 1;}
+	}
+	
+printf("\n passive mode... \n");
 
 	if(ftp_pasv()!=OK)// passive mode
 {ftp_abort(); return 1;}
 
+printf("\n asking for file... \n");
+
 	if(ftp_retr(info.filename)!=OK)// ask to receive file
 {ftp_abort(); return 1;}
+
+printf("\n downloading file... \n");
 
 	if(ftp_download(info.filename)!=OK)// receive file
 {ftp_abort(); return 1;}
 
+printf("\n disconecting... \n");
+
 	if(ftp_disconnect()!=OK)// disconnect from server
 {ftp_abort(); return 1;}
 
-printf("\n downloader terminated ok! \n")
+printf("\n downloader terminated ok! \n");
 
 	return 0;
 }

@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+
 #include "ftp.h"
 #include "socket.h"
 #include "utilities.h"
@@ -6,6 +10,41 @@
 
 int control_socket_fd; 
 int data_socket_fd;
+
+
+//------------------------------------------------------------------------
+// READ AND SEND
+#if 1
+
+int ftp_read(char* str,unsigned long str_total_size)
+{
+//no need for active waiting and user won't notice (-__-) i think...
+//may fail if the response doesn't come right away
+//could use a loop instead, but when should it be terminated ???
+sleep(1);
+		
+int num_bytes_read=0;
+	if ( (num_bytes_read = read(control_socket_fd, str, str_total_size))<0)
+	{
+		printf("ftp_read: Failed to read from data socket\n");
+		return -1;
+	}
+	return num_bytes_read;
+}
+
+int ftp_send( const char* str,unsigned long str_size)
+{
+	int bytes;
+
+	if ((bytes = write(control_socket_fd, str, str_size)) < 0) {
+		perror("ftp_send: Failed to write bytes\n");
+		return -1;
+	}
+	return bytes;
+}
+
+#endif
+
 
 //------------------------------------------------------------------------
 // CONECT AND DISCONECT
@@ -27,7 +66,7 @@ int ftp_connect( const char* ip, int port) {
 	data_socket_fd 	  = 0;
 
 	//Try to read with control socket
-	if (ftp_read(read_bytes, sizeof(read_bytes)))
+	if (ftp_read(read_bytes, sizeof(read_bytes))<0)
 	{
 		printf("ftp_connect: Failed to read\n");
 		return 1;
@@ -59,39 +98,6 @@ int ftp_disconnect() {
 #endif
 
 //------------------------------------------------------------------------
-// READ AND SEND
-#if 1
-
-int ftp_read(char* str,unsigned long str_total_size)
-{
-//no need for active waiting and user won't notice (-__-) i think...
-//may fail if the response doesn't come right away
-//could use a loop instead, but when should it be terminated ???
-sleep(1);
-		
-int num_bytes_read=0;
-	if ( (num_bytes_read = read(control_socket_fd, str, str_size)<0)
-	{
-		printf("ftp_read: Failed to read from data socket\n");
-		return -1;
-	}
-	return num_bytes_read;
-}
-
-int ftp_send( const char* str,unsigned long str_size)
-{
-	int bytes;
-
-	if ((bytes = write(control_socket_fd, str, str_size)) < 0) {
-		perror("ftp_send: Failed to write bytes\n");
-		return 1;
-	}
-	return bytes;
-}
-
-#endif
-
-//------------------------------------------------------------------------
 // MAIN OPERATIONS
 #if 1
 
@@ -101,12 +107,12 @@ int ftp_login( const char* user, const char* password) {
 
 	//send username
 	sprintf(aux, "user %s\r\n", user);
-	if (ftp_send( aux, strlen(aux))) {
-		printf("ERROR: ftp_send failure.\n");
+	if (ftp_send( aux, strlen(aux))< 0) {
+		printf("ftp_login: ftp_send failure.\n");
 		return 1;
 	}
 	//receive answer to username
-	if (ftp_read( aux, sizeof(aux))) {
+	if (ftp_read( aux, sizeof(aux))<0) {
 		printf(	"ftp_login:Bad response to user\n");
 		return 1;
 	}
@@ -114,12 +120,12 @@ int ftp_login( const char* user, const char* password) {
 	//send password
 	memset(aux, 0, sizeof(aux));//reuse 2send
 	sprintf(aux, "pass %s\r\n", password);
-	if (ftp_send( aux, strlen(aux))) {
+	if (ftp_send( aux, strlen(aux))< 0) {
 		printf("ftp_login: failed to send password.\n");
 		return 1;
 	}
 	//receive answer to password
-	if (ftp_read( aux, sizeof(aux))) 
+	if (ftp_read( aux, sizeof(aux))<0) 
 	{
 		printf(	"ftp_login:Bad response to pass\n");
 		return 1;
@@ -134,13 +140,13 @@ int ftp_changedir(const char* path) {
 
 	//send cwd command
 	sprintf(aux, "CWD %s\r\n", path);
-	if (ftp_send(aux, strlen(aux))) {
+	if (ftp_send(aux, strlen(aux))< 0) {
 		printf("ftp_changedir:Failed to send\n");
 		return 1;
 	}
 
 	//get response
-	if (ftp_read(aux, sizeof(aux))) {
+	if (ftp_read(aux, sizeof(aux))< 0) {
 		printf("ftp_changedir:Failed to get a valid response\n");
 		return 1;
 	}
@@ -154,18 +160,18 @@ int ftp_pasv() {
 	char aux[MAX_STRING_SIZE] = "PASV\r\n";
 	
 	//send pasv msg
-	if (ftp_send(aux, strlen(aux))) {
+	if (ftp_send(aux, strlen(aux))< 0) {
 		printf("ftp_pasv: Failed to enter in passive mode\n");
 		return 1;
 	}
 	
 	//receive response
-	if (ftp_read(aux, sizeof(aux))) {
+	if (ftp_read(aux, sizeof(aux))<0) {
 		printf("ftp_pasv: Failed to receive information to enter passive mode\n");
 		return 1;
 	}
 
-		DEBUG_SECTON(DEBUG_PASVprintf("pasv():received:%s\n",aux);
+		DEBUG_SECTION(DEBUG_PASV,printf("pasv():received:%s\n",aux);
 	);
 	
 	// info was received. scan it
@@ -173,7 +179,7 @@ int ftp_pasv() {
 	int ports[2];
 		
 	if ((sscanf(aux, "%*[^(](%d,%d,%d,%d,%d,%d)",
-	ip_bytes,ip_bytes+1, ip_bytes+2, ip_bytes+3, ports, ports+1)) 
+	ip_bytes,&ip_bytes[1], &ip_bytes[2], &ip_bytes[3], ports, &ports[1])) 
 		!=6 ) 
 	{
 		printf("ftp_pasv: Cannot process received data, must receive 6 bytes\n");
@@ -184,13 +190,13 @@ int ftp_pasv() {
 	memset(aux, 0, sizeof(aux));
 	if ((sprintf(aux, "%d.%d.%d.%d",
 	ip_bytes[0], ip_bytes[1], ip_bytes[2], ip_bytes[3]))
-		!= 4) 
+		<7) 
 	{
 		printf("ftp_pasv: Cannot compose ip address\n");
 		return 1;
 	}
 
-		DEBUG_SECTON(DEBUG_PASV,printf("pasv():ip:%s\n",aux);
+		DEBUG_SECTION(DEBUG_PASV,printf("pasv():ip:%s\n",aux);
 	);
 	
 	// calculate port
@@ -199,7 +205,7 @@ int ftp_pasv() {
 	printf("IP: %s\n", aux);
 	printf("PORT: %d\n", portResult);
 
-	if ((data_socket_fd = connectSocket(aux, portResult)) < 0) {
+	if ((data_socket_fd = connect_socket_TCP(aux, portResult)) < 0) {
 		printf(	"ftp_pasv: Failed to connect data socket\n");
 		return 1;
 	}
@@ -212,13 +218,13 @@ int ftp_retr(const char* filename) {
 
 	//send retr
 	sprintf(aux, "RETR %s\r\n", filename);
-	if (ftpSend(ftp, aux, strlen(aux))) {
+	if (ftp_send(aux, strlen(aux))< 0) {
 		printf("ftp_retr: Failed to send \n");
 		return 1;
 	}
 
 	//get respones
-	if (ftpRead(ftp, aux, sizeof(aux))) {
+	if (ftp_read(aux, sizeof(aux))< 0) {
 		printf("ftp_retr: Failed to get response\n");
 		return 1;
 	}
@@ -226,7 +232,8 @@ int ftp_retr(const char* filename) {
 	return 0;
 }
 
-int ftp_download(ftp* ftp, const char* filename) {
+#define DEBUG_DOWNLOAD 1
+int ftp_download(const char* filename) {
 	
 	FILE* file;
 	int bytes;
@@ -240,13 +247,19 @@ int ftp_download(ftp* ftp, const char* filename) {
 	//read received data in data socket until there is nothing more 2 read
 	//??? is it possible for the stream to stop temporarily and recive 0 as result
 	//without outputting everything ??? hmmm...
+	sleep(1);
 	char buf[MAX_STRING_SIZE];
-	while ((bytes = read(data_socket_fd, buf, sizeof(buf)))) {
+	while ((bytes = read(data_socket_fd, buf, sizeof(buf)))>0) {
 		if (bytes < 0) {
 			perror("ftp_download: Failed to receive from data socket\n");
 			fclose(file);
 			return 1;
 		}
+		
+		DEBUG_SECTION(DEBUG_DOWNLOAD,
+			      printf("bytes:%d\n",bytes);
+		              printf("rec:%s\n",buf);
+			     );
 		
 		//output received bytes to file
 		if ((bytes = fwrite(buf, bytes, 1, file)) < 0) {
@@ -264,7 +277,7 @@ int ftp_download(ftp* ftp, const char* filename) {
 
 void ftp_abort()
 {
-	//... not really useful thus far ...
+	printf("\n ABORTED! \n");
 	if(data_socket_fd) close(data_socket_fd);
 	if(control_socket_fd) close(control_socket_fd);
 	
