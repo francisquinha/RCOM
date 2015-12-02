@@ -2,6 +2,10 @@
 #include <unistd.h>
 #include <string.h>
 
+#include <sys/types.h>
+#include <sys/socket.h>
+
+
 #include "ftp.h"
 #include "socket.h"
 #include "utilities.h"
@@ -18,29 +22,24 @@ int data_socket_fd;
 
 int ftp_read(char* str,unsigned long str_total_size)
 {
-//no need for active waiting and user won't notice (-__-) i think...
-//may fail if the response doesn't come right away
-//could use a loop instead, but when should it be terminated ???
-sleep(1);
-		
-int num_bytes_read=0;
-	if ( (num_bytes_read = read(control_socket_fd, str, str_total_size))<0)
-	{
-		printf("ftp_read: Failed to read from data socket\n");
-		return -1;
-	}
-	return num_bytes_read;
+    int bytes = 0;
+    if( (bytes = recv(control_socket_fd,str,str_total_size,0)) < 0  )
+      {
+	perror("ftp_read: recv failed\n");
+	return -1;
+      }
+    return bytes;
 }
 
 int ftp_send( const char* str,unsigned long str_size)
 {
-	int bytes;
-
-	if ((bytes = write(control_socket_fd, str, str_size)) < 0) {
-		perror("ftp_send: Failed to write bytes\n");
-		return -1;
-	}
-	return bytes;
+	    int bytes = 0;
+    if( (bytes = send(control_socket_fd,str,str_size,0)) < 0  )
+      {
+	perror("ftp_read: recv failed\n");
+	return -1;
+      }
+    return bytes;
 }
 
 #endif
@@ -79,13 +78,13 @@ int ftp_disconnect() {
 	char aux[MAX_STRING_SIZE];
 
 	//read discnnect
-		if (ftp_read(aux, sizeof(aux))) {
+		if (ftp_read(aux, sizeof(aux))<0) {
 		printf("ftp_disconnect: Failed to disconnect\n");
 		return 1;
 	}
 	//send disconnect 
 	sprintf(aux, "QUIT\r\n");
-	if (ftp_send(aux, strlen(aux))) {
+	if (ftp_send(aux, strlen(aux))<0) {
 		printf("ftp_disconnect: Failed to output QUIT");
 		return 1;
 	}
@@ -213,11 +212,13 @@ int ftp_pasv() {
 	return 0;
 }
 
+#define DEBUG_RETR 1
 int ftp_retr(const char* filename) {
 	char aux[MAX_STRING_SIZE];
 
 	//send retr
 	sprintf(aux, "RETR %s\r\n", filename);
+	//sprintf(aux, "LIST %s\r\n", "");
 	if (ftp_send(aux, strlen(aux))< 0) {
 		printf("ftp_retr: Failed to send \n");
 		return 1;
@@ -229,12 +230,16 @@ int ftp_retr(const char* filename) {
 		return 1;
 	}
 	
+	DEBUG_SECTION(DEBUG_PASV,printf("ftp_retr_debug_1:%s\n",aux););
+	
 	return 0;
 }
 
 #define DEBUG_DOWNLOAD 1
 int ftp_download(const char* filename) {
 	
+  printf("\ndata_%d__cont_%d\n",data_socket_fd,  control_socket_fd);
+
 	FILE* file;
 	int bytes;
 
@@ -244,12 +249,9 @@ int ftp_download(const char* filename) {
 		return 1;
 	}
 
-	//read received data in data socket until there is nothing more 2 read
-	//??? is it possible for the stream to stop temporarily and recive 0 as result
-	//without outputting everything ??? hmmm...
-	sleep(1);
+
 	char buf[MAX_STRING_SIZE];
-	while ((bytes = read(data_socket_fd, buf, sizeof(buf)))>0) {
+	while ((bytes = recv(data_socket_fd,buf,MAX_STRING_SIZE,0))>0) {
 		if (bytes < 0) {
 			perror("ftp_download: Failed to receive from data socket\n");
 			fclose(file);
