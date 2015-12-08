@@ -1,0 +1,378 @@
+tux63:~# cd Desktop/RCOM/scripts/
+tux63:~/Desktop/RCOM/scripts# chmod +x tux2_ex2.sh 
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex2.sh 
+[ ok ] Restarting networking (via systemctl): networking.service.
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.253   0.0.0.0         UG    0      0        0 eth0
+172.16.61.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ping 172.16.60.1
+PING 172.16.60.1 (172.16.60.1) 56(84) bytes of data.
+64 bytes from 172.16.60.1: icmp_seq=1 ttl=63 time=0.390 ms
+64 bytes from 172.16.60.1: icmp_seq=2 ttl=63 time=0.356 ms
+64 bytes from 172.16.60.1: icmp_seq=3 ttl=63 time=0.464 ms
+^C
+--- 172.16.60.1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 1998ms
+rtt min/avg/max/mdev = 0.356/0.403/0.464/0.047 ms
+tux63:~/Desktop/RCOM/scripts# ping 172.16.60.254
+PING 172.16.60.254 (172.16.60.254) 56(84) bytes of data.
+64 bytes from 172.16.60.254: icmp_seq=1 ttl=64 time=0.142 ms
+64 bytes from 172.16.60.254: icmp_seq=2 ttl=64 time=0.154 ms
+^C
+--- 172.16.60.254 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 999ms
+rtt min/avg/max/mdev = 0.142/0.148/0.154/0.006 ms
+tux63:~/Desktop/RCOM/scripts# ping 172.16.61.253
+PING 172.16.61.253 (172.16.61.253) 56(84) bytes of data.
+64 bytes from 172.16.61.253: icmp_seq=1 ttl=64 time=0.151 ms
+64 bytes from 172.16.61.253: icmp_seq=2 ttl=64 time=0.140 ms
+^C
+--- 172.16.61.253 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 999ms
+rtt min/avg/max/mdev = 0.140/0.145/0.151/0.013 ms
+tux63:~/Desktop/RCOM/scripts# arp -a
+? (172.16.61.253) at 00:c0:df:04:20:8c [ether] on eth0
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex4.sh 
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+0.0.0.0         172.16.61.253   0.0.0.0         UG    0      0        0 eth0
+172.16.61.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex4.sh 
+No ARP entry for 172.16.61.0
+SIOCADDRT: File exists
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+0.0.0.0         172.16.61.253   0.0.0.0         UG    0      0        0 eth0
+172.16.61.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex4.sh 
+No ARP entry for 172.16.61.0
+SIOCADDRT: File exists
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+0.0.0.0         172.16.61.253   0.0.0.0         UG    0      0        0 eth0
+172.16.61.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex4.sh 
+No ARP entry for 0.0.0.0
+SIOCADDRT: File exists
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+0.0.0.0         172.16.61.253   0.0.0.0         UG    0      0        0 eth0
+172.16.61.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex4.sh 
+No ARP entry for 0.0.0.0
+SIOCADDRT: File exists
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+0.0.0.0         172.16.61.253   0.0.0.0         UG    0      0        0 eth0
+172.16.61.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex4.sh 
+No ARP entry for 0.0.0.0
+SIOCADDRT: File exists
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+0.0.0.0         172.16.61.253   0.0.0.0         UG    0      0        0 eth0
+172.16.61.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex4.sh 
+Usage: inet_route [-vF] del {-host|-net} Target[/prefix] [gw Gw] [metric M] [[dev] If]
+       inet_route [-vF] add {-host|-net} Target[/prefix] [gw Gw] [metric M]
+                              [netmask N] [mss Mss] [window W] [irtt I]
+                              [mod] [dyn] [reinstate] [[dev] If]
+       inet_route [-vF] add {-host|-net} Target[/prefix] [metric M] reject
+       inet_route [-FC] flush      NOT supported
+SIOCADDRT: File exists
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+0.0.0.0         172.16.61.253   0.0.0.0         UG    0      0        0 eth0
+172.16.61.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex4.sh 
+Usage: inet_route [-vF] del {-host|-net} Target[/prefix] [gw Gw] [metric M] [[dev] If]
+       inet_route [-vF] add {-host|-net} Target[/prefix] [gw Gw] [metric M]
+                              [netmask N] [mss Mss] [window W] [irtt I]
+                              [mod] [dyn] [reinstate] [[dev] If]
+       inet_route [-vF] add {-host|-net} Target[/prefix] [metric M] reject
+       inet_route [-FC] flush      NOT supported
+SIOCADDRT: File exists
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+0.0.0.0         172.16.61.253   0.0.0.0         UG    0      0        0 eth0
+172.16.61.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex4.sh 
+SIOCDELRT: No such process
+SIOCADDRT: File exists
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+0.0.0.0         172.16.61.253   0.0.0.0         UG    0      0        0 eth0
+172.16.61.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# route del 0.0.0.0
+SIOCDELRT: No such process
+tux63:~/Desktop/RCOM/scripts# route del 172.16.61.254
+SIOCDELRT: No such process
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex4.sh 
+SIOCADDRT: File exists
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+172.16.61.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex4.sh 
+SIOCDELRT: No such process
+SIOCADDRT: File exists
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+172.16.60.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+172.16.60.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ping 172.16.61.254
+PING 172.16.61.254 (172.16.61.254) 56(84) bytes of data.
+From 172.16.61.253: icmp_seq=1 Redirect Host(New nexthop: 172.16.61.254)
+From 172.16.61.253: icmp_seq=2 Redirect Host(New nexthop: 172.16.61.254)
+From 172.16.61.253: icmp_seq=3 Redirect Host(New nexthop: 172.16.61.254)
+^C
+--- 172.16.61.254 ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 2014ms
+
+tux63:~/Desktop/RCOM/scripts# route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+172.16.60.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ping 172.16.61.254
+PING 172.16.61.254 (172.16.61.254) 56(84) bytes of data.
+From 172.16.61.253: icmp_seq=1 Redirect Host(New nexthop: 172.16.61.254)
+From 172.16.61.253: icmp_seq=2 Redirect Host(New nexthop: 172.16.61.254)
+64 bytes from 172.16.61.254: icmp_seq=2 ttl=255 time=0.448 ms
+From 172.16.61.253: icmp_seq=3 Redirect Host(New nexthop: 172.16.61.254)
+64 bytes from 172.16.61.254: icmp_seq=3 ttl=255 time=0.395 ms
+From 172.16.61.253: icmp_seq=4 Redirect Host(New nexthop: 172.16.61.254)
+64 bytes from 172.16.61.254: icmp_seq=4 ttl=255 time=0.382 ms
+From 172.16.61.253: icmp_seq=5 Redirect Host(New nexthop: 172.16.61.254)
+64 bytes from 172.16.61.254: icmp_seq=5 ttl=255 time=0.384 ms
+From 172.16.61.253: icmp_seq=6 Redirect Host(New nexthop: 172.16.61.254)
+64 bytes from 172.16.61.254: icmp_seq=6 ttl=255 time=0.384 ms
+^C
+--- 172.16.61.254 ping statistics ---
+6 packets transmitted, 5 received, 16% packet loss, time 5004ms
+rtt min/avg/max/mdev = 0.382/0.398/0.448/0.033 ms
+tux63:~/Desktop/RCOM/scripts# route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+172.16.60.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex4.sh 
+SIOCDELRT: No such process
+SIOCADDRT: File exists
+SIOCADDRT: File exists
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+172.16.60.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex4.sh 
+SIOCDELRT: No such process
+SIOCADDRT: File exists
+SIOCDELRT: No such process
+SIOCADDRT: File exists
+SIOCADDRT: File exists
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+172.16.60.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# echo 0 > /proc/sys/net/ipv4/conf/eth0/accept_redirects
+tux63:~/Desktop/RCOM/scripts# echo 0 > /proc/sys/net/ipv4/conf/all/accept_redirects
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex2.sh 
+[ ok ] Restarting networking (via systemctl): networking.service.
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.253   0.0.0.0         UG    0      0        0 eth0
+172.16.61.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex4.sh 
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+172.16.60.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex2.sh 
+[ ok ] Restarting networking (via systemctl): networking.service.
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.253   0.0.0.0         UG    0      0        0 eth0
+172.16.61.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex4.sh 
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+172.16.60.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex4.sh 
+SIOCDELRT: No such process
+SIOCADDRT: File exists
+SIOCDELRT: No such process
+SIOCADDRT: File exists
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+172.16.60.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.60.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex2.sh 
+[ ok ] Restarting networking (via systemctl): networking.service.
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.253   0.0.0.0         UG    0      0        0 eth0
+172.16.61.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex4.sh 
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+172.16.60.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# route del -net 172.16.60.0/24 gw 172.16.61.253
+tux63:~/Desktop/RCOM/scripts# ping 172.16.60.1
+PING 172.16.60.1 (172.16.60.1) 56(84) bytes of data.
+From 172.16.61.254: icmp_seq=1 Redirect Host(New nexthop: 172.16.61.253)
+64 bytes from 172.16.60.1: icmp_seq=1 ttl=62 time=1.29 ms
+From 172.16.61.254: icmp_seq=2 Redirect Host(New nexthop: 172.16.61.253)
+64 bytes from 172.16.60.1: icmp_seq=2 ttl=62 time=0.837 ms
+From 172.16.61.254: icmp_seq=3 Redirect Host(New nexthop: 172.16.61.253)
+64 bytes from 172.16.60.1: icmp_seq=3 ttl=62 time=0.662 ms
+From 172.16.61.254: icmp_seq=4 Redirect Host(New nexthop: 172.16.61.253)
+64 bytes from 172.16.60.1: icmp_seq=4 ttl=62 time=0.891 ms
+From 172.16.61.254: icmp_seq=5 Redirect Host(New nexthop: 172.16.61.253)
+64 bytes from 172.16.60.1: icmp_seq=5 ttl=62 time=0.901 ms
+From 172.16.61.254: icmp_seq=6 Redirect Host(New nexthop: 172.16.61.253)
+64 bytes from 172.16.60.1: icmp_seq=6 ttl=62 time=0.961 ms
+From 172.16.61.254: icmp_seq=7 Redirect Host(New nexthop: 172.16.61.253)
+64 bytes from 172.16.60.1: icmp_seq=7 ttl=62 time=0.785 ms
+From 172.16.61.254: icmp_seq=8 Redirect Host(New nexthop: 172.16.61.253)
+64 bytes from 172.16.60.1: icmp_seq=8 ttl=62 time=0.835 ms
+From 172.16.61.254: icmp_seq=9 Redirect Host(New nexthop: 172.16.61.253)
+64 bytes from 172.16.60.1: icmp_seq=9 ttl=62 time=0.849 ms
+From 172.16.61.254: icmp_seq=10 Redirect Host(New nexthop: 172.16.61.253)
+64 bytes from 172.16.60.1: icmp_seq=10 ttl=62 time=0.821 ms
+^C
+--- 172.16.60.1 ping statistics ---
+10 packets transmitted, 10 received, 0% packet loss, time 9000ms
+rtt min/avg/max/mdev = 0.662/0.883/1.291/0.156 ms
+tux63:~/Desktop/RCOM/scripts# route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+172.16.61.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# ping 172.16.60.1
+PING 172.16.60.1 (172.16.60.1) 56(84) bytes of data.
+From 172.16.61.254: icmp_seq=1 Redirect Host(New nexthop: 172.16.61.253)
+64 bytes from 172.16.60.1: icmp_seq=1 ttl=62 time=0.818 ms
+From 172.16.61.254: icmp_seq=2 Redirect Host(New nexthop: 172.16.61.253)
+64 bytes from 172.16.60.1: icmp_seq=2 ttl=62 time=0.750 ms
+From 172.16.61.254: icmp_seq=3 Redirect Host(New nexthop: 172.16.61.253)
+64 bytes from 172.16.60.1: icmp_seq=3 ttl=62 time=0.845 ms
+From 172.16.61.254: icmp_seq=4 Redirect Host(New nexthop: 172.16.61.253)
+64 bytes from 172.16.60.1: icmp_seq=4 ttl=62 time=0.697 ms
+From 172.16.61.254: icmp_seq=5 Redirect Host(New nexthop: 172.16.61.253)
+64 bytes from 172.16.60.1: icmp_seq=5 ttl=62 time=0.831 ms
+From 172.16.61.254: icmp_seq=6 Redirect Host(New nexthop: 172.16.61.253)
+64 bytes from 172.16.60.1: icmp_seq=6 ttl=62 time=0.754 ms
+^C
+--- 172.16.60.1 ping statistics ---
+6 packets transmitted, 6 received, 0% packet loss, time 5000ms
+rtt min/avg/max/mdev = 0.697/0.782/0.845/0.059 ms
+tux63:~/Desktop/RCOM/scripts# traceroute 172.16.60.1
+traceroute to 172.16.60.1 (172.16.60.1), 30 hops max, 60 byte packets
+ 1  172.16.61.254 (172.16.61.254)  0.496 ms  0.542 ms  0.581 ms
+ 2  172.16.61.253 (172.16.61.253)  0.782 ms  0.487 ms  0.487 ms
+ 3  172.16.60.1 (172.16.60.1)  0.708 ms  0.702 ms  0.694 ms
+tux63:~/Desktop/RCOM/scripts# route add -net 172.16.60.0/24 gw 172.16.61.253
+tux63:~/Desktop/RCOM/scripts# traceroute 172.16.60.1
+traceroute to 172.16.60.1 (172.16.60.1), 30 hops max, 60 byte packets
+ 1  172.16.61.253 (172.16.61.253)  0.526 ms  0.416 ms  0.419 ms
+ 2  172.16.60.1 (172.16.60.1)  0.801 ms  0.798 ms  0.793 ms
+tux63:~/Desktop/RCOM/scripts# ./tux2_ex4.sh 
+SIOCDELRT: No such process
+SIOCADDRT: File exists
+SIOCDELRT: No such process
+SIOCADDRT: File exists
+SIOCADDRT: File exists
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+172.16.60.0     172.16.61.253   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# route del -net 172.16.60.0/24 gw 172.16.61.253
+tux63:~/Desktop/RCOM/scripts# route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+172.16.61.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# traceroute 172.16.60.1
+traceroute to 172.16.60.1 (172.16.60.1), 30 hops max, 60 byte packets
+ 1  172.16.61.254 (172.16.61.254)  0.498 ms  0.548 ms  0.587 ms
+ 2  172.16.61.253 (172.16.61.253)  0.873 ms  0.500 ms  0.506 ms
+ 3  172.16.60.1 (172.16.60.1)  0.799 ms  0.792 ms  0.784 ms
+tux63:~/Desktop/RCOM/scripts# ping 172.16.60.1
+PING 172.16.60.1 (172.16.60.1) 56(84) bytes of data.
+64 bytes from 172.16.60.1: icmp_seq=1 ttl=62 time=0.629 ms
+64 bytes from 172.16.60.1: icmp_seq=2 ttl=62 time=0.594 ms
+64 bytes from 172.16.60.1: icmp_seq=3 ttl=62 time=0.587 ms
+64 bytes from 172.16.60.1: icmp_seq=4 ttl=62 time=0.569 ms
+64 bytes from 172.16.60.1: icmp_seq=5 ttl=62 time=0.623 ms
+^C
+--- 172.16.60.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4000ms
+rtt min/avg/max/mdev = 0.569/0.600/0.629/0.031 ms
+tux63:~/Desktop/RCOM/scripts# traceroute 172.16.60.1
+traceroute to 172.16.60.1 (172.16.60.1), 30 hops max, 60 byte packets
+ 1  172.16.61.253 (172.16.61.253)  0.465 ms  0.343 ms  0.344 ms
+ 2  172.16.60.1 (172.16.60.1)  0.666 ms  0.662 ms  0.654 ms
+tux63:~/Desktop/RCOM/scripts# route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+172.16.61.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# 
+
