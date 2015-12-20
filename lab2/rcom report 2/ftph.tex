@@ -1,0 +1,24 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{ftp.h}
+\label{FTPH}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{lstlisting}
+
+#ifndef FTP
+#define FTP
+
+int ftp_connect( const char* ip, int port);
+int ftp_disconnect();
+
+int ftp_login( const char* user, const char* password);
+int ftp_changedir( const char* path);
+int ftp_pasv();
+int ftp_retr( const char* filename);
+int ftp_download( const char* filename);
+
+void ftp_abort();
+
+#endif
+
+\end{lstlisting}

@@ -19,7 +19,10 @@
 \usepackage{amsthm,amsfonts,amsmath,amssymb,indentfirst,mathrsfs,amscd}
 \usepackage[mathscr]{eucal}
 \usepackage{tensor}
-\usepackage[utf8x]{inputenc}
+%\usepackage[utf8x]{inputenc}
+
+\usepackage[utf8]{inputenc}
+
 \usepackage[portuges]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{enumitem}
@@ -149,17 +152,22 @@ TODO
 % LABS REALIZADOS%
 %%%%%%%%%%%%%%%%%%%%
 \chapter{Experiências}
-...
+
 \section{Experiência 1 - Configurar uma Rede IP}
 
 Nesta experiência criou-se uma LAN com o tux1 e o tux4 na mesma rede e configurados os seus endereços ip. Usando o comando ping na etapa 7, pudemos verificar o envio de um comando ARP em broadcast pelo tux1 que procurava o endereço físico do tux4, necessário ao protocolo ethernet usado para poder comunicar dentro de uma mesma rede local. Seguidamente vericou-se a resposta do tux4 e foi realizado o ping com sucesso.
 
-Atentando aos pacotes do wireshark podesse verificar o que os pacotes ARP são identificáveis pelo cabeçalho Ethernet x0806 e os IP pelo x0800. As mensagens de ping, do tipo ICMP, podem ser identificadas pelo cabeçalho IP x01 cabeçalho Ethernet correspondente ao IP.
+Atentando nos pacotes capturados com o wireshark do anexo~\ref{ex1_headers} é possível verificar que os pacotes ARP são identificáveis pelo cabeçalho Ethernet x0806 e os IP pelo x0800. As mensagens de ping podem ser identificadas pelo cabeçalho Ethernet correspondente ao protocolo IP e pelo cabeçalho de IP x01 que corresponde ao protocolo ICMP.
 
-TODO loopback interface e frame length
+...\\ TODO frame length \\
+
+Na lista de pacotes recebidos existe também pacotes do tipo loopback. Este são pacotes que são redireccionados para a máquina que os emitiu com a finalidade (tipicamente) de verificar se esta se encontra em estado operacional. Neste caso, os pacotes recebidos aparentam ser do switch, tendo como endereço de origem e destino o CiscoInc\_3a:f1:03.
 
 \section{Experiência 2 - Implementar 2 LANs num switch}
-...
+
+Foram criadas duas LANs uma com o tux1 e o tux4 na rede 172.16.60.0 outra com o tux2 na 172.16.61.0 (com máscara de 24 bits) atribuindoendereços  ip às máquinas relativos à rede em que se deviam encontrar e configurando o switch de modo a funcionarem como 2 redes distintas. Constatou-se que apenas  computadores que se encontravam na mesma rede virtual local podiam comunicar entre si. Nos anexos ~\ref{ex2_tux1ping_tux2} e ~\ref{ex2_tux1ping_tux4} verifica-se que pings realizados do tux1 em broadcast (alignea 7 do trabalho prático) chegam ao tux4 mas não ao tux2. Similarmente, não foi possível encontrar pacotes de ICMP no tux1 e no tux4 quando realizado ping apartir do tux2 como se pode observar nos anexos seguintes.
+
+
 \section{Experiência 3 - Configurar um Router em Linux}
 ...
 \section{Experiência 4 - Configurar um Router Comercial e Implementar NAT}
@@ -170,17 +178,17 @@ TODO loopback interface e frame length
 
 \section{Experiência 7 }
 
-%%%%%%%%%%%%%%%
-% VALORIZACAO %
-%%%%%%%%%%%%%%%
-\chapter{Elementos de valorização}
-
-
 %%%%%%%%%%%%%%
 % CONCLUSOES %
 %%%%%%%%%%%%%%
 \chapter{Conclusões}
 
+%%%%%%%%%%%%%%
+% NOTAS IMPORTANTES %
+%%%%%%%%%%%%%%
+\chapter{Esclarecimentos}
+
+Apesar de deste relatório referir muitas vezes o TUX2, da experiência 4 até à 7, qualquer referência ao TUX2 corresponde na realidade ao TUX3 uma vez que o TUX2 deixou de estar disponivel apartir de dada altura. Para que o relatório respeite os nomes referidos no guião e usados nos anexos, mantendo a continuidade entre experiências, decidimos continuar a referir-nos ao terceiro computador usado na rede como sendo o TUX2.  
 
 %%%%%%%%%%%%%%%%
 % BIBLIOGRAPHY %
@@ -195,22 +203,105 @@ TODO loopback interface e frame length
 \chapter{Enderaços MAC}
 
 \begin{itemize} 
-\item TUX1: 00:0f:fe:8c:af:71
-\item TUX2: 00:21:5a:5a:7d:9c
-\item TUX3: 00:21:5a:61:2f:4e
-\item TUX4: 00:21:5a:c5:61:bb
+\item TUX1 eth0: 00:0f:fe:8c:af:71
+\item TUX2 eth0: 00:21:5a:5a:7d:9c
+\item TUX3 eth0: 00:21:5a:61:2f:4e
+\item TUX4 eth0: 00:21:5a:c5:61:bb
+\item TUX4 eth1: 00:c0:df:04:20:8c
 \end{itemize}
 
-\chapter{Wireshark}
+\chapter{Console logs}
+
+\section{Ex4 align.4}
+\begin{lstlisting}[frame=single]
+tux63:~/Desktop/RCOM/scripts# route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+172.16.61.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# traceroute 172.16.60.1
+traceroute to 172.16.60.1 (172.16.60.1), 30 hops max, 60 byte packets
+ 1  172.16.61.254 (172.16.61.254)  0.498 ms  0.548 ms  0.587 ms
+ 2  172.16.61.253 (172.16.61.253)  0.873 ms  0.500 ms  0.506 ms
+ 3  172.16.60.1 (172.16.60.1)  0.799 ms  0.792 ms  0.784 ms
+tux63:~/Desktop/RCOM/scripts# ping 172.16.60.1
+PING 172.16.60.1 (172.16.60.1) 56(84) bytes of data.
+64 bytes from 172.16.60.1: icmp_seq=1 ttl=62 time=0.629 ms
+64 bytes from 172.16.60.1: icmp_seq=2 ttl=62 time=0.594 ms
+64 bytes from 172.16.60.1: icmp_seq=3 ttl=62 time=0.587 ms
+64 bytes from 172.16.60.1: icmp_seq=4 ttl=62 time=0.569 ms
+64 bytes from 172.16.60.1: icmp_seq=5 ttl=62 time=0.623 ms
+^C
+--- 172.16.60.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4000ms
+rtt min/avg/max/mdev = 0.569/0.600/0.629/0.031 ms
+tux63:~/Desktop/RCOM/scripts# traceroute 172.16.60.1
+traceroute to 172.16.60.1 (172.16.60.1), 30 hops max, 60 byte packets
+ 1  172.16.61.253 (172.16.61.253)  0.465 ms  0.343 ms  0.344 ms
+ 2  172.16.60.1 (172.16.60.1)  0.666 ms  0.662 ms  0.654 ms
+tux63:~/Desktop/RCOM/scripts# route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
+172.16.61.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
+172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+tux63:~/Desktop/RCOM/scripts# 
+\end{lstlisting}
+
+\chapter{Wireshark logs and statistics}
 
 \section{Ex1}
-\includegraphics[width=20cm]{ex1_arp.png}
-\includegraphics[width=20cm]{ex1_icmp.png}
+\label{ex1_headers}
+\subsection{Captura no TUX1 - ARP}
+\includegraphics[width=18cm]{ex1_arp.png}
+\subsection{Captura no TUX1 - ICMP}
+\includegraphics[width=18cm]{ex1_icmp.png}
+
+\section{Ex2}
+\subsection{Align.7 - Captura no TUX1}
+\includegraphics[width=18cm]{ex2_a7_tux1.png}
+\subsection{Align.7 - Captura no TUX2}
+\label{ex2_tux1ping_tux2}
+\includegraphics[width=18cm]{ex2_a7_tux2.png}
+\subsection{Align.7 - Captura no TUX4}
+\label{ex2_tux1ping_tux4}
+\includegraphics[width=18cm]{ex2_a7_tux4.png}
+
+\subsection{Align.10 - Captura no TUX1}
+\includegraphics[width=18cm]{ex2_a10_tux1.png}
+\subsection{Align.10 - Captura no TUX2}
+\includegraphics[width=18cm]{ex2_a10_tux2.png}
+\subsection{Align.10 - Captura no TUX4}
+\includegraphics[width=18cm]{ex2_a10_tux4.png}
+
+\section{Ex3}
+
+\section{Ex4}
+
+\section{Ex5}
+
+\section{Ex6}
+
+\section{Ex7}
+
+\subsection{Align.10 - Captura no TUX1}
+\includegraphics[width=18cm]{ex6_a5_tux1_IO.png}
+\subsection{Align.10 - Captura no TUX2}
+\includegraphics[width=18cm]{ex6_a5_tux2_IO.png}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % APENDICE - CODIGO FONTE %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Código Fonte}
+
+\input{./downloaderc.tex}
+\input{./ftph.tex}
+\input{./ftpc.tex}
+\input{./socketh.tex}
+\input{./socketc.tex}
+\pagebreak
+\input{./utilitiesh.tex}
 
 \end{appendices}
 
