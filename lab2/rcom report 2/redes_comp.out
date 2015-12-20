@@ -6,8 +6,8 @@
 \BOOKMARK [1][-]{section.3.3}{Experi\352ncia 3 - Configurar um Router em Linux}{chapter.3}% 6
 \BOOKMARK [1][-]{section.3.4}{Experi\352ncia 4 - Configurar um Router Comercial e Implementar NAT}{chapter.3}% 7
 \BOOKMARK [1][-]{section.3.5}{Experi\352ncia 5 - DNS}{chapter.3}% 8
-\BOOKMARK [1][-]{section.3.6}{Experi\352ncia 6 -Conex\365es TCP}{chapter.3}% 9
-\BOOKMARK [1][-]{section.3.7}{Experi\352ncia 7 }{chapter.3}% 10
+\BOOKMARK [1][-]{section.3.6}{Experi\352ncia 6 - Conex\365es TCP}{chapter.3}% 9
+\BOOKMARK [1][-]{section.3.7}{Experi\352ncia 7 - Implementar NAT em Linux}{chapter.3}% 10
 \BOOKMARK [0][-]{chapter.4}{Conclus\365es}{}% 11
 \BOOKMARK [0][-]{chapter.5}{Esclarecimentos}{}% 12
 \BOOKMARK [0][-]{section*.2}{Appendices}{}% 13
@@ -19,23 +19,26 @@
 \BOOKMARK [2][-]{subsection.C.1.1}{Captura no TUX1 - ARP}{section.C.1}% 19
 \BOOKMARK [2][-]{subsection.C.1.2}{Captura no TUX1 - ICMP}{section.C.1}% 20
 \BOOKMARK [1][-]{section.C.2}{Ex2}{Anexo.C}% 21
-\BOOKMARK [2][-]{subsection.C.2.1}{Align.7 - Captura no TUX1}{section.C.2}% 22
-\BOOKMARK [2][-]{subsection.C.2.2}{Align.7 - Captura no TUX2}{section.C.2}% 23
-\BOOKMARK [2][-]{subsection.C.2.3}{Align.7 - Captura no TUX4}{section.C.2}% 24
-\BOOKMARK [2][-]{subsection.C.2.4}{Align.10 - Captura no TUX1}{section.C.2}% 25
-\BOOKMARK [2][-]{subsection.C.2.5}{Align.10 - Captura no TUX2}{section.C.2}% 26
-\BOOKMARK [2][-]{subsection.C.2.6}{Align.10 - Captura no TUX4}{section.C.2}% 27
+\BOOKMARK [2][-]{subsection.C.2.1}{Al\355nea 7 - Captura no TUX1}{section.C.2}% 22
+\BOOKMARK [2][-]{subsection.C.2.2}{Al\355nea 7 - Captura no TUX2}{section.C.2}% 23
+\BOOKMARK [2][-]{subsection.C.2.3}{Al\355nea 7 - Captura no TUX4}{section.C.2}% 24
+\BOOKMARK [2][-]{subsection.C.2.4}{Al\355nea10 - Captura no TUX1}{section.C.2}% 25
+\BOOKMARK [2][-]{subsection.C.2.5}{Al\355nea10 - Captura no TUX2}{section.C.2}% 26
+\BOOKMARK [2][-]{subsection.C.2.6}{Al\355nea10 - Captura no TUX4}{section.C.2}% 27
 \BOOKMARK [1][-]{section.C.3}{Ex3}{Anexo.C}% 28
 \BOOKMARK [1][-]{section.C.4}{Ex4}{Anexo.C}% 29
 \BOOKMARK [1][-]{section.C.5}{Ex5}{Anexo.C}% 30
 \BOOKMARK [1][-]{section.C.6}{Ex6}{Anexo.C}% 31
-\BOOKMARK [1][-]{section.C.7}{Ex7}{Anexo.C}% 32
-\BOOKMARK [2][-]{subsection.C.7.1}{Align.10 - Captura no TUX1}{section.C.7}% 33
-\BOOKMARK [2][-]{subsection.C.7.2}{Align.10 - Captura no TUX2}{section.C.7}% 34
-\BOOKMARK [0][-]{Anexo.D}{C\363digo Fonte}{}% 35
-\BOOKMARK [1][-]{section.D.1}{downloader.c}{Anexo.D}% 36
-\BOOKMARK [1][-]{section.D.2}{ftp.h}{Anexo.D}% 37
-\BOOKMARK [1][-]{section.D.3}{ftp.c}{Anexo.D}% 38
-\BOOKMARK [1][-]{section.D.4}{socket.h}{Anexo.D}% 39
-\BOOKMARK [1][-]{section.D.5}{socket.c}{Anexo.D}% 40
-\BOOKMARK [1][-]{section.D.6}{Utilities.h}{Anexo.D}% 41
+\BOOKMARK [2][-]{subsection.C.6.1}{Capturas dos 'hanshakes' no TUX1}{section.C.6}% 32
+\BOOKMARK [2][-]{subsection.C.6.2}{Primeiro 'Handshake' no TUX1 em Detalhe}{section.C.6}% 33
+\BOOKMARK [2][-]{subsection.C.6.3}{Capturas no TUX1 de Dup ACK, Fast Retransmission e Retransmission}{section.C.6}% 34
+\BOOKMARK [2][-]{subsection.C.6.4}{Al\355nea 5 - Gr\341fico de Tr\341fego no TUX1}{section.C.6}% 35
+\BOOKMARK [2][-]{subsection.C.6.5}{Al\355nea 5 - Gr\341fico de Tr\341fego no TUX2}{section.C.6}% 36
+\BOOKMARK [1][-]{section.C.7}{Ex7}{Anexo.C}% 37
+\BOOKMARK [0][-]{Anexo.D}{C\363digo Fonte}{}% 38
+\BOOKMARK [1][-]{section.D.1}{downloader.c}{Anexo.D}% 39
+\BOOKMARK [1][-]{section.D.2}{ftp.h}{Anexo.D}% 40
+\BOOKMARK [1][-]{section.D.3}{ftp.c}{Anexo.D}% 41
+\BOOKMARK [1][-]{section.D.4}{socket.h}{Anexo.D}% 42
+\BOOKMARK [1][-]{section.D.5}{socket.c}{Anexo.D}% 43
+\BOOKMARK [1][-]{section.D.6}{Utilities.h}{Anexo.D}% 44

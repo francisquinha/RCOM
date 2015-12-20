@@ -7,8 +7,8 @@
 \contentsline {section}{\numberline {3.3}Experi\IeC {\^e}ncia 3 - Configurar um Router em Linux}{5}{section.3.3}
 \contentsline {section}{\numberline {3.4}Experi\IeC {\^e}ncia 4 - Configurar um Router Comercial e Implementar NAT}{5}{section.3.4}
 \contentsline {section}{\numberline {3.5}Experi\IeC {\^e}ncia 5 - DNS}{6}{section.3.5}
-\contentsline {section}{\numberline {3.6}Experi\IeC {\^e}ncia 6 -Conex\IeC {\~o}es TCP}{6}{section.3.6}
-\contentsline {section}{\numberline {3.7}Experi\IeC {\^e}ncia 7 }{6}{section.3.7}
+\contentsline {section}{\numberline {3.6}Experi\IeC {\^e}ncia 6 - Conex\IeC {\~o}es TCP}{6}{section.3.6}
+\contentsline {section}{\numberline {3.7}Experi\IeC {\^e}ncia 7 - Implementar NAT em Linux}{6}{section.3.7}
 \contentsline {chapter}{\numberline {4}Conclus\IeC {\~o}es}{7}{chapter.4}
 \contentsline {chapter}{\numberline {5}Esclarecimentos}{8}{chapter.5}
 \contentsline {chapter}{Appendices}{9}{section*.2}
@@ -20,23 +20,26 @@
 \contentsline {subsection}{\numberline {C.1.1}Captura no TUX1 - ARP}{12}{subsection.C.1.1}
 \contentsline {subsection}{\numberline {C.1.2}Captura no TUX1 - ICMP}{13}{subsection.C.1.2}
 \contentsline {section}{\numberline {C.2}Ex2}{13}{section.C.2}
-\contentsline {subsection}{\numberline {C.2.1}Align.7 - Captura no TUX1}{13}{subsection.C.2.1}
-\contentsline {subsection}{\numberline {C.2.2}Align.7 - Captura no TUX2}{13}{subsection.C.2.2}
-\contentsline {subsection}{\numberline {C.2.3}Align.7 - Captura no TUX4}{14}{subsection.C.2.3}
-\contentsline {subsection}{\numberline {C.2.4}Align.10 - Captura no TUX1}{14}{subsection.C.2.4}
-\contentsline {subsection}{\numberline {C.2.5}Align.10 - Captura no TUX2}{14}{subsection.C.2.5}
-\contentsline {subsection}{\numberline {C.2.6}Align.10 - Captura no TUX4}{15}{subsection.C.2.6}
+\contentsline {subsection}{\numberline {C.2.1}Al\IeC {\'\i }nea 7 - Captura no TUX1}{13}{subsection.C.2.1}
+\contentsline {subsection}{\numberline {C.2.2}Al\IeC {\'\i }nea 7 - Captura no TUX2}{13}{subsection.C.2.2}
+\contentsline {subsection}{\numberline {C.2.3}Al\IeC {\'\i }nea 7 - Captura no TUX4}{14}{subsection.C.2.3}
+\contentsline {subsection}{\numberline {C.2.4}Al\IeC {\'\i }nea10 - Captura no TUX1}{14}{subsection.C.2.4}
+\contentsline {subsection}{\numberline {C.2.5}Al\IeC {\'\i }nea10 - Captura no TUX2}{14}{subsection.C.2.5}
+\contentsline {subsection}{\numberline {C.2.6}Al\IeC {\'\i }nea10 - Captura no TUX4}{15}{subsection.C.2.6}
 \contentsline {section}{\numberline {C.3}Ex3}{15}{section.C.3}
 \contentsline {section}{\numberline {C.4}Ex4}{15}{section.C.4}
 \contentsline {section}{\numberline {C.5}Ex5}{15}{section.C.5}
 \contentsline {section}{\numberline {C.6}Ex6}{15}{section.C.6}
-\contentsline {section}{\numberline {C.7}Ex7}{15}{section.C.7}
-\contentsline {subsection}{\numberline {C.7.1}Align.10 - Captura no TUX1}{15}{subsection.C.7.1}
-\contentsline {subsection}{\numberline {C.7.2}Align.10 - Captura no TUX2}{16}{subsection.C.7.2}
-\contentsline {chapter}{\numberline {D}C\IeC {\'o}digo Fonte}{17}{Anexo.D}
-\contentsline {section}{\numberline {D.1}downloader.c}{17}{section.D.1}
-\contentsline {section}{\numberline {D.2}ftp.h}{19}{section.D.2}
-\contentsline {section}{\numberline {D.3}ftp.c}{19}{section.D.3}
-\contentsline {section}{\numberline {D.4}socket.h}{24}{section.D.4}
-\contentsline {section}{\numberline {D.5}socket.c}{24}{section.D.5}
-\contentsline {section}{\numberline {D.6}Utilities.h}{25}{section.D.6}
+\contentsline {subsection}{\numberline {C.6.1}Capturas dos 'hanshakes' no TUX1}{15}{subsection.C.6.1}
+\contentsline {subsection}{\numberline {C.6.2}Primeiro 'Handshake' no TUX1 em Detalhe}{16}{subsection.C.6.2}
+\contentsline {subsection}{\numberline {C.6.3}Capturas no TUX1 de Dup ACK, Fast Retransmission e Retransmission}{17}{subsection.C.6.3}
+\contentsline {subsection}{\numberline {C.6.4}Al\IeC {\'\i }nea 5 - Gr\IeC {\'a}fico de Tr\IeC {\'a}fego no TUX1}{18}{subsection.C.6.4}
+\contentsline {subsection}{\numberline {C.6.5}Al\IeC {\'\i }nea 5 - Gr\IeC {\'a}fico de Tr\IeC {\'a}fego no TUX2}{18}{subsection.C.6.5}
+\contentsline {section}{\numberline {C.7}Ex7}{18}{section.C.7}
+\contentsline {chapter}{\numberline {D}C\IeC {\'o}digo Fonte}{19}{Anexo.D}
+\contentsline {section}{\numberline {D.1}downloader.c}{19}{section.D.1}
+\contentsline {section}{\numberline {D.2}ftp.h}{21}{section.D.2}
+\contentsline {section}{\numberline {D.3}ftp.c}{21}{section.D.3}
+\contentsline {section}{\numberline {D.4}socket.h}{26}{section.D.4}
+\contentsline {section}{\numberline {D.5}socket.c}{26}{section.D.5}
+\contentsline {section}{\numberline {D.6}Utilities.h}{27}{section.D.6}
