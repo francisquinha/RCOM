@@ -149,8 +149,15 @@ Todas as funcionalidades desenvolvidas ligadas ao protocolo FTP podem ser verifi
 
 Para efectuar ligação ao servidor a aplicação deve também receber um URL no formato estabelecido no  \href{https://www.ietf.org/rfc/rfc1738.txt}{RFC1738}. Não consideramos utilizadores anónimos como é referido na secção 3.2.1. do RFC1738. No downloader.c (ver anexo ~\ref{DOWNLOADERC}) é realizado o parsing do url ficando guardado numa estrutura o nome de utilizador, password, nome do host, caminho até ao ficheiro e o nome do ficheiro.
 
-Uma vez realizado o parsing tenta-se obter o ip do destino e cria-se uma ligação TCP para a porta 21 do servidor a fim de enviar os comandos para pedir a recepção do ficheiro. As funções usadas para obter o ip e para estabelecer são as disponibilizadas nos exemplos do moodle da disciplina. A conexão é realizada com a função connect e não o bind uma vez que a aplicação está do lado do cliente. É utilizada a função gethostbyname para obter o ip, que funciona mas está depreciada segundo o \href{ http://beej.us/guide/bgnet/output/html/multipage/index.html}{Beej's Guide to Network Programming}.
+Uma vez realizado o parsing tenta-se obter o ip do destino e cria-se uma ligação TCP para a porta 21 do servidor a fim de enviar os comandos para pedir a recepção do ficheiro. As funções usadas para obter o ip e para estabelecer são as disponibilizadas nos exemplos do moodle da disciplina. A conexão é realizada com a função connect e não o bind uma vez que a aplicação está do lado do cliente. É utilizada a função gethostbyname para obter o ip, que funciona mas está depreciada segundo o \href{ http://beej.us/guide/bgnet/output/html/multipage/index.html}{Beej's Guide to Network Programming}.\\
 
+Em termos de estrutura foram desenvolvidos apenas 4 modulos que apresentamos seguidamente.
+\begin{itemize} 
+\item downloader - Onde se encontra a função main da aplicação. Também é responsável pelo parsing e por obter o ip destino.
+\item ftp -  Implementa e disponibiliza comandos do protocolo ftp. Os file descriptors das sockets também se encontram neste módulo.
+\item socket - Apenas disponibiliza uma função para conectar sockets.
+\item utilities - Apenas disponibiliza auxiliares para debug.
+\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%
 % LABS REALIZADOS%
@@ -178,9 +185,17 @@ Foram criadas duas LANs uma com o tux1 e o tux4 na rede 172.16.60.0 outra com o 
 ...
 \section{Experiência 5 - DNS}
 
-\section{Experiência 6 -Conexões TCP}
+\section{Experiência 6 - Conexões TCP}
 
-\section{Experiência 7 }
+Nesta experiência usámos a aplicação desenvolvida para realizar o downlad de um ficheiro.
+
+Como esperado, devido ao protocolo FTP, podemos verificar o triple hand shake de duas conexões TCP. O primeiro relativo à ligação usada para envio de comandos e o segundo relativo a de envio de dados que podem ser verificados respectivamente nos anexo XXX e XXX.
+
+TODO...
+
+Na realização da última alínea pudemos verificar que a recepção de dados quando usada uma segunda ligação no TUX2 era afectada. Pode observar-se nos anexos ~\ref{ex6_a5_1io} e ~\ref{ex6_a5_2io} que a recepção  tende para um plateu máximo no TUX1 que é quebrado devido à ligação estabelecida pelo TUX2. Observando o gráfico relativo ao TUX2 podemos ver que este atinge um plateu máximo perto do final da sua ligação que ocorre devido ao TUX1 já ter terminado o download. Além deste plateu máximo podemos verificar que os gráficos são complementares no sentido em que a soma das funções dos dois gráficos, alinhando-os consoante os seus pontos mínimos e máximos dado que as leituras em wireshark não foram iniciadas em simultâneo, resulta aproximadamente numa função constante que apresenta uma recepção entre 10000 e 12000 packets por segundo.
+
+\section{Experiência 7 - Implementar NAT em Linux}
 
 %%%%%%%%%%%%%%
 % CONCLUSOES %
@@ -263,20 +278,20 @@ tux63:~/Desktop/RCOM/scripts#
 \includegraphics[width=18cm]{ex1_icmp.png}
 
 \section{Ex2}
-\subsection{Align.7 - Captura no TUX1}
+\subsection{Alínea 7 - Captura no TUX1}
 \includegraphics[width=18cm]{ex2_a7_tux1.png}
-\subsection{Align.7 - Captura no TUX2}
+\subsection{Alínea 7 - Captura no TUX2}
 \label{ex2_tux1ping_tux2}
 \includegraphics[width=18cm]{ex2_a7_tux2.png}
-\subsection{Align.7 - Captura no TUX4}
+\subsection{Alínea 7 - Captura no TUX4}
 \label{ex2_tux1ping_tux4}
 \includegraphics[width=18cm]{ex2_a7_tux4.png}
 
-\subsection{Align.10 - Captura no TUX1}
+\subsection{Alínea10 - Captura no TUX1}
 \includegraphics[width=18cm]{ex2_a10_tux1.png}
-\subsection{Align.10 - Captura no TUX2}
+\subsection{Alínea10 - Captura no TUX2}
 \includegraphics[width=18cm]{ex2_a10_tux2.png}
-\subsection{Align.10 - Captura no TUX4}
+\subsection{Alínea10 - Captura no TUX4}
 \includegraphics[width=18cm]{ex2_a10_tux4.png}
 
 \section{Ex3}
@@ -287,12 +302,14 @@ tux63:~/Desktop/RCOM/scripts#
 
 \section{Ex6}
 
-\section{Ex7}
-
-\subsection{Align.10 - Captura no TUX1}
+\subsection{Alínea 5 - Captura no TUX1}
+\label{ex6_a5_1io}
 \includegraphics[width=18cm]{ex6_a5_tux1_IO.png}
-\subsection{Align.10 - Captura no TUX2}
+\subsection{Alínea 5 - Captura no TUX2}
+\label{ex6_a5_2io}
 \includegraphics[width=18cm]{ex6_a5_tux2_IO.png}
+
+\section{Ex7}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % APENDICE - CODIGO FONTE %
