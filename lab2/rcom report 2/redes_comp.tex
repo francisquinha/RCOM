@@ -141,12 +141,16 @@ Este relatório tem como objectivo reportar o segundo trabalho prático relativo
 %%%%%%%%%%%%%%%
 \chapter{Aplicação}
 
-A aplicação deve receber informação no formato estabelecido no guião para ser realizado o parsing desta e estabelecida a conexão. Não foram considerados utilizadores anónimos como é referido no rfc???? em ????. Relaizando o parsing fica guardado numa estrutura o nome de utilizador, password, nome do host, caminho ate ao ficheiro e o nome do ficheiro.
+A aplicação desenvolvida realiza o download de um ficheiro fazendo uso do protocolo FTP segundo o  \href{https://www.ietf.org/rfc/rfc959.txt}{RFC959}.
+Para tal são usadas duas sockets, uma para comandos e outra para dados, de acordo com o modelo descrito na secção 2.3 do RFC959.
+Os comandos usados podem ser verificados na secção 4 (páginas 25 a 34) do RFC959 e na página 47. É usado o comando PASV sendo que o servidor não usa a porta default para os dados (porta 20) e fica à espera que o cliente estabeleça a ligação.
 
-Uma vez realizado o parsing tenta-se obter o ip do destino e cria-se uma ligação tcp para a porta 21 do servidor a fim de enviar os comandos para pedir a recepção do ficheiro.
+Todas as funcionalidades desenvolvidas ligadas ao protocolo FTP podem ser verificadas no ficheiro ftp.c e ftp.h dispoíveis nos anexos ~\ref{FTPC} e ~\ref{FTPH}. Apesar de existir uma função denominada ftp\_abort esta não envia um comando ABORT (embora esta tenha sido a funcionalidade inicialmente pensada para o mesmo). Esta função apenas fecha as sockets em caso de erro.\\
 
-São usadas duas sockets na aplicação, uma aberta inicialmente para enviar comandos ao servidor e outra aberta mais tarde pare a transmissão de dados. 
-TODO
+Para efectuar ligação ao servidor a aplicação deve também receber um URL no formato estabelecido no  \href{https://www.ietf.org/rfc/rfc1738.txt}{RFC1738}. Não consideramos utilizadores anónimos como é referido na secção 3.2.1. do RFC1738. No downloader.c (ver anexo ~\ref{DOWNLOADERC}) é realizado o parsing do url ficando guardado numa estrutura o nome de utilizador, password, nome do host, caminho até ao ficheiro e o nome do ficheiro.
+
+Uma vez realizado o parsing tenta-se obter o ip do destino e cria-se uma ligação TCP para a porta 21 do servidor a fim de enviar os comandos para pedir a recepção do ficheiro. As funções usadas para obter o ip e para estabelecer são as disponibilizadas nos exemplos do moodle da disciplina. A conexão é realizada com a função connect e não o bind uma vez que a aplicação está do lado do cliente. É utilizada a função gethostbyname para obter o ip, que funciona mas está depreciada segundo o \href{ http://beej.us/guide/bgnet/output/html/multipage/index.html}{Beej's Guide to Network Programming}.
+
 
 %%%%%%%%%%%%%%%%%%%%
 % LABS REALIZADOS%
