@@ -122,7 +122,7 @@
 %%%%%%%%%%%
 \begin{abstract}
 	
-Este relatório tem como objectivo reportar o segundo trabalho prático relativo a Redes de Computadores da Licenciatura com Mestrado em Engenharia Informátia e Computação. 
+Este relatório tem como objectivo reportar o segundo trabalho prático relativo a Redes de Computadores da Licenciatura com Mestrado em Engenharia Informátia e Computação que consiste na configuração de uma rede e na implementação de uma aplicação de download de ficheiros.
 
 
 \end{abstract}
@@ -134,7 +134,11 @@ Este relatório tem como objectivo reportar o segundo trabalho prático relativo
 %%%%%%%%%%%%%%
 \chapter{Introdução}
 
+A primeira secção deste relatório incide sobre a aplicação desenvolvida. A aplicação de download de ficheiro foi desenvolvida fora das aulas práticas e o relatório tenta esclarecer detalhes de implementação da mesma a fim de esclarecer possíveis dúvidas que possam surgir face à mesma.
 
+A segunda secção do relatório incide sob os sete exercícios realizados nas aulas práticas relacionados com a configuração de rede. O relatório evita relatar os exercícios detalhadamente uma vez que estes podem ser consultados no guião do trabalho e tenta focar-se mais na análise dos resultados obtidos e na interpretação dos dados obtidos com o software \href{https://www.wireshark.org/}{Wireshark}.
+
+ 
 	
 %%%%%%%%%%%%%%%
 % APLICAÇÂO %
@@ -180,9 +184,22 @@ Foram criadas duas LANs uma com o tux1 e o tux4 na rede 172.16.60.0 outra com o 
 
 
 \section{Experiência 3 - Configurar um Router em Linux}
-...
+
+No seguimento da experiência anterior, foi configurada a rede de modo a que o TUX4 funcionasse como um router entre as duas vlans criadas. Ao TUX4.eth0 foi atribuido o endereço 172.16.60.254 e ao TUX4.eth1 o  endereço 172.16.61.253. Foram também reconfigurados o TUX1 e  TUX2 de modo a fazerem uso do router (TUX4) para poderem comunicar entre si.\\
+
+Nas tabelas de encaminhamento (fowarding tables) do TUX1 e TUX2 apareciam respectivamente as gateways 172.16.60.254 e 172.16.61.253 para aceder à rede vizinha. Estes gateways são o endereço para o qual os pacotes IP que apresentam um endereço da rede vizinha como destino devem ser encaminhados. Os ARPs, quando enviados do TUX1 quando este pretende comunicar com o TUX2 (ou virse-versa), percorrem apenas a vlan na qual foram emitidos com o objectivo de descobrir o endereço MAC do gateway. Os pacotes capturados pelo wireshark no anexo ~\ref{ex3_eth0} ilustram esta situação.
+No anexo referido estamos à escuta no TUX4.eth0 e podemos verificar que é recebido um ARP de origem no TUX1 a perguntar pelo endereço MAC do TUX4.eth0. O TUX1 quer realizar ping ao TUX2 como se pode concluir pelos pacotes ICMP seguintes, e, só o faz depois de receber a resposta do TUX4 ao seu ARP, que é necessário ao protocolo ethernet na camada de enlace (data-link layer). \\
+
+Relativamente aos endereços dos pacotes ICMP é possível verificar que apresentam sempre o mesmo endereço IP de origem e destino na camada de rede (network layer) mas que o endereço MAC de origem e destino varia consoante a rede em que se encontram. Um pacote de ping ICMP proveniente do TUX1 para o o TUX2 apresenta inicialmente o endereço de origem do TUX1.eth0 e de destino o TUX4.eth0 (gateway). Depois de recebido pelo gateway (TUX4) é enviado para o TUX2 com os endereços MAC de origem em TUX4.eth1 e destino TUX2.eth0. O anexo  ~\ref{ex3_eth1} mostra esta última situação.
+
+
+
 \section{Experiência 4 - Configurar um Router Comercial e Implementar NAT}
-...
+...TODO...\\
+O NAT (Network Address Translation) permite criar uma separação entre uma rede LAN e uma outra rede (tipicamente maior, WAN por exemplo). Esta separação permite usar IPs dentro da LAN que podem já estar em uso fora desta. Funciona como solução ao limite de endereços do IPv4 e confere alguma segurança adicional à rede não permitindo acessos directos às máquinas desta. Na prática ele mapeia portas do gateway a pares de endereço e porta dentro da LAN.\\
+...blababla...\\
+~\ref{ex4_redirect}.
+...blablabla...\\
 \section{Experiência 5 - DNS}
 
 \section{Experiência 6 - Conexões TCP}
@@ -191,9 +208,11 @@ Nesta experiência usámos a aplicação desenvolvida para realizar o download d
 
 Como esperado, devido ao protocolo FTP, pudemos verificar o \emph{3-way handshake} de duas conexões TCP. O primeiro relativo à ligação usada para envio de comandos e o segundo relativo a de envio de dados que podem ser verificados no anexo ~\ref{ex6_tux1_handshakes}. O estabelecimento de conexão consiste no pedido do cliente ao servidor para estabelecer ligação (SYN) seguido da resposta do servidor (SYN,ACK) e de uma confirmação final pelo cliente (ACK) que podem ser melhor observados no anexo ~\ref{ex6_tux1_1sthandshake} onde é mostrado também o número de sequência e de confirmação em cada pacote.\\
 
-O mecanismo de ARQ (Automatic Repeat Request) do protocolo TCP é uma variante do Go-Back-N onde o servidor envia confirmações relativas a cada segmento que recebe. 
+O mecanismo de ARQ (Automatic Repeat Request) do protocolo TCP é uma variante do Go-Back-N onde o servidor envia confirmações relativas a cada segmento que recebe. \\
 
-Perto de quando o TUX1 atinge o seu plateu máximo de tráfego, aos 14 segundos d gráfico ~\ref{ex6_a5_1io}, podem ser observadas vários pacotes do tipo [duplicate ACK], [Previous Segment not captured],[Fast Retransmission] e [Retransmission] que parecem indicar congestionamento.
+TODO...\\
+
+Perto de quando o TUX1 atinge o seu plateu máximo de tráfego, entre os 14 e 15 segundos do gráfico ~\ref{ex6_a5_1io}, podem ser observadas vários pacotes do tipo [duplicate ACK], [Previous Segment not captured],[Fast Retransmission] e [Retransmission] que parecem indicar congestionamento.
 Segundo o \href{http://www.ietf.org/rfc/rfc2581.txt}{RFC2581} o receptor deve enviar um duplicate ACK quando é recebido um segmento fora de ordem e pode ocorrer uma retransmissão, \emph{fast retransmit}, após a recepção de 3 confirmações duplicadas (duplicate ACKs) pelo transmissor. Na experiência foram capturados pelo Wireshark pacotes que parecem demonstrar este comportamento como se pode pelo anexo ~\ref{ex6_retrans}.\\
 
 
@@ -202,6 +221,15 @@ TODO...\\
 Na realização da última alínea pudemos verificar que a recepção de dados quando usada uma segunda ligação no TUX2 era afectada. Pode observar-se nos anexos ~\ref{ex6_a5_1io} e ~\ref{ex6_a5_2io} que a recepção  tende para um plateu máximo no TUX1 que é quebrado devido à ligação estabelecida pelo TUX2. Observando o gráfico relativo ao TUX2 podemos ver que este atinge um plateu máximo perto do final da sua ligação que ocorre devido ao TUX1 já ter terminado o download. Além deste plateu máximo podemos verificar que os gráficos são complementares no sentido em que a soma das funções dos dois gráficos, alinhando-os consoante os seus pontos mínimos e máximos dado que as leituras em wireshark não foram iniciadas em simultâneo, resulta aproximadamente numa função constante que apresenta uma recepção entre 10000 e 12000 packets por segundo.
 
 \section{Experiência 7 - Implementar NAT em Linux}
+
+TODO intro ... \\
+
+Verificou-se que usando o NAT no TUX4 os endereços IP origem e destino da camada de Rede nos pacotes TCP variavam consoante a rede em que se encontravam. O encaminhamento só é realizado devido às portas indicadas na camada de transporte (TCP) sendo que o TUX4 re-encaminhou para o TUX1 pacotes associados à porta 37351 como se pode ver no anexo ~\ref{ex7_tcp}.\\
+
+sebem entendi UDP devia dar pk usa ports tb e ICMP nao pk nao tem ports???
+mas ha icmp com resposta na cena! antes de aprecerem os udp... hmmmmmmmmmmm
+not sure how 2 go about this
+TODO ... UDP e ICMP ...\\
 
 %%%%%%%%%%%%%%
 % CONCLUSOES %
@@ -235,9 +263,10 @@ Apesar de deste relatório referir muitas vezes o TUX2, da experiência 4 até �
 \item TUX4 eth1: 00:c0:df:04:20:8c
 \end{itemize}
 
-\chapter{Console logs}
+\chapter{Console logs}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-\section{Ex4 align.4}
+\section{Ex4 alínea 4 (redirect)}
+\label{ex4_redirect}
 \begin{lstlisting}[frame=single]
 tux63:~/Desktop/RCOM/scripts# route -n
 Kernel IP routing table
@@ -274,16 +303,16 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 tux63:~/Desktop/RCOM/scripts# 
 \end{lstlisting}
 
-\chapter{Wireshark logs and statistics}
+\chapter{Wireshark logs and statistics}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-\section{Ex1}
+\section{Ex1}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 \label{ex1_headers}
 \subsection{Captura no TUX1 - ARP}
 \includegraphics[width=18cm]{ex1_arp.png}
 \subsection{Captura no TUX1 - ICMP}
 \includegraphics[width=18cm]{ex1_icmp.png}
 
-\section{Ex2}
+\section{Ex2}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 \subsection{Alínea 7 - Captura no TUX1}
 \includegraphics[width=18cm]{ex2_a7_tux1.png}
 \subsection{Alínea 7 - Captura no TUX2}
@@ -300,13 +329,21 @@ tux63:~/Desktop/RCOM/scripts#
 \subsection{Alínea10 - Captura no TUX4}
 \includegraphics[width=18cm]{ex2_a10_tux4.png}
 
-\section{Ex3}
+\section{Ex3}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-\section{Ex4}
+\subsection{Capturas no TUX4.eth0}
+\label{ex3_eth0}
+\includegraphics[width=18cm]{ex3_tux4eth0_ARP.png}
 
-\section{Ex5}
+\subsection{Capturas no TUX4.eth1}
+\label{ex3_eth1}
+\includegraphics[width=18cm]{ex3_tux4eth1_pingdetailed.png}
 
-\section{Ex6}
+\section{Ex4}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+\section{Ex5}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+\section{Ex6}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 \subsection{Capturas dos 'hanshakes' no TUX1}
 \label{ex6_tux1_handshakes}
@@ -331,7 +368,11 @@ tux63:~/Desktop/RCOM/scripts#
 \label{ex6_a5_2io}
 \includegraphics[width=18cm]{ex6_a5_tux2_IO.png}
 
-\section{Ex7}
+\section{Ex7}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+\subsection{Capturas TCP no TUX4.eth0 e TUX4.eth1}
+\label{ex7_tcp}
+\includegraphics[width=18cm]{ex7_TCP.png}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % APENDICE - CODIGO FONTE %

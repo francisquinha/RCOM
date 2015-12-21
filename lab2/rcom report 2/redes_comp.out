@@ -13,7 +13,7 @@
 \BOOKMARK [0][-]{section*.2}{Appendices}{}% 13
 \BOOKMARK [0][-]{Anexo.A}{Endera\347os MAC}{}% 14
 \BOOKMARK [0][-]{Anexo.B}{Console logs}{}% 15
-\BOOKMARK [1][-]{section.B.1}{Ex4 align.4}{Anexo.B}% 16
+\BOOKMARK [1][-]{section.B.1}{Ex4 al\355nea 4 \(redirect\)}{Anexo.B}% 16
 \BOOKMARK [0][-]{Anexo.C}{Wireshark logs and statistics}{}% 17
 \BOOKMARK [1][-]{section.C.1}{Ex1}{Anexo.C}% 18
 \BOOKMARK [2][-]{subsection.C.1.1}{Captura no TUX1 - ARP}{section.C.1}% 19
@@ -26,19 +26,22 @@
 \BOOKMARK [2][-]{subsection.C.2.5}{Al\355nea10 - Captura no TUX2}{section.C.2}% 26
 \BOOKMARK [2][-]{subsection.C.2.6}{Al\355nea10 - Captura no TUX4}{section.C.2}% 27
 \BOOKMARK [1][-]{section.C.3}{Ex3}{Anexo.C}% 28
-\BOOKMARK [1][-]{section.C.4}{Ex4}{Anexo.C}% 29
-\BOOKMARK [1][-]{section.C.5}{Ex5}{Anexo.C}% 30
-\BOOKMARK [1][-]{section.C.6}{Ex6}{Anexo.C}% 31
-\BOOKMARK [2][-]{subsection.C.6.1}{Capturas dos 'hanshakes' no TUX1}{section.C.6}% 32
-\BOOKMARK [2][-]{subsection.C.6.2}{Primeiro 'Handshake' no TUX1 em Detalhe}{section.C.6}% 33
-\BOOKMARK [2][-]{subsection.C.6.3}{Capturas no TUX1 de Dup ACK, Fast Retransmission e Retransmission}{section.C.6}% 34
-\BOOKMARK [2][-]{subsection.C.6.4}{Al\355nea 5 - Gr\341fico de Tr\341fego no TUX1}{section.C.6}% 35
-\BOOKMARK [2][-]{subsection.C.6.5}{Al\355nea 5 - Gr\341fico de Tr\341fego no TUX2}{section.C.6}% 36
-\BOOKMARK [1][-]{section.C.7}{Ex7}{Anexo.C}% 37
-\BOOKMARK [0][-]{Anexo.D}{C\363digo Fonte}{}% 38
-\BOOKMARK [1][-]{section.D.1}{downloader.c}{Anexo.D}% 39
-\BOOKMARK [1][-]{section.D.2}{ftp.h}{Anexo.D}% 40
-\BOOKMARK [1][-]{section.D.3}{ftp.c}{Anexo.D}% 41
-\BOOKMARK [1][-]{section.D.4}{socket.h}{Anexo.D}% 42
-\BOOKMARK [1][-]{section.D.5}{socket.c}{Anexo.D}% 43
-\BOOKMARK [1][-]{section.D.6}{Utilities.h}{Anexo.D}% 44
+\BOOKMARK [2][-]{subsection.C.3.1}{Capturas no TUX4.eth0}{section.C.3}% 29
+\BOOKMARK [2][-]{subsection.C.3.2}{Capturas no TUX4.eth1}{section.C.3}% 30
+\BOOKMARK [1][-]{section.C.4}{Ex4}{Anexo.C}% 31
+\BOOKMARK [1][-]{section.C.5}{Ex5}{Anexo.C}% 32
+\BOOKMARK [1][-]{section.C.6}{Ex6}{Anexo.C}% 33
+\BOOKMARK [2][-]{subsection.C.6.1}{Capturas dos 'hanshakes' no TUX1}{section.C.6}% 34
+\BOOKMARK [2][-]{subsection.C.6.2}{Primeiro 'Handshake' no TUX1 em Detalhe}{section.C.6}% 35
+\BOOKMARK [2][-]{subsection.C.6.3}{Capturas no TUX1 de Dup ACK, Fast Retransmission e Retransmission}{section.C.6}% 36
+\BOOKMARK [2][-]{subsection.C.6.4}{Al\355nea 5 - Gr\341fico de Tr\341fego no TUX1}{section.C.6}% 37
+\BOOKMARK [2][-]{subsection.C.6.5}{Al\355nea 5 - Gr\341fico de Tr\341fego no TUX2}{section.C.6}% 38
+\BOOKMARK [1][-]{section.C.7}{Ex7}{Anexo.C}% 39
+\BOOKMARK [2][-]{subsection.C.7.1}{Capturas TCP no TUX4.eth0 e TUX4.eth1}{section.C.7}% 40
+\BOOKMARK [0][-]{Anexo.D}{C\363digo Fonte}{}% 41
+\BOOKMARK [1][-]{section.D.1}{downloader.c}{Anexo.D}% 42
+\BOOKMARK [1][-]{section.D.2}{ftp.h}{Anexo.D}% 43
+\BOOKMARK [1][-]{section.D.3}{ftp.c}{Anexo.D}% 44
+\BOOKMARK [1][-]{section.D.4}{socket.h}{Anexo.D}% 45
+\BOOKMARK [1][-]{section.D.5}{socket.c}{Anexo.D}% 46
+\BOOKMARK [1][-]{section.D.6}{Utilities.h}{Anexo.D}% 47
