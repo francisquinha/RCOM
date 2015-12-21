@@ -17,32 +17,32 @@
 \contentsline {section}{\numberline {B.1}Ex4 al\IeC {\'\i }nea 4 (redirect)}{12}{section.B.1}
 \contentsline {chapter}{\numberline {C}Wireshark logs and statistics}{13}{Anexo.C}
 \contentsline {section}{\numberline {C.1}Ex1}{13}{section.C.1}
-\contentsline {subsection}{\numberline {C.1.1}Captura no TUX1 - ARP}{13}{subsection.C.1.1}
-\contentsline {subsection}{\numberline {C.1.2}Captura no TUX1 - ICMP}{14}{subsection.C.1.2}
+\contentsline {subsection}{\numberline {C.1.1}Captura no tux1 - ARP}{13}{subsection.C.1.1}
+\contentsline {subsection}{\numberline {C.1.2}Captura no tux1 - ICMP}{13}{subsection.C.1.2}
 \contentsline {section}{\numberline {C.2}Ex2}{14}{section.C.2}
-\contentsline {subsection}{\numberline {C.2.1}Al\IeC {\'\i }nea 7 - Captura no TUX1}{14}{subsection.C.2.1}
-\contentsline {subsection}{\numberline {C.2.2}Al\IeC {\'\i }nea 7 - Captura no TUX2}{14}{subsection.C.2.2}
-\contentsline {subsection}{\numberline {C.2.3}Al\IeC {\'\i }nea 7 - Captura no TUX4}{15}{subsection.C.2.3}
-\contentsline {subsection}{\numberline {C.2.4}Al\IeC {\'\i }nea10 - Captura no TUX1}{15}{subsection.C.2.4}
-\contentsline {subsection}{\numberline {C.2.5}Al\IeC {\'\i }nea10 - Captura no TUX2}{15}{subsection.C.2.5}
-\contentsline {subsection}{\numberline {C.2.6}Al\IeC {\'\i }nea10 - Captura no TUX4}{16}{subsection.C.2.6}
-\contentsline {section}{\numberline {C.3}Ex3}{16}{section.C.3}
-\contentsline {subsection}{\numberline {C.3.1}Capturas no TUX4.eth0}{16}{subsection.C.3.1}
-\contentsline {subsection}{\numberline {C.3.2}Capturas no TUX4.eth1}{16}{subsection.C.3.2}
-\contentsline {section}{\numberline {C.4}Ex4}{17}{section.C.4}
-\contentsline {section}{\numberline {C.5}Ex5}{17}{section.C.5}
-\contentsline {section}{\numberline {C.6}Ex6}{17}{section.C.6}
-\contentsline {subsection}{\numberline {C.6.1}Capturas dos 'hanshakes' no TUX1}{17}{subsection.C.6.1}
-\contentsline {subsection}{\numberline {C.6.2}Primeiro 'Handshake' no TUX1 em Detalhe}{17}{subsection.C.6.2}
-\contentsline {subsection}{\numberline {C.6.3}Capturas no TUX1 de Dup ACK, Fast Retransmission e Retransmission}{19}{subsection.C.6.3}
-\contentsline {subsection}{\numberline {C.6.4}Al\IeC {\'\i }nea 5 - Gr\IeC {\'a}fico de Tr\IeC {\'a}fego no TUX1}{20}{subsection.C.6.4}
-\contentsline {subsection}{\numberline {C.6.5}Al\IeC {\'\i }nea 5 - Gr\IeC {\'a}fico de Tr\IeC {\'a}fego no TUX2}{20}{subsection.C.6.5}
-\contentsline {section}{\numberline {C.7}Ex7}{21}{section.C.7}
-\contentsline {subsection}{\numberline {C.7.1}Capturas TCP no TUX4.eth0 e TUX4.eth1}{21}{subsection.C.7.1}
-\contentsline {chapter}{\numberline {D}C\IeC {\'o}digo Fonte}{22}{Anexo.D}
-\contentsline {section}{\numberline {D.1}downloader.c}{22}{section.D.1}
-\contentsline {section}{\numberline {D.2}ftp.h}{24}{section.D.2}
-\contentsline {section}{\numberline {D.3}ftp.c}{24}{section.D.3}
-\contentsline {section}{\numberline {D.4}socket.h}{29}{section.D.4}
-\contentsline {section}{\numberline {D.5}socket.c}{29}{section.D.5}
-\contentsline {section}{\numberline {D.6}Utilities.h}{30}{section.D.6}
+\contentsline {subsection}{\numberline {C.2.1}Al\IeC {\'\i }nea 7 - Captura no tux1}{14}{subsection.C.2.1}
+\contentsline {subsection}{\numberline {C.2.2}Al\IeC {\'\i }nea 7 - Captura no tux2}{14}{subsection.C.2.2}
+\contentsline {subsection}{\numberline {C.2.3}Al\IeC {\'\i }nea 7 - Captura no tux4}{14}{subsection.C.2.3}
+\contentsline {subsection}{\numberline {C.2.4}Al\IeC {\'\i }nea10 - Captura no tux1}{15}{subsection.C.2.4}
+\contentsline {subsection}{\numberline {C.2.5}Al\IeC {\'\i }nea10 - Captura no tux2}{15}{subsection.C.2.5}
+\contentsline {subsection}{\numberline {C.2.6}Al\IeC {\'\i }nea10 - Captura no tux4}{15}{subsection.C.2.6}
+\contentsline {section}{\numberline {C.3}Ex3}{15}{section.C.3}
+\contentsline {subsection}{\numberline {C.3.1}Capturas no tux4.eth0}{15}{subsection.C.3.1}
+\contentsline {subsection}{\numberline {C.3.2}Capturas no tux4.eth1}{16}{subsection.C.3.2}
+\contentsline {section}{\numberline {C.4}Ex4}{16}{section.C.4}
+\contentsline {section}{\numberline {C.5}Ex5}{16}{section.C.5}
+\contentsline {section}{\numberline {C.6}Ex6}{16}{section.C.6}
+\contentsline {subsection}{\numberline {C.6.1}Capturas dos `hanshakes' no tux1}{16}{subsection.C.6.1}
+\contentsline {subsection}{\numberline {C.6.2}Primeiro `Handshake' no tux1 em Detalhe}{17}{subsection.C.6.2}
+\contentsline {subsection}{\numberline {C.6.3}Capturas no tux1 de Dup ACK, Fast Retransmission e Retransmission}{18}{subsection.C.6.3}
+\contentsline {subsection}{\numberline {C.6.4}Al\IeC {\'\i }nea 5 - Gr\IeC {\'a}fico de Tr\IeC {\'a}fego no tux1}{19}{subsection.C.6.4}
+\contentsline {subsection}{\numberline {C.6.5}Al\IeC {\'\i }nea 5 - Gr\IeC {\'a}fico de Tr\IeC {\'a}fego no tux2}{19}{subsection.C.6.5}
+\contentsline {section}{\numberline {C.7}Ex7}{20}{section.C.7}
+\contentsline {subsection}{\numberline {C.7.1}Capturas TCP no tux4.eth0 e tux4.eth1}{20}{subsection.C.7.1}
+\contentsline {chapter}{\numberline {D}C\IeC {\'o}digo Fonte}{21}{Anexo.D}
+\contentsline {section}{\numberline {D.1}downloader.c}{21}{section.D.1}
+\contentsline {section}{\numberline {D.2}ftp.h}{23}{section.D.2}
+\contentsline {section}{\numberline {D.3}ftp.c}{23}{section.D.3}
+\contentsline {section}{\numberline {D.4}socket.h}{28}{section.D.4}
+\contentsline {section}{\numberline {D.5}socket.c}{28}{section.D.5}
+\contentsline {section}{\numberline {D.6}Utilities.h}{29}{section.D.6}
