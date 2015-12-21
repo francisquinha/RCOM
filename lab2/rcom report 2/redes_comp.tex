@@ -140,20 +140,21 @@ A primeira secção deste relatório incide sobre a aplicação desenvolvida. A 
 
 A segunda secção do relatório incide sob os sete exercícios realizados nas aulas práticas relacionados com a configuração de rede. O relatório evita relatar os exercícios detalhadamente uma vez que estes podem ser consultados no guião do trabalho e tenta focar-se mais na análise e interpretação dos resultados obtidos com o software \href{https://www.wireshark.org/}{Wireshark}.
 
- 
+Na análise de dados realizada na segunda secção do relatório pode ser útil consultar o anexo ~\ref{mac_addresses} que apresenta os endereços MAC dos tuxs. É importante referir também que apesar de deste relatório referir muitas vezes o tux2, da experiência 4 até à 7, qualquer referência ao tux2 corresponde na realidade ao tux3 uma vez que o tux2 deixou de estar disponivel apartir de dada altura. Para que o relatório respeite os nomes referidos no guião e usados nos anexos, mantendo a continuidade entre experiências, decidimos continuar a referir-nos ao terceiro computador usado na rede como sendo o tux2.  
 	
+No final do relatório apresentamos uma conclusão com as nossas considerações face ao mesmo e ao nossa prestação.
 %%%%%%%%%%%%%%%
 % APLICAÇÂO %
 %%%%%%%%%%%%%%%
 \chapter{Aplicação}
 
 A aplicação desenvolvida realiza o download de um ficheiro fazendo uso do protocolo FTP, cuja especificação se encontra em  \href{https://www.ietf.org/rfc/rfc959.txt}{RFC959}.
-Para tal são usadas duas sockets, uma para comandos e outra para dados, de acordo com o modelo descrito na secção 2.3 do protocolo RFC959.
-Os comandos usados podem ser verificados na secção 4 (páginas 25 a 34)  e na página 47 do protocolo RFC959. É usado o comando PASV sendo que o servidor não usa a porta default para os dados (porta 20) e fica à espera que o cliente estabeleça a ligação.
+Para tal são usadas duas sockets, uma para comandos e outra para dados, de acordo com o modelo descrito na secção 2.3 do RFC959.
+Os comandos usados podem ser verificados na secção 4 (páginas 25 a 34)  e na página 47 do RFC959. É usado o comando PASV sendo que o servidor não usa a porta default para os dados (porta 20) e fica à espera que o cliente estabeleça a ligação.
 
 Todas as funcionalidades desenvolvidas ligadas ao protocolo FTP podem ser verificadas no ficheiro \verb|ftp.c| e \verb|ftp.h| disponíveis nos anexos~\ref{FTPC} e~\ref{FTPH}. Apesar de existir uma função denominada \verb|ftp_abort| esta não envia um comando \verb|ABORT| (embora esta tenha sido a funcionalidade inicialmente pensada para o mesmo). Esta função apenas fecha as sockets em caso de erro.
 
-Para efectuar ligação ao servidor a aplicação deve também receber um URL no formato estabelecido no protocolo \href{https://www.ietf.org/rfc/rfc1738.txt}{RFC1738}. Não consideramos utilizadores anónimos como é referido na secção 3.2.1. do protocolo RFC1738. No ficheiro \verb|downloader.c| (ver anexo~\ref{DOWNLOADERC}) é realizado o parsing do \verb|url| ficando guardado numa estrutura o nome de utilizador, a sua password, o nome do host, o caminho até ao ficheiro e o nome do ficheiro.
+Para efectuar ligação ao servidor a aplicação deve também receber um URL no formato descrito no \href{https://www.ietf.org/rfc/rfc1738.txt}{RFC1738}. Não consideramos utilizadores anónimos como é referido na secção 3.2.1. do RFC1738. No ficheiro \verb|downloader.c| (ver anexo~\ref{DOWNLOADERC}) é realizado o parsing do \verb|url| ficando guardado numa estrutura o nome de utilizador, a sua password, o nome do host, o caminho até ao ficheiro e o nome do ficheiro.
 
 Uma vez realizado o parsing tenta-se obter o IP do destino e cria-se uma ligação TCP para a porta 21 do servidor a fim de enviar os comandos para pedir a recepção do ficheiro. As funções usadas para obter o IP e para estabelecer são as disponibilizadas nos exemplos do moodle da disciplina. A conexão é realizada com a função \verb|connect| e não com a função \verb|bind| uma vez que a aplicação está do lado do cliente. É utilizada a função \verb|gethostbyname| para obter o IP, que funciona mas está depreciada segundo o \href{http://beej.us/guide/bgnet/output/html/multipage/index.html}{Beej's Guide to Network Programming}.
 
@@ -208,11 +209,13 @@ O NAT (Network Address Translation) permite criar uma separação entre uma rede
 
 Nesta experiência usámos a aplicação desenvolvida para realizar o download de um ficheiro. Foi chamada a aplicação inicialmente no tux1 e seguidamente após um pequeno intervalo de tempo no tux2. Sendo assim, o tux1 começou sozinho, depois há uma parte em que ambos os downloads são simultâneos e, finalmente, o tux2 termina o download sozinho.
 
-Como esperado, devido ao protocolo FTP, pudemos verificar o \emph{3-way handshake} de duas conexões TCP. O primeiro relativo à ligação usada para envio de comandos e o segundo relativo a de envio de dados que podem ser verificados no anexo~\ref{ex6_tux1_handshakes}. O estabelecimento de conexão consiste no pedido do cliente ao servidor para estabelecer ligação (SYN) seguido da resposta do servidor (SYN, ACK) e de uma confirmação final pelo cliente (ACK) que podem ser melhor observados no anexo~\ref{ex6_tux1_1sthandshake}, onde é mostrado também o número de sequência e de confirmação em cada pacote.
+Como esperado, devido ao protocolo FTP, pudemos verificar o \emph{3-way handshake} de duas conexões TCP. O primeiro relativo à ligação usada para envio de comandos e o segundo relativo a de envio de dados que podem ser verificados no anexo~\ref{ex6_tux1_handshakes}. O estabelecimento de conexão consiste no pedido do cliente ao servidor para estabelecer ligação (SYN) seguido da resposta do servidor (SYN, ACK) e de uma confirmação final pelo cliente (ACK) que podem ser melhor observados no anexo~\ref{ex6_tux1_1sthandshake}, onde é mostrado também o número de sequência e de confirmação em cada pacote. \\
 
 O mecanismo de ARQ (Automatic Repeat Request) do protocolo TCP é uma variante do Go-Back-N onde o servidor envia confirmações relativas a cada segmento que recebe.
 
 TODO...\\
+
+Detalhes adicionais relativos ao protocolo TCP podem ser consultado no \href{https://www.ietf.org/rfc/rfc793.txt}{RFC793}.\\
 
 Pouco depois do tux1 atingir o seu plateu máximo de tráfego, entre os 14 e 15 segundos do gráfico~\ref{ex6_a5_1io}, podem ser observadas vários pacotes do tipo [duplicate ACK], [Previous Segment not captured], [Fast Retransmission] e [Retransmission] que parecem indicar congestionamento.
 Segundo o \href{http://www.ietf.org/rfc/rfc2581.txt}{RFC2581} o receptor deve enviar um duplicate ACK quando é recebido um segmento fora de ordem e pode ocorrer uma retransmissão, \emph{fast retransmit}, após a recepção de 3 confirmações duplicadas (duplicate ACKs) pelo transmissor. Na experiência foram capturados pelo Wireshark pacotes que parecem demonstrar este comportamento como se pode pelo anexo~\ref{ex6_retrans}.
@@ -223,14 +226,13 @@ Na realização da última alínea pudemos verificar que a recepção de dados q
 
 \section{Experiência 7 - Implementar NAT em Linux}
 
-TODO intro ... \\
+Experiência implementamos NAT no tux4 e geramos diferentes tipos de tráfego para interne. Foram usados os comando wget, traceroute e ping sendo consecutivamente observado o tráfego no tux4.eth0 e no tux4.eth1.\\
 
-Verificou-se que usando o NAT no tux4 os endereços IP origem e destino da camada de Rede nos pacotes TCP variavam consoante a rede em que se encontravam. O encaminhamento só é realizado devido às portas indicadas na camada de transporte (TCP) sendo que o tux4 re-encaminhou para o tux1 pacotes associados à porta 37351 como se pode ver no anexo~\ref{ex7_tcp}.
+Verificou-se que usando o NAT no tux4 que os endereços IP de origem e destino da camada de Rede nos pacotes TCP variavam consoante a rede em que se encontravam, tal como era esperado ao usar NAT. O encaminhamento só é realizado devido às portas indicadas na camada de transporte (TCP) sendo que o tux4 re-encaminhou para o tux1 pacotes associados à porta 37351 como se pode ver no anexo~\ref{ex7_tcp}.\\
 
-sebem entendi UDP devia dar pk usa ports tb e ICMP nao pk nao tem ports???
-mas ha icmp com resposta na cena! antes de aprecerem os udp... hmmmmmmmmmmm
-not sure how 2 go about this
-TODO ... UDP e ICMP ...\\
+Foram enviados pacotes UDP ao realizar o traceroute. O protocolo UDP não é orientado a ligações e não é fiável ao contrário do TCP. No protocolo UDP não existem confirmações de pacotes nem retransmissões ou outros mecanismos que garantem a entrega de dados ao destinatário. Esta propriedade pode ser observedada no anexo ~\ref{ex7_udp} onde não foi recebida resposta a alguns dos pacotes UDP enviados. O \href{https://www.ietf.org/rfc/rfc768.txt}{RFC768} apresenta detalhes adicionais relativos ao protocolo UDP.\\
+
+Foi observada a recepção de pacotes ICMP como resposta aos pacotes de traceroute e de ping. O protocolo ICMP não faz uso de portas como o UDP e TCP sendo que usando NAT só é possível realizar o encaminhamento correctamente devido ao uso de um "identifier" como referido na página 15 do \href{https://www.ietf.org/rfc/rfc792.txt}{RFC792}. O anexo ~\ref{ex7_ping} mostra um par de pacotes ping onde se pode observar que apresentam o mesmo "identifier". Mais detalhes relativos ao uso de ICMP com NAT estão disponíveis na secção 3 do \href{https://www.ietf.org/rfc/rfc5508.txt}{RFC5508} . 
 
 %%%%%%%%%%%%%%
 % CONCLUSOES %
@@ -240,9 +242,9 @@ TODO ... UDP e ICMP ...\\
 %%%%%%%%%%%%%%
 % NOTAS IMPORTANTES %
 %%%%%%%%%%%%%%
-\chapter{Esclarecimentos}
+%\chapter{Esclarecimentos}
 
-Apesar de deste relatório referir muitas vezes o tux2, da experiência 4 até à 7, qualquer referência ao tux2 corresponde na realidade ao tux3 uma vez que o tux2 deixou de estar disponivel apartir de dada altura. Para que o relatório respeite os nomes referidos no guião e usados nos anexos, mantendo a continuidade entre experiências, decidimos continuar a referir-nos ao terceiro computador usado na rede como sendo o tux2.  
+%Apesar de deste relatório referir muitas vezes o tux2, da experiência 4 até à 7, qualquer referência ao tux2 corresponde na realidade ao tux3 uma vez que o tux2 deixou de estar disponivel apartir de dada altura. Para que o relatório respeite os nomes referidos no guião e usados nos anexos, mantendo a continuidade entre experiências, decidimos continuar a referir-nos ao terceiro computador usado na rede como sendo o tux2.  
 
 %%%%%%%%%%%%%%%%
 % BIBLIOGRAPHY %
@@ -255,7 +257,7 @@ Apesar de deste relatório referir muitas vezes o tux2, da experiência 4 até �
 % APENDICE - VARIAS %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Enderaços MAC}
-
+\label{mac_addresses}
 \begin{itemize} 
 \item tux1 eth0: 00:0f:fe:8c:af:71
 \item tux2 eth0: 00:21:5a:5a:7d:9c
@@ -375,6 +377,12 @@ tux63:~/Desktop/RCOM/scripts#
 \subsection{Capturas TCP no tux4.eth0 e tux4.eth1}
 \label{ex7_tcp}
 \includegraphics[width=18cm]{ex7_TCP.png}
+\subsection{Captura UDP e timeout no tux4.eth0}
+\label{ex7_udp}
+\includegraphics[width=18cm]{ex7_udp_timeout.png}
+\subsection{Capturas TCP no tux4.eth0}
+\label{ex7_ping}
+\includegraphics[width=18cm]{ex7_ping.png}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % APENDICE - CODIGO FONTE %
