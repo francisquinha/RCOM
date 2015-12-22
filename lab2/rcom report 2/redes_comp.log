@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2015.11.1)  22 DEC 2015 18:55
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2015.11.1)  22 DEC 2015 20:36
 entering extended mode
 **"C:/Users/Bruno/Documents/repositories/lab1/trunk/lab2/rcom report 2/redes_co
 mp.tex"
@@ -1553,50 +1553,24 @@ Package babel Info: Redefining portuges shorthand "|
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 284.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 322.
+(babel)             in language  on input line 329.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 322.
+(babel)             in language  on input line 329.
 [12
 
 ]
 Anexo C.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 322.
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 324.
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 326.
-<ex1_arp.png, id=393, 676.77844pt x 430.60875pt>
-File: ex1_arp.png Graphic file (type png)
- <use ex1_arp.png>
-Package pdftex.def Info: ex1_arp.png used on input line 327.
-(pdftex.def)             Requested size: 512.1496pt x 325.87308pt.
-
-Overfull \hbox (45.45273pt too wide) in paragraph at lines 327--328
-[][][] 
- []
-
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 328.
-<ex1_icmp.png, id=395, 528.47438pt x 243.91125pt>
-File: ex1_icmp.png Graphic file (type png)
- <use ex1_icmp.png>
-Package pdftex.def Info: ex1_icmp.png used on input line 329.
-(pdftex.def)             Requested size: 512.1496pt x 236.38892pt.
-
-Overfull \hbox (45.45273pt too wide) in paragraph at lines 329--330
-[][][] 
- []
-
+(babel)             in language  on input line 329.
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 331.
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 333.
-<ex2_a7_tux1.png, id=396, 723.45282pt x 286.82156pt>
-File: ex2_a7_tux1.png Graphic file (type png)
- <use ex2_a7_tux1.png>
-Package pdftex.def Info: ex2_a7_tux1.png used on input line 334.
-(pdftex.def)             Requested size: 512.1496pt x 203.04951pt.
+<ex1_arp.png, id=400, 676.77844pt x 430.60875pt>
+File: ex1_arp.png Graphic file (type png)
+ <use ex1_arp.png>
+Package pdftex.def Info: ex1_arp.png used on input line 334.
+(pdftex.def)             Requested size: 512.1496pt x 325.87308pt.
 
 Overfull \hbox (45.45273pt too wide) in paragraph at lines 334--335
 [][][] 
@@ -1604,73 +1578,57 @@ Overfull \hbox (45.45273pt too wide) in paragraph at lines 334--335
 
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 335.
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 335.
-[13
+<ex1_icmp.png, id=402, 528.47438pt x 243.91125pt>
+File: ex1_icmp.png Graphic file (type png)
+ <use ex1_icmp.png>
+Package pdftex.def Info: ex1_icmp.png used on input line 336.
+(pdftex.def)             Requested size: 512.1496pt x 236.38892pt.
 
- <./ex1_arp.png> <./ex1_icmp.png>]
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 335.
-
-<ex2_a7_tux2.png, id=404, 382.42876pt x 134.75343pt>
-File: ex2_a7_tux2.png Graphic file (type png)
- <use ex2_a7_tux2.png>
-Package pdftex.def Info: ex2_a7_tux2.png used on input line 337.
-(pdftex.def)             Requested size: 512.1496pt x 180.4864pt.
-
-Overfull \hbox (45.45273pt too wide) in paragraph at lines 337--338
+Overfull \hbox (45.45273pt too wide) in paragraph at lines 336--337
 [][][] 
  []
 
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 338.
-<ex2_a7_tux4.png, id=405, 454.69875pt x 149.8097pt>
-File: ex2_a7_tux4.png Graphic file (type png)
- <use ex2_a7_tux4.png>
-Package pdftex.def Info: ex2_a7_tux4.png used on input line 340.
-(pdftex.def)             Requested size: 512.1496pt x 168.7412pt.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 340.
+<ex2_a7_tux1.png, id=403, 723.45282pt x 286.82156pt>
+File: ex2_a7_tux1.png Graphic file (type png)
+ <use ex2_a7_tux1.png>
+Package pdftex.def Info: ex2_a7_tux1.png used on input line 341.
+(pdftex.def)             Requested size: 512.1496pt x 203.04951pt.
 
-Overfull \hbox (45.45273pt too wide) in paragraph at lines 340--341
+Overfull \hbox (45.45273pt too wide) in paragraph at lines 341--342
 [][][] 
  []
 
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 342.
-<ex2_a10_tux1.png, id=406, 392.96812pt x 137.01187pt>
-File: ex2_a10_tux1.png Graphic file (type png)
- <use ex2_a10_tux1.png>
-Package pdftex.def Info: ex2_a10_tux1.png used on input line 343.
-(pdftex.def)             Requested size: 512.1496pt x 178.57744pt.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 342.
+[13
 
-Overfull \hbox (45.45273pt too wide) in paragraph at lines 343--344
+ <./ex1_arp.png> <./ex1_icmp.png>]
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 342.
+
+<ex2_a7_tux2.png, id=411, 382.42876pt x 134.75343pt>
+File: ex2_a7_tux2.png Graphic file (type png)
+ <use ex2_a7_tux2.png>
+Package pdftex.def Info: ex2_a7_tux2.png used on input line 344.
+(pdftex.def)             Requested size: 512.1496pt x 180.4864pt.
+
+Overfull \hbox (45.45273pt too wide) in paragraph at lines 344--345
 [][][] 
  []
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 344.
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 344.
-[14 <./ex2_a7_tux1.png> <./ex2_a7_tux2.png> <./ex2_a7_tux4.png>]
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 344.
-
-<ex2_a10_tux2.png, id=411, 745.28438pt x 183.68625pt>
-File: ex2_a10_tux2.png Graphic file (type png)
- <use ex2_a10_tux2.png>
-Package pdftex.def Info: ex2_a10_tux2.png used on input line 345.
-(pdftex.def)             Requested size: 512.1496pt x 126.23071pt.
-
-Overfull \hbox (45.45273pt too wide) in paragraph at lines 345--346
-[][][] 
- []
-
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 346.
-<ex2_a10_tux4.png, id=412, 379.4175pt x 132.495pt>
-File: ex2_a10_tux4.png Graphic file (type png)
- <use ex2_a10_tux4.png>
-Package pdftex.def Info: ex2_a10_tux4.png used on input line 347.
-(pdftex.def)             Requested size: 512.1496pt x 178.86455pt.
+(babel)             in language  on input line 345.
+<ex2_a7_tux4.png, id=412, 454.69875pt x 149.8097pt>
+File: ex2_a7_tux4.png Graphic file (type png)
+ <use ex2_a7_tux4.png>
+Package pdftex.def Info: ex2_a7_tux4.png used on input line 347.
+(pdftex.def)             Requested size: 512.1496pt x 168.7412pt.
 
 Overfull \hbox (45.45273pt too wide) in paragraph at lines 347--348
 [][][] 
@@ -1678,282 +1636,324 @@ Overfull \hbox (45.45273pt too wide) in paragraph at lines 347--348
 
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 349.
+<ex2_a10_tux1.png, id=413, 392.96812pt x 137.01187pt>
+File: ex2_a10_tux1.png Graphic file (type png)
+ <use ex2_a10_tux1.png>
+Package pdftex.def Info: ex2_a10_tux1.png used on input line 350.
+(pdftex.def)             Requested size: 512.1496pt x 178.57744pt.
+
+Overfull \hbox (45.45273pt too wide) in paragraph at lines 350--351
+[][][] 
+ []
+
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 351.
-<ex3_tux4eth0_ARP.png, id=413, 586.44093pt x 94.10156pt>
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 351.
+[14 <./ex2_a7_tux1.png> <./ex2_a7_tux2.png> <./ex2_a7_tux4.png>]
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 351.
+
+<ex2_a10_tux2.png, id=418, 745.28438pt x 183.68625pt>
+File: ex2_a10_tux2.png Graphic file (type png)
+ <use ex2_a10_tux2.png>
+Package pdftex.def Info: ex2_a10_tux2.png used on input line 352.
+(pdftex.def)             Requested size: 512.1496pt x 126.23071pt.
+
+Overfull \hbox (45.45273pt too wide) in paragraph at lines 352--353
+[][][] 
+ []
+
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 353.
+<ex2_a10_tux4.png, id=419, 379.4175pt x 132.495pt>
+File: ex2_a10_tux4.png Graphic file (type png)
+ <use ex2_a10_tux4.png>
+Package pdftex.def Info: ex2_a10_tux4.png used on input line 354.
+(pdftex.def)             Requested size: 512.1496pt x 178.86455pt.
+
+Overfull \hbox (45.45273pt too wide) in paragraph at lines 354--355
+[][][] 
+ []
+
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 356.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 358.
+<ex3_tux4eth0_ARP.png, id=420, 586.44093pt x 94.10156pt>
 File: ex3_tux4eth0_ARP.png Graphic file (type png)
 
 <use ex3_tux4eth0_ARP.png>
-Package pdftex.def Info: ex3_tux4eth0_ARP.png used on input line 353.
+Package pdftex.def Info: ex3_tux4eth0_ARP.png used on input line 360.
 (pdftex.def)             Requested size: 512.1496pt x 82.1807pt.
 
-Overfull \hbox (45.45273pt too wide) in paragraph at lines 353--354
+Overfull \hbox (45.45273pt too wide) in paragraph at lines 360--361
 [][][] 
  []
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 355.
-<ex3_tux4eth1_pingdetailed.png, id=414, 718.18312pt x 268.75406pt>
+(babel)             in language  on input line 362.
+<ex3_tux4eth1_pingdetailed.png, id=421, 718.18312pt x 268.75406pt>
 File: ex3_tux4eth1_pingdetailed.png Graphic file (type png)
 
 <use ex3_tux4eth1_pingdetailed.png>
-Package pdftex.def Info: ex3_tux4eth1_pingdetailed.png used on input line 357.
+Package pdftex.def Info: ex3_tux4eth1_pingdetailed.png used on input line 364.
 (pdftex.def)             Requested size: 512.1496pt x 191.66559pt.
 
-Overfull \hbox (45.45273pt too wide) in paragraph at lines 357--358
+Overfull \hbox (45.45273pt too wide) in paragraph at lines 364--365
 [][][] 
  []
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 361.
+(babel)             in language  on input line 368.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 361.
+(babel)             in language  on input line 368.
 [15 <./ex2_a10_tux1.png> <./ex2_a10_tux2.png> <./ex2_a10_tux4.png> <./ex3_tux4e
 th0_ARP.png>]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 361.
+(babel)             in language  on input line 368.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 363.
- <ex5_dns.png, id=419, 660.96938pt x 264.23718pt>
+(babel)             in language  on input line 370.
+ <ex5_dns.png, id=426, 660.96938pt x 264.23718pt>
 File: ex5_dns.png Graphic file (type png)
 
 <use ex5_dns.png>
-Package pdftex.def Info: ex5_dns.png used on input line 365.
+Package pdftex.def Info: ex5_dns.png used on input line 372.
 (pdftex.def)             Requested size: 512.1496pt x 204.74944pt.
 
-Overfull \hbox (45.45273pt too wide) in paragraph at lines 365--366
+Overfull \hbox (45.45273pt too wide) in paragraph at lines 372--373
 [][][] 
  []
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 367.
+(babel)             in language  on input line 374.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 369.
-<ex6_tux1_handshakes.png, id=420, 698.61pt x 261.97874pt>
+(babel)             in language  on input line 376.
+<ex6_tux1_handshakes.png, id=427, 698.61pt x 261.97874pt>
 File: ex6_tux1_handshakes.png Graphic file (type png)
 
 <use ex6_tux1_handshakes.png>
-Package pdftex.def Info: ex6_tux1_handshakes.png used on input line 371.
+Package pdftex.def Info: ex6_tux1_handshakes.png used on input line 378.
 (pdftex.def)             Requested size: 512.1496pt x 192.06636pt.
 
-Overfull \hbox (45.45273pt too wide) in paragraph at lines 371--372
+Overfull \hbox (45.45273pt too wide) in paragraph at lines 378--379
 [][][] 
  []
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 373.
+(babel)             in language  on input line 380.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 373.
+(babel)             in language  on input line 380.
 [16 <./ex3_tux4eth1_pingdetailed.png> <./ex5_dns.png>]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 373.
+(babel)             in language  on input line 380.
 
-<ex6_handshake1.png, id=425, 408.02437pt x 179.92218pt>
+<ex6_handshake1.png, id=432, 408.02437pt x 179.92218pt>
 File: ex6_handshake1.png Graphic file (type png)
 
 <use ex6_handshake1.png>
-Package pdftex.def Info: ex6_handshake1.png used on input line 375.
+Package pdftex.def Info: ex6_handshake1.png used on input line 382.
 (pdftex.def)             Requested size: 512.1496pt x 225.84932pt.
- <ex6_handshake2.png, id=426, 421.575pt x 209.28188pt>
+ <ex6_handshake2.png, id=433, 421.575pt x 209.28188pt>
 File: ex6_handshake2.png Graphic file (type png)
 
 <use ex6_handshake2.png>
-Package pdftex.def Info: ex6_handshake2.png used on input line 376.
+Package pdftex.def Info: ex6_handshake2.png used on input line 383.
 (pdftex.def)             Requested size: 512.1496pt x 254.2505pt.
 
-<ex6_handshake3.png, id=427, 404.26031pt x 179.92218pt>
+<ex6_handshake3.png, id=434, 404.26031pt x 179.92218pt>
 File: ex6_handshake3.png Graphic file (type png)
 
 <use ex6_handshake3.png>
-Package pdftex.def Info: ex6_handshake3.png used on input line 377.
+Package pdftex.def Info: ex6_handshake3.png used on input line 384.
 (pdftex.def)             Requested size: 512.1496pt x 227.94406pt.
 
-Overfull \hbox (45.45273pt too wide) in paragraph at lines 375--378
+Overfull \hbox (45.45273pt too wide) in paragraph at lines 382--385
 [][][]
  []
 
 
-Overfull \hbox (28.45273pt too wide) in paragraph at lines 375--378
+Overfull \hbox (28.45273pt too wide) in paragraph at lines 382--385
 []
  []
 
 
-Overfull \hbox (28.45273pt too wide) in paragraph at lines 375--378
+Overfull \hbox (28.45273pt too wide) in paragraph at lines 382--385
 [] 
  []
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 378.
+(babel)             in language  on input line 385.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 378.
+(babel)             in language  on input line 385.
 [17 <./ex6_tux1_handshakes.png> <./ex6_handshake1.png>]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 379.
+(babel)             in language  on input line 386.
 
-<ex6_arq.png, id=433, 593.96906pt x 274.02374pt>
+<ex6_arq.png, id=440, 593.96906pt x 274.02374pt>
 File: ex6_arq.png Graphic file (type png)
  <use ex6_arq.png>
-Package pdftex.def Info: ex6_arq.png used on input line 381.
+Package pdftex.def Info: ex6_arq.png used on input line 388.
 (pdftex.def)             Requested size: 512.1496pt x 236.28719pt.
 
-Overfull \hbox (45.45273pt too wide) in paragraph at lines 381--382
+Overfull \hbox (45.45273pt too wide) in paragraph at lines 388--389
 [][][] 
  []
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 383.
+(babel)             in language  on input line 390.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 383.
+(babel)             in language  on input line 390.
 [18 <./ex6_handshake2.png> <./ex6_handshake3.png>]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 383.
+(babel)             in language  on input line 390.
 
-<ex6_tux1_3054.png, id=438, 1156.32pt x 566.115pt>
+<ex6_tux1_3054.png, id=445, 1156.32pt x 566.115pt>
 File: ex6_tux1_3054.png Graphic file (type png)
  <use ex6_tux1_3054.png>
-Package pdftex.def Info: ex6_tux1_3054.png used on input line 385.
+Package pdftex.def Info: ex6_tux1_3054.png used on input line 392.
 (pdftex.def)             Requested size: 512.1496pt x 250.73262pt.
 
-<ex6_tux1_fastretransmission.png, id=439, 784.43062pt x 194.97844pt>
+<ex6_tux1_fastretransmission.png, id=446, 784.43062pt x 194.97844pt>
 File: ex6_tux1_fastretransmission.png Graphic file (type png)
 
 <use ex6_tux1_fastretransmission.png>
-Package pdftex.def Info: ex6_tux1_fastretransmission.png used on input line 386
+Package pdftex.def Info: ex6_tux1_fastretransmission.png used on input line 393
 .
 (pdftex.def)             Requested size: 512.1496pt x 127.30867pt.
 
-<ex6_tux1_retransmission.png, id=440, 693.34032pt x 193.47281pt>
+<ex6_tux1_retransmission.png, id=447, 693.34032pt x 193.47281pt>
 File: ex6_tux1_retransmission.png Graphic file (type png)
 
 <use ex6_tux1_retransmission.png>
-Package pdftex.def Info: ex6_tux1_retransmission.png used on input line 387.
+Package pdftex.def Info: ex6_tux1_retransmission.png used on input line 394.
 (pdftex.def)             Requested size: 512.1496pt x 142.9167pt.
 
-Overfull \hbox (45.45273pt too wide) in paragraph at lines 385--388
+Overfull \hbox (45.45273pt too wide) in paragraph at lines 392--395
 [][][] 
  []
 
 
-Overfull \hbox (28.45273pt too wide) in paragraph at lines 385--388
+Overfull \hbox (28.45273pt too wide) in paragraph at lines 392--395
 [] 
  []
 
 
-Overfull \hbox (28.45273pt too wide) in paragraph at lines 385--388
+Overfull \hbox (28.45273pt too wide) in paragraph at lines 392--395
 [] 
  []
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 389.
+(babel)             in language  on input line 396.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 389.
+(babel)             in language  on input line 396.
 [19 <./ex6_arq.png> <./ex6_tux1_3054.png> <./ex6_tux1_fastretransmission.png>]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 389.
+(babel)             in language  on input line 396.
 
-<ex6_a5_tux1_IO.png, id=445, 510.40688pt x 317.68687pt>
+<ex6_a5_tux1_IO.png, id=452, 510.40688pt x 317.68687pt>
 File: ex6_a5_tux1_IO.png Graphic file (type png)
 
 <use ex6_a5_tux1_IO.png>
-Package pdftex.def Info: ex6_a5_tux1_IO.png used on input line 391.
+Package pdftex.def Info: ex6_a5_tux1_IO.png used on input line 398.
 (pdftex.def)             Requested size: 512.1496pt x 318.78645pt.
-
-Overfull \hbox (45.45273pt too wide) in paragraph at lines 391--392
-[][][] 
- []
-
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 392.
-<ex6_a5_tux2_IO.png, id=446, 556.32843pt x 314.67563pt>
-File: ex6_a5_tux2_IO.png Graphic file (type png)
-
-<use ex6_a5_tux2_IO.png>
-Package pdftex.def Info: ex6_a5_tux2_IO.png used on input line 394.
-(pdftex.def)             Requested size: 512.1496pt x 289.69234pt.
-
-Overfull \hbox (45.45273pt too wide) in paragraph at lines 394--395
-[][][] 
- []
-
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 396.
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 396.
-[20 <./ex6_tux1_retransmission.png> <./ex6_a5_tux1_IO.png>]
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 396.
-
-<ex6_tux1_window.png, id=451, 619.56468pt x 383.93437pt>
-File: ex6_tux1_window.png Graphic file (type png)
-
-<use ex6_tux1_window.png>
-Package pdftex.def Info: ex6_tux1_window.png used on input line 398.
-(pdftex.def)             Requested size: 512.1496pt x 317.37074pt.
 
 Overfull \hbox (45.45273pt too wide) in paragraph at lines 398--399
 [][][] 
  []
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 400.
-Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 402.
-<ex7_TCP.png, id=452, 596.2275pt x 374.14781pt>
-File: ex7_TCP.png Graphic file (type png)
- <use ex7_TCP.png>
-Package pdftex.def Info: ex7_TCP.png used on input line 404.
-(pdftex.def)             Requested size: 512.1496pt x 321.40688pt.
+(babel)             in language  on input line 399.
+<ex6_a5_tux2_IO.png, id=453, 556.32843pt x 314.67563pt>
+File: ex6_a5_tux2_IO.png Graphic file (type png)
 
-Overfull \hbox (45.45273pt too wide) in paragraph at lines 404--405
+<use ex6_a5_tux2_IO.png>
+Package pdftex.def Info: ex6_a5_tux2_IO.png used on input line 401.
+(pdftex.def)             Requested size: 512.1496pt x 289.69234pt.
+
+Overfull \hbox (45.45273pt too wide) in paragraph at lines 401--402
 [][][] 
  []
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 405.
+(babel)             in language  on input line 403.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 405.
+(babel)             in language  on input line 403.
+[20 <./ex6_tux1_retransmission.png> <./ex6_a5_tux1_IO.png>]
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 403.
+
+<ex6_tux1_window.png, id=458, 619.56468pt x 383.93437pt>
+File: ex6_tux1_window.png Graphic file (type png)
+
+<use ex6_tux1_window.png>
+Package pdftex.def Info: ex6_tux1_window.png used on input line 405.
+(pdftex.def)             Requested size: 512.1496pt x 317.37074pt.
+
+Overfull \hbox (45.45273pt too wide) in paragraph at lines 405--406
+[][][] 
+ []
+
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 407.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 409.
+<ex7_TCP.png, id=459, 596.2275pt x 374.14781pt>
+File: ex7_TCP.png Graphic file (type png)
+ <use ex7_TCP.png>
+Package pdftex.def Info: ex7_TCP.png used on input line 411.
+(pdftex.def)             Requested size: 512.1496pt x 321.40688pt.
+
+Overfull \hbox (45.45273pt too wide) in paragraph at lines 411--412
+[][][] 
+ []
+
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 412.
+Package babel Info: Redefining portuges shorthand "|
+(babel)             in language  on input line 412.
 [21 <./ex6_a5_tux2_IO.png> <./ex6_tux1_window.png>]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 405.
+(babel)             in language  on input line 412.
 
-<ex7_udp_timeout.png, id=458, 672.26157pt x 177.66376pt>
+<ex7_udp_timeout.png, id=465, 672.26157pt x 177.66376pt>
 File: ex7_udp_timeout.png Graphic file (type png)
 
 <use ex7_udp_timeout.png>
-Package pdftex.def Info: ex7_udp_timeout.png used on input line 407.
+Package pdftex.def Info: ex7_udp_timeout.png used on input line 414.
 (pdftex.def)             Requested size: 512.1496pt x 135.35115pt.
 
-Overfull \hbox (45.45273pt too wide) in paragraph at lines 407--408
+Overfull \hbox (45.45273pt too wide) in paragraph at lines 414--415
 [][][] 
  []
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 408.
-<ex7_ping.png, id=459, 580.41844pt x 452.4403pt>
+(babel)             in language  on input line 415.
+<ex7_ping.png, id=466, 580.41844pt x 452.4403pt>
 File: ex7_ping.png Graphic file (type png)
  <use ex7_ping.png>
-Package pdftex.def Info: ex7_ping.png used on input line 410.
+Package pdftex.def Info: ex7_ping.png used on input line 417.
 (pdftex.def)             Requested size: 512.1496pt x 399.24638pt.
 
-Overfull \hbox (45.45273pt too wide) in paragraph at lines 410--411
+Overfull \hbox (45.45273pt too wide) in paragraph at lines 417--418
 [][][] 
  []
 
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 415.
+(babel)             in language  on input line 422.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 415.
+(babel)             in language  on input line 422.
 [22 <./ex7_TCP.png> <./ex7_udp_timeout.png>]
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 415.
+(babel)             in language  on input line 422.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 415.
+(babel)             in language  on input line 422.
  [23 <./ex7_ping.png>]
 Anexo D.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 415.
+(babel)             in language  on input line 422.
 Package srcltx Info: Expanded filename `./downloaderc.tex' to `./downloaderc.te
-x' on input line 417.
+x' on input line 424.
 :<+ ./downloaderc.tex
 (downloaderc.tex
 Package babel Info: Redefining portuges shorthand "|
@@ -2146,7 +2146,45 @@ pdfTeX warning (ext4): destination with the same identifier (name{lstnumber.33}
 <to be read again> 
                    \relax 
 l.39 		return 
-              1;
+              1;pdfTeX warning (ext4): destination with the same identifier (na
+me{lstnumber.34}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.40 	}
+       pdfTeX warning (ext4): destination with the same identifier (name{lstnum
+ber.35}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.42   //
+         get filename http://stackoverflow.com/questions/32822988/get-the-la...
+pdfTeX warning (ext4): destination with the same identifier (name{lstnumber.36}
+) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.42   //
+         get filename http://stackoverflow.com/questions/32822988/get-the-la...
+pdfTeX warning (ext4): destination with the same identifier (name{lstnumber.37}
+) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.43       char 
+                *last = strrchr(info->url_path, '/') ;pdfTeX warning (ext4): de
+stination with the same identifier (name{lstnumber.38}) has been already used, 
+duplicate ignored
+<to be read again> 
+                   \relax 
+l.44       if(
+              last!=NULL)pdfTeX warning (ext4): destination with the same ident
+ifier (name{lstnumber.39}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.45       {
+            pdfTeX warning (ext4): destination with the same identifier (name{l
+stnumber.40}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.46 	memcpy(
+             info->filename, last+1, strlen(last)+1);
 Package babel Info: Redefining portuges shorthand "|
 (babel)             in language  on input line 61.
 Package babel Info: Redefining portuges shorthand "|
@@ -2165,7 +2203,7 @@ Package babel Info: Redefining portuges shorthand "|
 [25])
 :<-
 Package srcltx Info: Expanded filename `./ftph.tex' to `./ftph.tex' on input li
-ne 418.
+ne 425.
 :<+ ./ftph.tex
 (ftph.tex
 Package babel Info: Redefining portuges shorthand "|
@@ -2265,7 +2303,7 @@ l.24 \end{lstlisting}
                      )
 :<-
 Package srcltx Info: Expanded filename `./ftpc.tex' to `./ftpc.tex' on input li
-ne 419.
+ne 426.
 :<+ ./ftpc.tex
 (ftpc.tex
 Package babel Info: Redefining portuges shorthand "|
@@ -3051,7 +3089,7 @@ Package babel Info: Redefining portuges shorthand "|
  [29])
 :<-
 Package srcltx Info: Expanded filename `./socketh.tex' to `./socketh.tex' on in
-put line 420.
+put line 427.
 :<+ ./socketh.tex
 (socketh.tex
 Package babel Info: Redefining portuges shorthand "|
@@ -3109,7 +3147,7 @@ l.16 \end{lstlisting}
                      )
 :<-
 Package srcltx Info: Expanded filename `./socketc.tex' to `./socketc.tex' on in
-put line 421.
+put line 428.
 :<+ ./socketc.tex
 (socketc.tex
 Package babel Info: Redefining portuges shorthand "|
@@ -3323,12 +3361,12 @@ l.46 \end{lstlisting}
                      )
 :<-
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 423.
+(babel)             in language  on input line 430.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 423.
+(babel)             in language  on input line 430.
 [31]
 Package srcltx Info: Expanded filename `./utilitiesh.tex' to `./utilitiesh.tex'
- on input line 423.
+ on input line 430.
 
 :<+ ./utilitiesh.tex
 (utilitiesh.tex
@@ -3532,23 +3570,23 @@ l.44 \end{lstlisting}
                      )
 :<-
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 427.
+(babel)             in language  on input line 434.
 Package babel Info: Redefining portuges shorthand "|
-(babel)             in language  on input line 427.
+(babel)             in language  on input line 434.
 [32]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 427.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 427.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 434.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 434.
  (redes_comp.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 427.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 427.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 434.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 434.
 Package rerunfilecheck Info: File `redes_comp.out' has not changed.
 (rerunfilecheck)             Checksum: 2ECFD381D8023453D7A05641375D9698;3645.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 427.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 434.
  ) 
 Here is how much of TeX's memory you used:
  24298 strings out of 493636
  410045 string characters out of 3143756
- 663162 words of memory out of 3000000
+ 708162 words of memory out of 3000000
  26811 multiletter control sequences out of 15000+200000
  21203 words of font info for 59 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
@@ -3564,7 +3602,7 @@ m1095.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/cm-super/sfrm1200.pfb
 ><C:/Program Files/MiKTeX 2.9/fonts/type1/public/cm-super/sfrm1440.pfb><C:/Prog
 ram Files/MiKTeX 2.9/fonts/type1/public/cm-super/sfti1095.pfb><C:/Program Files
 /MiKTeX 2.9/fonts/type1/public/cm-super/sftt1095.pfb>
-Output written on redes_comp.pdf (34 pages, 995023 bytes).
+Output written on redes_comp.pdf (34 pages, 995342 bytes).
 PDF statistics:
  883 PDF objects out of 1000 (max. 8388607)
  380 named destinations out of 1000 (max. 500000)
