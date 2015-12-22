@@ -140,7 +140,7 @@ A primeira secção deste relatório incide sobre a aplicação desenvolvida. A 
 
 A segunda secção do relatório incide sob os sete exercícios realizados nas aulas práticas relacionados com a configuração de rede. O relatório evita relatar os exercícios detalhadamente uma vez que estes podem ser consultados no guião do trabalho e tenta focar-se mais na análise e interpretação dos resultados obtidos com o software \href{https://www.wireshark.org/}{Wireshark}.
 
-Na análise de dados realizada na segunda secção do relatório pode ser útil consultar o anexo ~\ref{mac_addresses} que apresenta os endereços MAC dos tuxs. É importante referir também que apesar de deste relatório referir muitas vezes o tux2, da experiência 4 até à 7, qualquer referência ao tux2 corresponde na realidade ao tux3 uma vez que o tux2 deixou de estar disponivel apartir de dada altura. Para que o relatório respeite os nomes referidos no guião e usados nos anexos, mantendo a continuidade entre experiências, decidimos continuar a referir-nos ao terceiro computador usado na rede como sendo o tux2.  
+Na análise de dados realizada na segunda secção do relatório pode ser útil consultar o anexo ~\ref{mac_addresses} que apresenta os endereços MAC dos tuxys. É importante referir também que apesar de deste relatório referir muitas vezes o tuxy2, da experiência 4 até à 7, qualquer referência ao tuxy2 corresponde na realidade ao tuxy3 uma vez que o tuxy2 deixou de estar disponivel apartir de dada altura. Para que o relatório respeite os nomes referidos no guião e usados nos anexos, mantendo a continuidade entre experiências, decidimos continuar a referir-nos ao terceiro computador usado na rede como sendo o tuxy2.  
 	
 No final do relatório apresentamos uma conclusão com as nossas considerações face ao mesmo e ao nossa prestação.
 %%%%%%%%%%%%%%%
@@ -156,7 +156,7 @@ Todas as funcionalidades desenvolvidas ligadas ao protocolo FTP podem ser verifi
 
 Para efectuar ligação ao servidor a aplicação deve também receber um URL no formato descrito no \href{https://www.ietf.org/rfc/rfc1738.txt}{RFC1738}. Não consideramos utilizadores anónimos como é referido na secção 3.2.1. do RFC1738. No ficheiro \verb|downloader.c| (ver anexo~\ref{DOWNLOADERC}) é realizado o parsing do \verb|url| ficando guardado numa estrutura o nome de utilizador, a sua password, o nome do host, o caminho até ao ficheiro e o nome do ficheiro.
 
-Uma vez realizado o parsing tenta-se obter o IP do destino e cria-se uma ligação TCP para a porta 21 do servidor a fim de enviar os comandos para pedir a recepção do ficheiro. As funções usadas para obter o IP e para estabelecer são as disponibilizadas nos exemplos do moodle da disciplina. A conexão é realizada com a função \verb|connect| e não com a função \verb|bind| uma vez que a aplicação está do lado do cliente. É utilizada a função \verb|gethostbyname| para obter o IP, que funciona mas está depreciada segundo o \href{http://beej.us/guide/bgnet/output/html/multipage/index.html}{Beej's Guide to Network Programming}.
+Uma vez realizado o parsing tenta-se obter o IP do destino e cria-se uma ligação TCP para a porta 21 do servidor a fim de enviar os comandos para pedir a recepção do ficheiro. As funções usadas para obter o IP e para estabelecer são as disponibilizadas nos exemplos do moodle da disciplina. A conexão é realizada com a função \verb|connect| e não com a função \verb|bind| uma vez que a aplicação está do lado do cliente. É utilizada a função \verb|gethostbyname| para obter o IP, que funciona mas está depreciada segundo o \href{http://beej.us/guide/bgnet/output/html/multipage/index.html}{Beej's Guide to Network Programming}.\\
 
 Em termos de estrutura foram desenvolvidos apenas 4 múdulos que apresentamos seguidamente.
 \begin{itemize} 
@@ -173,41 +173,50 @@ Em termos de estrutura foram desenvolvidos apenas 4 múdulos que apresentamos se
 
 \section{Experiência 1 - Configurar uma Rede IP}
 
-Nesta experiência criou-se uma rede LAN com o tux1 e o tux4 na mesma rede, tendo sido configurados os seus endereços IP. Usando o comando \verb|ping| na etapa 7, pudemos verificar o envio de um comando ARP em broadcast pelo tux1 que procurava o endereço físico do tux4, necessário ao protocolo ethernet usado para poder comunicar dentro de uma mesma rede local. Seguidamente verificou-se a resposta do tux4 e foi realizado o ping com sucesso.
+Nesta experiência criou-se uma rede LAN com o tuxy1 e o tuxy4 na mesma rede, tendo sido configurados os seus endereços IP. Usando o comando \verb|ping| na etapa 7, pudemos verificar o envio de um comando ARP em broadcast pelo tuxy1 que procurava o endereço físico do tuxy4, necessário ao protocolo ethernet usado para poder comunicar dentro de uma mesma rede local. Seguidamente verificou-se a resposta do tuxy4 e foi realizado o ping com sucesso.\\
 
-Atentando nos pacotes capturados com o Wireshark do anexo~\ref{ex1_headers}, é possível verificar que os pacotes ARP são identificáveis pelo cabeçalho Ethernet x0806, enquanto que os pacotes IP têm o cabeçalho x0800. As mensagens de ping podem ser identificadas pelo cabeçalho Ethernet correspondente ao protocolo IP e pelo cabeçalho de IP x01 que corresponde ao protocolo ICMP.
+Atentando nos pacotes capturados com o Wireshark do anexo~\ref{ex1_headers}, é possível verificar que as tramas de tipo ARP são identificáveis pelo cabeçalho Ethernet x0806, enquanto que os pacotes IP têm o cabeçalho x0800. As mensagens de ping podem ser identificadas pelo cabeçalho Ethernet correspondente ao protocolo IP e pelo cabeçalho de IP x01 que corresponde ao protocolo ICMP.
 
-...\\ TODO frame length \\
+Verificamos também que o tamanho da trama recebida encontra-se indicado entre o bit 16 e 31 do primeiro byte do cabeçalho IP tal como é descrito na secção 3.1 do \href{https://www.ietf.org/rfc/rfc791.txt}{RFC791}
 
 Na lista de pacotes recebidos existe também pacotes do tipo loopback. Este são pacotes são redireccionados para a máquina que os emitiu, tipicamente com a finalidade de verificar se esta se encontra em estado operacional. Neste caso, os pacotes recebidos aparentam ser do switch, tendo como endereço de origem e destino o CiscoInc\_3a:f1:03.
 
 \section{Experiência 2 - Implementar 2 LANs num switch}
 
-Foram criadas duas LANs. A primeira, com o tux1 e o tux4 na rede 172.16.60.0 (máscara de 24 bits), corresponde à experiência 1. A outra, com o tux2, na rede 172.16.61.0. Foram atribuídos endereços IP às máquinas relativos à rede em que se deviam encontrar e configurando o switch de modo a funcionarem como 2 redes distintas. Constatou-se que apenas os computadores que se encontravam na mesma rede virtual local podiam comunicar entre si. 
+Foram criadas duas LANs. A primeira, com o tuxy1 e o tuxy4 na rede 172.16.60.0 (máscara de 24 bits), corresponde à experiência 1. A outra, com o tuxy2, na rede 172.16.61.0. Foram atribuídos endereços IP às máquinas relativos à rede em que se deviam encontrar e configurando o switch de modo a funcionarem como 2 redes distintas. Constatou-se que apenas os computadores que se encontravam na mesma rede virtual local podiam comunicar entre si. 
 
-Nos anexos~\ref{ex2_tux1ping_tux2} e~\ref{ex2_tux1ping_tux4} verifica-se que pings realizados do tux1 em broadcast (alínea 7 do trabalho prático) chegam ao tux4 mas não ao tux2. Similarmente, não foi possível encontrar pacotes de ICMP no tux1 e no tux4 quando realizado ping a partir do tux2 como se pode observar nos restantes anexos da Secção~\ref{ex_2}.
+Nos anexos~\ref{ex2_tux1ping_tux2} e~\ref{ex2_tux1ping_tux4} verifica-se que pings realizados do tuxy1 em broadcast (alínea 7 do trabalho prático) chegam ao tuxy4 mas não ao tuxy2. Similarmente, não foi possível encontrar pacotes de ICMP no tuxy1 e no tuxy4 quando realizado ping a partir do tuxy2 como se pode observar nos restantes anexos da Secção~\ref{ex_2}. Pode-se concluir que apenas existiam dois domíneos de broadcast (broadcast domains).
 
 \section{Experiência 3 - Configurar um Router em Linux}
 
-No seguimento da experiência anterior, foi configurada a rede de modo a que o tux4 funcionasse como um router entre as duas LANs criadas. O tux4.eth0 continuou com o endereço 172.16.60.254 e ao tux4.eth1 foi atribuído o endereço 172.16.61.253. Foram também reconfigurados o tux1 e tux2 de modo a fazerem uso do router (tux4) para poderem comunicar entre si.
+No seguimento da experiência anterior, foi configurada a rede de modo a que o tuxy4 funcionasse como um router entre as duas LANs criadas. O tuxy4.eth0 continuou com o endereço 172.16.60.254 e ao tuxy4.eth1 foi atribuído o endereço 172.16.61.253. Foram também reconfigurados o tuxy1 e tuxy2 de modo a fazerem uso do router (tux4) para poderem comunicar entre si.
 
-Nas tabelas de encaminhamento (forwarding tables) do tux1 e tux2 aparecem, respectivamente, os gateways 172.16.60.254 e 172.16.61.253 para aceder à rede vizinha. Estes gateways são os endereços para os quais devem ser encaminhados os pacotes IP que apresentam um endereço da rede vizinha como destino. Os ARPs enviados quando o tux1 pretende comunicar com o tux2 (ou vise-versa), percorrem apenas a LAN na qual foram emitidos com o objectivo de descobrir o endereço MAC do gateway. Os pacotes capturados pelo Wireshark no anexo~\ref{ex3_eth0} ilustram esta situação. No anexo referido estamos à escuta no tux4.eth0 e podemos verificar que é recebido um ARP de origem no tux1 a perguntar pelo endereço MAC do tux4.eth0. O tux1 quer realizar ping ao tux2 como se pode concluir pelos pacotes ICMP seguintes, e, só o faz depois de receber a resposta do tux4 ao seu ARP, que é necessário ao protocolo ethernet na camada de enlace (data-link layer).
+Nas tabelas de encaminhamento (forwarding tables) do tuxy1 e tuxy2 aparecem, respectivamente, os gateways 172.16.60.254 e 172.16.61.253 para aceder à rede vizinha. Estes gateways são os endereços para os quais devem ser encaminhados os pacotes IP que apresentam um endereço da rede vizinha como destino. Os ARPs enviados quando o tuxy1 pretende comunicar com o tuxy2 (ou vise-versa), percorrem apenas a LAN na qual foram emitidos com o objectivo de descobrir o endereço MAC do gateway. Os pacotes capturados pelo Wireshark no anexo~\ref{ex3_eth0} ilustram esta situação. No anexo referido estamos à escuta no tuxy4.eth0 e podemos verificar que é recebido um ARP de origem no tuxy1 a perguntar pelo endereço MAC do tuxy4.eth0. O tuxy1 quer realizar ping ao tuxy2 como se pode concluir pelos pacotes ICMP seguintes, e, só o faz depois de receber a resposta do tuxy4 ao seu ARP, que é necessário ao protocolo ethernet na camada de enlace (data-link layer).
 
-Relativamente aos endereços dos pacotes ICMP é possível verificar que apresentam sempre o mesmo endereço IP de origem e destino na camada de rede (network layer), mas que o endereço MAC de origem e destino varia consoante a rede em que se encontram. Um pacote de ping ICMP proveniente do tux1 para o o tux2 apresenta inicialmente o endereço de origem do tux1.eth0 e de destino o tux4.eth0 (gateway). Depois de recebido pelo gateway (tux4) é enviado para o tux2 com os endereços MAC de origem em tux4.eth1 e destino tux2.eth0. O anexo~\ref{ex3_eth1} mostra esta última situação.
+Relativamente aos endereços dos pacotes ICMP é possível verificar que apresentam sempre o mesmo endereço IP de origem e destino na camada de rede (network layer), mas que o endereço MAC de origem e destino varia consoante a rede em que se encontram. Um pacote de ping ICMP proveniente do tuxy1 para o o tuxy2 apresenta inicialmente o endereço de origem do tuxy1.eth0 e de destino o tuxy4.eth0 (gateway). Depois de recebido pelo gateway (tux4) é enviado para o tuxy2 com os endereços MAC de origem em tuxy4.eth1 e destino tuxy2.eth0. O anexo~\ref{ex3_eth1} mostra esta última situação.
 
 
 
 \section{Experiência 4 - Configurar um Router Comercial e Implementar NAT}
-...TODO...\\
-O NAT (Network Address Translation) permite criar uma separação entre uma rede LAN e uma outra rede (tipicamente maior, WAN por exemplo). Esta separação permite usar IPs dentro da LAN que podem já estar em uso fora desta. Funciona como solução ao limite de endereços do IPv4 e confere alguma segurança adicional à rede não permitindo acessos directos às máquinas desta. Na prática ele mapeia portas do gateway a pares de endereço e porta dentro da LAN. Na experiência 7 veremos um pouco melhor tudo isto.\\
-...blababla...\\
-~\ref{ex4_redirect}.
-...blablabla...\\
+A experiência quatro pode é composta por duas partes. A primeira consiste em conectar um router comercia, Rc,l à lab network e à rede 172.16.61.0/24 e definir como routers default o tuxy4 para para o tuxy1 e o Rc para o tuxy2 e tuxy4.
+Esta configuração fez com que os pacotes enviados do tuxy2 para o tuxy1, após a remoção da rota na alínea quatro, percorrecem um caminho maior sendo encaminhados para o Rc que estava definido como default e só depois enviados para o tuxy4. Usando a rota via tuxy4 o encaminhamento foi directo e quando não se usou esta rota e se activou o redirecionamento ICMP o tuxy2, sendo informado que existe uma rota melhor via tuxy4 pelo Rc, adicionou-a automáticamente. No anexo ~\ref{ex4_redirect} apresentamos o output em consola do traceroute ao fazer uso do redirecionamento ICMP.\\
+
+A segunda parte consistio em adicionar a funcionalidade de NAT (Network Address Translation) ao Rc.
+O NAT permite criar uma separação entre uma rede LAN e uma outra rede (tipicamente maior, WAN por exemplo). Esta separação permite usar IPs dentro da LAN que podem já estar em uso fora desta. Funciona como solução ao limite de endereços do IPv4 e confere alguma segurança adicional à rede não permitindo acessos directos às máquinas desta. Na prática ele mapeia portas do gateway a pares de endereço e porta dentro da LAN. Na experiência 7 veremos um pouco melhor tudo isto.\\
+
 \section{Experiência 5 - DNS}
+
+A experiência 5 foi confiurado o DNS (Domain Name System) com o servidor lixa.netlab.fe.up.pt (172.16.1.1) alterando o ficheiro resolv.conf.
+
+O DNS permite associar strings a endereços. Graças a ele pode-se aceder a sites/plataformas sem ter que usar os seus endereços directamente. O nome, de um site a que se quer aceder por exemplo, é verificado no servidor DNS definido e caso exista é devolvido o respectivo IP. Caso o servidor DNS não tenha conhecimento do IP respectivo pode questionar outros servidores DNS por este. \\
+
+Pode-se verficar a query DNS e a respectiva resposta do ping que realizamos para o \emph{sapo.pt} no anexo ~\ref{ex5_dns}.\\
+
+Por curiosidade, antes de ser realizado o ping para a um site na internet, reparamos que na rede a string tux4 (ou tuxy4?) era resolvida com o endereço default do tuxy4.
 
 \section{Experiência 6 - Conexões TCP}
 
-Nesta experiência usámos a aplicação desenvolvida para realizar o download de um ficheiro. Foi chamada a aplicação inicialmente no tux1 e seguidamente após um pequeno intervalo de tempo no tux2. Sendo assim, o tux1 começou sozinho, depois há uma parte em que ambos os downloads são simultâneos e, finalmente, o tux2 termina o download sozinho.
+Nesta experiência usámos a aplicação desenvolvida para realizar o download de um ficheiro. Foi chamada a aplicação inicialmente no tuxy1 e seguidamente após um pequeno intervalo de tempo no tuxy2. Sendo assim, o tuxy1 começou sozinho, depois há uma parte em que ambos os downloads são simultâneos e, finalmente, o tuxy2 termina o download sozinho.
 
 Como esperado, devido ao protocolo FTP, pudemos verificar o \emph{3-way handshake} de duas conexões TCP. O primeiro relativo à ligação usada para envio de comandos e o segundo relativo a de envio de dados que podem ser verificados no anexo~\ref{ex6_tux1_handshakes}. O estabelecimento de conexão consiste no pedido do cliente ao servidor para estabelecer ligação (SYN) seguido da resposta do servidor (SYN, ACK) e de uma confirmação final pelo cliente (ACK) que podem ser melhor observados no anexo~\ref{ex6_tux1_1sthandshake}, onde é mostrado também o número de sequência e de confirmação em cada pacote. \\
 
@@ -217,18 +226,18 @@ TODO...\\
 
 Detalhes adicionais relativos ao protocolo TCP podem ser consultado no \href{https://www.ietf.org/rfc/rfc793.txt}{RFC793}.\\
 
-Pouco depois do tux1 atingir o seu plateu máximo de tráfego, entre os 14 e 15 segundos do gráfico~\ref{ex6_a5_1io}, podem ser observadas vários pacotes do tipo [duplicate ACK], [Previous Segment not captured], [Fast Retransmission] e [Retransmission] que parecem indicar congestionamento.
+Pouco depois do tuxy1 atingir o seu plateau máximo de tráfego, entre os 14 e 15 segundos do gráfico~\ref{ex6_a5_1io}, podem ser observadas vários pacotes do tipo [duplicate ACK], [Previous Segment not captured], [Fast Retransmission] e [Retransmission] que parecem indicar congestionamento.
 Segundo o \href{http://www.ietf.org/rfc/rfc2581.txt}{RFC2581} o receptor deve enviar um duplicate ACK quando é recebido um segmento fora de ordem e pode ocorrer uma retransmissão, \emph{fast retransmit}, após a recepção de 3 confirmações duplicadas (duplicate ACKs) pelo transmissor. Na experiência foram capturados pelo Wireshark pacotes que parecem demonstrar este comportamento como se pode pelo anexo~\ref{ex6_retrans}.
 
 TODO...\\
 
-Na realização da última alínea pudemos verificar que a recepção de dados quando usada uma segunda ligação no tux2 era afectada. Pode observar-se nos anexos~\ref{ex6_a5_1io} e~\ref{ex6_a5_2io} que a recepção  tende para um plateu máximo no tux1 que é quebrado devido à ligação estabelecida pelo tux2. Observando o gráfico relativo ao tux2 podemos ver que este atinge um plateu máximo perto do final da sua ligação, que ocorre devido ao tux1 já ter terminado o download. Além deste plateu máximo podemos verificar que os gráficos são complementares no sentido em que a soma das funções dos dois gráficos, alinhando-os consoante os seus pontos mínimos e máximos dado que as leituras em Wireshark não foram iniciadas em simultâneo, resulta aproximadamente numa função constante que apresenta uma recepção entre 10000 e 12000 packets por segundo.
+Na realização da última alínea pudemos verificar que a recepção de dados quando usada uma segunda ligação no tuxy2 era afectada. Pode observar-se nos anexos~\ref{ex6_a5_1io} e~\ref{ex6_a5_2io} que a recepção  tende para um plateau máximo no tuxy1 que é quebrado devido à ligação estabelecida pelo tuxy2. Observando o gráfico relativo ao tuxy2 podemos ver que este atinge um plateau máximo perto do final da sua ligação, que ocorre devido ao tuxy1 já ter terminado o download. Além deste plateau máximo podemos verificar que os gráficos são complementares no sentido em que a soma das funções dos dois gráficos, alinhando-os consoante os seus pontos mínimos e máximos dado que as leituras em Wireshark não foram iniciadas em simultâneo, resulta aproximadamente numa função constante que apresenta uma recepção entre 10000 e 12000 packets por segundo.
 
 \section{Experiência 7 - Implementar NAT em Linux}
 
-Experiência implementamos NAT no tux4 e geramos diferentes tipos de tráfego para interne. Foram usados os comando wget, traceroute e ping sendo consecutivamente observado o tráfego no tux4.eth0 e no tux4.eth1.\\
+Experiência implementamos NAT no tuxy4 e geramos diferentes tipos de tráfego para interne. Foram usados os comando wget, traceroute e ping sendo consecutivamente observado o tráfego no tuxy4.eth0 e no tuxy4.eth1.\\
 
-Verificou-se que usando o NAT no tux4 que os endereços IP de origem e destino da camada de Rede nos pacotes TCP variavam consoante a rede em que se encontravam, tal como era esperado ao usar NAT. O encaminhamento só é realizado devido às portas indicadas na camada de transporte (TCP) sendo que o tux4 re-encaminhou para o tux1 pacotes associados à porta 37351 como se pode ver no anexo~\ref{ex7_tcp}.\\
+Verificou-se que usando o NAT no tuxy4 que os endereços IP de destino da camada de Rede nos pacotes TCP recebidos (como resposta aos enviados) variavam consoante a rede em que se encontravam, tal como era esperado ao usar NAT. O encaminhamento só é realizado devido às portas indicadas na camada de transporte (TCP) sendo que o tuxy4 re-encaminhou para o tuxy1 pacotes associados à porta 37351 como se pode ver no anexo~\ref{ex7_tcp}.\\
 
 Foram enviados pacotes UDP ao realizar o traceroute. O protocolo UDP não é orientado a ligações e não é fiável ao contrário do TCP. No protocolo UDP não existem confirmações de pacotes nem retransmissões ou outros mecanismos que garantem a entrega de dados ao destinatário. Esta propriedade pode ser observedada no anexo ~\ref{ex7_udp} onde não foi recebida resposta a alguns dos pacotes UDP enviados. O \href{https://www.ietf.org/rfc/rfc768.txt}{RFC768} apresenta detalhes adicionais relativos ao protocolo UDP.\\
 
@@ -239,12 +248,16 @@ Foi observada a recepção de pacotes ICMP como resposta aos pacotes de tracerou
 %%%%%%%%%%%%%%
 \chapter{Conclusões}
 
+O grupo conseguio realizar todos os exercícios propostos. A realização destes exercícios e a elaboração do relatório visando responder às perguntas do guião ajudaram a sedimentar os conceitos leccionados através de uma metodologia prática e que estimula a reflexão crítica dos estudantes. Foi também possível aprofundar alguns detalhes através de pesquisa autónoma. 
+
+A parte que achamos mais difícil no projecto foi perceber e analisar o funcionamento do protocolo TCP.
+
 %%%%%%%%%%%%%%
 % NOTAS IMPORTANTES %
 %%%%%%%%%%%%%%
 %\chapter{Esclarecimentos}
 
-%Apesar de deste relatório referir muitas vezes o tux2, da experiência 4 até à 7, qualquer referência ao tux2 corresponde na realidade ao tux3 uma vez que o tux2 deixou de estar disponivel apartir de dada altura. Para que o relatório respeite os nomes referidos no guião e usados nos anexos, mantendo a continuidade entre experiências, decidimos continuar a referir-nos ao terceiro computador usado na rede como sendo o tux2.  
+%Apesar de deste relatório referir muitas vezes o tuxy2, da experiência 4 até à 7, qualquer referência ao tuxy2 corresponde na realidade ao tuxy3 uma vez que o tuxy2 deixou de estar disponivel apartir de dada altura. Para que o relatório respeite os nomes referidos no guião e usados nos anexos, mantendo a continuidade entre experiências, decidimos continuar a referir-nos ao terceiro computador usado na rede como sendo o tuxy2.  
 
 %%%%%%%%%%%%%%%%
 % BIBLIOGRAPHY %
@@ -259,11 +272,11 @@ Foi observada a recepção de pacotes ICMP como resposta aos pacotes de tracerou
 \chapter{Enderaços MAC}
 \label{mac_addresses}
 \begin{itemize} 
-\item tux1 eth0: 00:0f:fe:8c:af:71
-\item tux2 eth0: 00:21:5a:5a:7d:9c
-\item tux3 eth0: 00:21:5a:61:2f:4e
-\item tux4 eth0: 00:21:5a:c5:61:bb
-\item tux4 eth1: 00:c0:df:04:20:8c
+\item tuxy1 eth0: 00:0f:fe:8c:af:71
+\item tuxy2 eth0: 00:21:5a:5a:7d:9c
+\item tuxy3 eth0: 00:21:5a:61:2f:4e
+\item tuxy4 eth0: 00:21:5a:c5:61:bb
+\item tuxy4 eth1: 00:c0:df:04:20:8c
 \end{itemize}
 
 \chapter{Console logs}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -310,77 +323,81 @@ tux63:~/Desktop/RCOM/scripts#
 
 \section{Ex1}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 \label{ex1_headers}
-\subsection{Captura no tux1 - ARP}
+\subsection{Captura no tuxy1 - ARP}
 \includegraphics[width=18cm]{ex1_arp.png}
-\subsection{Captura no tux1 - ICMP}
+\subsection{Captura no tuxy1 - ICMP}
 \includegraphics[width=18cm]{ex1_icmp.png}
 
 \section{Ex2}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 \label{ex_2}
-\subsection{Alínea 7 - Captura no tux1}
+\subsection{Alínea 7 - Captura no tuxy1}
 \includegraphics[width=18cm]{ex2_a7_tux1.png}
-\subsection{Alínea 7 - Captura no tux2}
+\subsection{Alínea 7 - Captura no tuxy2}
 \label{ex2_tux1ping_tux2}
 \includegraphics[width=18cm]{ex2_a7_tux2.png}
-\subsection{Alínea 7 - Captura no tux4}
+\subsection{Alínea 7 - Captura no tuxy4}
 \label{ex2_tux1ping_tux4}
 \includegraphics[width=18cm]{ex2_a7_tux4.png}
 
-\subsection{Alínea10 - Captura no tux1}
+\subsection{Alínea10 - Captura no tuxy1}
 \includegraphics[width=18cm]{ex2_a10_tux1.png}
-\subsection{Alínea10 - Captura no tux2}
+\subsection{Alínea10 - Captura no tuxy2}
 \includegraphics[width=18cm]{ex2_a10_tux2.png}
-\subsection{Alínea10 - Captura no tux4}
+\subsection{Alínea10 - Captura no tuxy4}
 \includegraphics[width=18cm]{ex2_a10_tux4.png}
 
 \section{Ex3}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-\subsection{Capturas no tux4.eth0}
+\subsection{Capturas no tuxy4.eth0}
 \label{ex3_eth0}
 \includegraphics[width=18cm]{ex3_tux4eth0_ARP.png}
 
-\subsection{Capturas no tux4.eth1}
+\subsection{Capturas no tuxy4.eth1}
 \label{ex3_eth1}
 \includegraphics[width=18cm]{ex3_tux4eth1_pingdetailed.png}
 
-\section{Ex4}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+%\section{Ex4}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 \section{Ex5}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
+\subsection{Capturas de DNS no tuxy1}
+\label{ex5_dns}
+\includegraphics[width=18cm]{ex5_dns.png}
+
 \section{Ex6}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-\subsection{Capturas dos `hanshakes' no tux1}
+\subsection{Capturas dos `hanshakes' no tuxy1}
 \label{ex6_tux1_handshakes}
 \includegraphics[width=18cm]{ex6_tux1_handshakes.png}
 
-\subsection{Primeiro `Handshake' no tux1 em Detalhe}
+\subsection{Primeiro `Handshake' no tuxy1 em Detalhe}
 \label{ex6_tux1_1sthandshake}
 \includegraphics[width=18cm]{ex6_handshake1.png}
 \includegraphics[width=18cm]{ex6_handshake2.png}
 \includegraphics[width=18cm]{ex6_handshake3.png}
 
-\subsection{Capturas no tux1 de Dup ACK, Fast Retransmission e Retransmission}
+\subsection{Capturas no tuxy1 de Dup ACK, Fast Retransmission e Retransmission}
 \label{ex6_retrans}
 \includegraphics[width=18cm]{ex6_tux1_3054.png}
 \includegraphics[width=18cm]{ex6_tux1_fastretransmission.png}
 \includegraphics[width=18cm]{ex6_tux1_retransmission.png}
 
-\subsection{Alínea 5 - Gráfico de Tráfego no tux1}
+\subsection{Alínea 5 - Gráfico de Tráfego no tuxy1}
 \label{ex6_a5_1io}
 \includegraphics[width=18cm]{ex6_a5_tux1_IO.png}
-\subsection{Alínea 5 - Gráfico de Tráfego no tux2}
+\subsection{Alínea 5 - Gráfico de Tráfego no tuxy2}
 \label{ex6_a5_2io}
 \includegraphics[width=18cm]{ex6_a5_tux2_IO.png}
 
 \section{Ex7}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-\subsection{Capturas TCP no tux4.eth0 e tux4.eth1}
+\subsection{Capturas TCP no tuxy4.eth0 e tuxy4.eth1}
 \label{ex7_tcp}
 \includegraphics[width=18cm]{ex7_TCP.png}
-\subsection{Captura UDP e timeout no tux4.eth0}
+\subsection{Captura UDP e timeout no tuxy4.eth0}
 \label{ex7_udp}
 \includegraphics[width=18cm]{ex7_udp_timeout.png}
-\subsection{Capturas TCP no tux4.eth0}
+\subsection{Capturas TCP no tuxy4.eth0}
 \label{ex7_ping}
 \includegraphics[width=18cm]{ex7_ping.png}
 

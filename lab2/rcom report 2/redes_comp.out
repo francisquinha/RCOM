@@ -15,30 +15,30 @@
 \BOOKMARK [1][-]{section.B.1}{Ex4 al\355nea 4 \(redirect\)}{Anexo.B}% 15
 \BOOKMARK [0][-]{Anexo.C}{Wireshark logs and statistics}{}% 16
 \BOOKMARK [1][-]{section.C.1}{Ex1}{Anexo.C}% 17
-\BOOKMARK [2][-]{subsection.C.1.1}{Captura no tux1 - ARP}{section.C.1}% 18
-\BOOKMARK [2][-]{subsection.C.1.2}{Captura no tux1 - ICMP}{section.C.1}% 19
+\BOOKMARK [2][-]{subsection.C.1.1}{Captura no tuxy1 - ARP}{section.C.1}% 18
+\BOOKMARK [2][-]{subsection.C.1.2}{Captura no tuxy1 - ICMP}{section.C.1}% 19
 \BOOKMARK [1][-]{section.C.2}{Ex2}{Anexo.C}% 20
-\BOOKMARK [2][-]{subsection.C.2.1}{Al\355nea 7 - Captura no tux1}{section.C.2}% 21
-\BOOKMARK [2][-]{subsection.C.2.2}{Al\355nea 7 - Captura no tux2}{section.C.2}% 22
-\BOOKMARK [2][-]{subsection.C.2.3}{Al\355nea 7 - Captura no tux4}{section.C.2}% 23
-\BOOKMARK [2][-]{subsection.C.2.4}{Al\355nea10 - Captura no tux1}{section.C.2}% 24
-\BOOKMARK [2][-]{subsection.C.2.5}{Al\355nea10 - Captura no tux2}{section.C.2}% 25
-\BOOKMARK [2][-]{subsection.C.2.6}{Al\355nea10 - Captura no tux4}{section.C.2}% 26
+\BOOKMARK [2][-]{subsection.C.2.1}{Al\355nea 7 - Captura no tuxy1}{section.C.2}% 21
+\BOOKMARK [2][-]{subsection.C.2.2}{Al\355nea 7 - Captura no tuxy2}{section.C.2}% 22
+\BOOKMARK [2][-]{subsection.C.2.3}{Al\355nea 7 - Captura no tuxy4}{section.C.2}% 23
+\BOOKMARK [2][-]{subsection.C.2.4}{Al\355nea10 - Captura no tuxy1}{section.C.2}% 24
+\BOOKMARK [2][-]{subsection.C.2.5}{Al\355nea10 - Captura no tuxy2}{section.C.2}% 25
+\BOOKMARK [2][-]{subsection.C.2.6}{Al\355nea10 - Captura no tuxy4}{section.C.2}% 26
 \BOOKMARK [1][-]{section.C.3}{Ex3}{Anexo.C}% 27
-\BOOKMARK [2][-]{subsection.C.3.1}{Capturas no tux4.eth0}{section.C.3}% 28
-\BOOKMARK [2][-]{subsection.C.3.2}{Capturas no tux4.eth1}{section.C.3}% 29
-\BOOKMARK [1][-]{section.C.4}{Ex4}{Anexo.C}% 30
-\BOOKMARK [1][-]{section.C.5}{Ex5}{Anexo.C}% 31
-\BOOKMARK [1][-]{section.C.6}{Ex6}{Anexo.C}% 32
-\BOOKMARK [2][-]{subsection.C.6.1}{Capturas dos `hanshakes' no tux1}{section.C.6}% 33
-\BOOKMARK [2][-]{subsection.C.6.2}{Primeiro `Handshake' no tux1 em Detalhe}{section.C.6}% 34
-\BOOKMARK [2][-]{subsection.C.6.3}{Capturas no tux1 de Dup ACK, Fast Retransmission e Retransmission}{section.C.6}% 35
-\BOOKMARK [2][-]{subsection.C.6.4}{Al\355nea 5 - Gr\341fico de Tr\341fego no tux1}{section.C.6}% 36
-\BOOKMARK [2][-]{subsection.C.6.5}{Al\355nea 5 - Gr\341fico de Tr\341fego no tux2}{section.C.6}% 37
-\BOOKMARK [1][-]{section.C.7}{Ex7}{Anexo.C}% 38
-\BOOKMARK [2][-]{subsection.C.7.1}{Capturas TCP no tux4.eth0 e tux4.eth1}{section.C.7}% 39
-\BOOKMARK [2][-]{subsection.C.7.2}{Captura UDP e timeout no tux4.eth0}{section.C.7}% 40
-\BOOKMARK [2][-]{subsection.C.7.3}{Capturas TCP no tux4.eth0}{section.C.7}% 41
+\BOOKMARK [2][-]{subsection.C.3.1}{Capturas no tuxy4.eth0}{section.C.3}% 28
+\BOOKMARK [2][-]{subsection.C.3.2}{Capturas no tuxy4.eth1}{section.C.3}% 29
+\BOOKMARK [1][-]{section.C.4}{Ex5}{Anexo.C}% 30
+\BOOKMARK [2][-]{subsection.C.4.1}{Capturas de DNS no tuxy1}{section.C.4}% 31
+\BOOKMARK [1][-]{section.C.5}{Ex6}{Anexo.C}% 32
+\BOOKMARK [2][-]{subsection.C.5.1}{Capturas dos `hanshakes' no tuxy1}{section.C.5}% 33
+\BOOKMARK [2][-]{subsection.C.5.2}{Primeiro `Handshake' no tuxy1 em Detalhe}{section.C.5}% 34
+\BOOKMARK [2][-]{subsection.C.5.3}{Capturas no tuxy1 de Dup ACK, Fast Retransmission e Retransmission}{section.C.5}% 35
+\BOOKMARK [2][-]{subsection.C.5.4}{Al\355nea 5 - Gr\341fico de Tr\341fego no tuxy1}{section.C.5}% 36
+\BOOKMARK [2][-]{subsection.C.5.5}{Al\355nea 5 - Gr\341fico de Tr\341fego no tuxy2}{section.C.5}% 37
+\BOOKMARK [1][-]{section.C.6}{Ex7}{Anexo.C}% 38
+\BOOKMARK [2][-]{subsection.C.6.1}{Capturas TCP no tuxy4.eth0 e tuxy4.eth1}{section.C.6}% 39
+\BOOKMARK [2][-]{subsection.C.6.2}{Captura UDP e timeout no tuxy4.eth0}{section.C.6}% 40
+\BOOKMARK [2][-]{subsection.C.6.3}{Capturas TCP no tuxy4.eth0}{section.C.6}% 41
 \BOOKMARK [0][-]{Anexo.D}{C\363digo Fonte}{}% 42
 \BOOKMARK [1][-]{section.D.1}{downloader.c}{Anexo.D}% 43
 \BOOKMARK [1][-]{section.D.2}{ftp.h}{Anexo.D}% 44
