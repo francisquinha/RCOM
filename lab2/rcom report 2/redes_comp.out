@@ -32,17 +32,19 @@
 \BOOKMARK [1][-]{section.C.5}{Ex6}{Anexo.C}% 32
 \BOOKMARK [2][-]{subsection.C.5.1}{Capturas dos `hanshakes' no tuxy1}{section.C.5}% 33
 \BOOKMARK [2][-]{subsection.C.5.2}{Primeiro `Handshake' no tuxy1 em Detalhe}{section.C.5}% 34
-\BOOKMARK [2][-]{subsection.C.5.3}{Capturas no tuxy1 de Dup ACK, Fast Retransmission e Retransmission}{section.C.5}% 35
-\BOOKMARK [2][-]{subsection.C.5.4}{Al\355nea 5 - Gr\341fico de Tr\341fego no tuxy1}{section.C.5}% 36
-\BOOKMARK [2][-]{subsection.C.5.5}{Al\355nea 5 - Gr\341fico de Tr\341fego no tuxy2}{section.C.5}% 37
-\BOOKMARK [1][-]{section.C.6}{Ex7}{Anexo.C}% 38
-\BOOKMARK [2][-]{subsection.C.6.1}{Capturas TCP no tuxy4.eth0 e tuxy4.eth1}{section.C.6}% 39
-\BOOKMARK [2][-]{subsection.C.6.2}{Captura UDP e timeout no tuxy4.eth0}{section.C.6}% 40
-\BOOKMARK [2][-]{subsection.C.6.3}{Capturas TCP no tuxy4.eth0}{section.C.6}% 41
-\BOOKMARK [0][-]{Anexo.D}{C\363digo Fonte}{}% 42
-\BOOKMARK [1][-]{section.D.1}{downloader.c}{Anexo.D}% 43
-\BOOKMARK [1][-]{section.D.2}{ftp.h}{Anexo.D}% 44
-\BOOKMARK [1][-]{section.D.3}{ftp.c}{Anexo.D}% 45
-\BOOKMARK [1][-]{section.D.4}{socket.h}{Anexo.D}% 46
-\BOOKMARK [1][-]{section.D.5}{socket.c}{Anexo.D}% 47
-\BOOKMARK [1][-]{section.D.6}{Utilities.h}{Anexo.D}% 48
+\BOOKMARK [2][-]{subsection.C.5.3}{Capturas no tuxy1 de ACKs}{section.C.5}% 35
+\BOOKMARK [2][-]{subsection.C.5.4}{Capturas no tuxy1 de Dup ACK, Fast Retransmission e Retransmission}{section.C.5}% 36
+\BOOKMARK [2][-]{subsection.C.5.5}{Gr\341fico de Tr\341fego no tuxy1}{section.C.5}% 37
+\BOOKMARK [2][-]{subsection.C.5.6}{Gr\341fico de Tr\341fego no tuxy2}{section.C.5}% 38
+\BOOKMARK [2][-]{subsection.C.5.7}{Gr\341fico de Window Size no tuxy1 de pacotes TCP recebidos na porta de dados}{section.C.5}% 39
+\BOOKMARK [1][-]{section.C.6}{Ex7}{Anexo.C}% 40
+\BOOKMARK [2][-]{subsection.C.6.1}{Capturas TCP no tuxy4.eth0 e tuxy4.eth1}{section.C.6}% 41
+\BOOKMARK [2][-]{subsection.C.6.2}{Captura UDP e timeout no tuxy4.eth0}{section.C.6}% 42
+\BOOKMARK [2][-]{subsection.C.6.3}{Capturas TCP no tuxy4.eth0}{section.C.6}% 43
+\BOOKMARK [0][-]{Anexo.D}{C\363digo Fonte}{}% 44
+\BOOKMARK [1][-]{section.D.1}{downloader.c}{Anexo.D}% 45
+\BOOKMARK [1][-]{section.D.2}{ftp.h}{Anexo.D}% 46
+\BOOKMARK [1][-]{section.D.3}{ftp.c}{Anexo.D}% 47
+\BOOKMARK [1][-]{section.D.4}{socket.h}{Anexo.D}% 48
+\BOOKMARK [1][-]{section.D.5}{socket.c}{Anexo.D}% 49
+\BOOKMARK [1][-]{section.D.6}{Utilities.h}{Anexo.D}% 50

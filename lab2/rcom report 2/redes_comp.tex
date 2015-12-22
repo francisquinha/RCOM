@@ -216,22 +216,22 @@ Por curiosidade, antes de ser realizado o ping para a um site na internet, repar
 
 \section{Experiência 6 - Conexões TCP}
 
-Nesta experiência usámos a aplicação desenvolvida para realizar o download de um ficheiro. Foi chamada a aplicação inicialmente no tuxy1 e seguidamente após um pequeno intervalo de tempo no tuxy2. Sendo assim, o tuxy1 começou sozinho, depois há uma parte em que ambos os downloads são simultâneos e, finalmente, o tuxy2 termina o download sozinho.
+Nesta experiência usámos a aplicação desenvolvida para realizar o download de um ficheiro. Foi chamada a aplicação inicialmente no tuxy1 e seguidamente após um pequeno intervalo de tempo no tuxy2. Foi observado o trafego nos 2 tuxys através do Wireshark. Observou-se que o tuxy1 e tuxy2 realizaram parte do seu download em simutâneo e consequentemente as velocidades de recepção dos ficheiros descarregados em ambos foram afectadas.\\
 
-Como esperado, devido ao protocolo FTP, pudemos verificar o \emph{3-way handshake} de duas conexões TCP. O primeiro relativo à ligação usada para envio de comandos e o segundo relativo a de envio de dados que podem ser verificados no anexo~\ref{ex6_tux1_handshakes}. O estabelecimento de conexão consiste no pedido do cliente ao servidor para estabelecer ligação (SYN) seguido da resposta do servidor (SYN, ACK) e de uma confirmação final pelo cliente (ACK) que podem ser melhor observados no anexo~\ref{ex6_tux1_1sthandshake}, onde é mostrado também o número de sequência e de confirmação em cada pacote. \\
+O protocolo TCP é um protocolo orientado a conexões sendo necessário estabelecer ligação entre o cliente e servidor.
+Pudemos verificar o \emph{3-way handshake} de duas conexões TCP no tuxy1. O primeiro relativo à ligação usada para envio de comandos e o segundo relativo a de envio de dados que podem ser verificados no anexo~\ref{ex6_tux1_handshakes}. Este estabelecimento de conexão consiste num pedido do cliente ao servidor (SYN) seguido da resposta do servidor (SYN, ACK) e de uma confirmação final pelo cliente (ACK) que podem ser melhor observados no anexo~\ref{ex6_tux1_1sthandshake}, onde é mostrado também o número de sequência e de confirmação em cada pacote. \\
 
-O mecanismo de ARQ (Automatic Repeat Request) do protocolo TCP é uma variante do Go-Back-N onde o servidor envia confirmações relativas a cada segmento que recebe.
+O TCP é também um protocolo fiável. Parte desta fiabilidade é conferida por um mecanismo de ARQ (Automatic Repeat Request) que no TCP é uma variante do Go-Back-N onde o servidor envia confirmações relativas a cada segmento que recebe. No anexo ~\ref{ex6_acks} é mostrada uma destas confirmações em detalhe. \\
 
-TODO...\\
+Outra característica do TCP é a sua capacidade de se adaptar à rede e à máquinas usadas.
 
-Detalhes adicionais relativos ao protocolo TCP podem ser consultado no \href{https://www.ietf.org/rfc/rfc793.txt}{RFC793}.\\
+Pouco depois do tuxy1 atingir o seu plateau máximo de tráfego, entre os 14 e 15 segundos do gráfico~\ref{ex6_a5_1io}, podem ser observadas vários pacotes do tipo [TCP Dup ACK], [Previous Segment not captured, [TCP Fast Retransmission], [TCP Out-Of-Order] e [TCP Retransmission] que parecem indicar congestionamento na rede causado pelo slow-start do protocolo TCP. O gráfico de I/O e de window size nos anexos ~\ref{ex6_a5_1io} e ~\ref{ex6_window} parecem sugerir o mesmo podendo observar-se um aumento na taxa de transmissão/recepção e no tamanho da janela até ao segundo 14.\\
 
-Pouco depois do tuxy1 atingir o seu plateau máximo de tráfego, entre os 14 e 15 segundos do gráfico~\ref{ex6_a5_1io}, podem ser observadas vários pacotes do tipo [duplicate ACK], [Previous Segment not captured], [Fast Retransmission] e [Retransmission] que parecem indicar congestionamento.
-Segundo o \href{http://www.ietf.org/rfc/rfc2581.txt}{RFC2581} o receptor deve enviar um duplicate ACK quando é recebido um segmento fora de ordem e pode ocorrer uma retransmissão, \emph{fast retransmit}, após a recepção de 3 confirmações duplicadas (duplicate ACKs) pelo transmissor. Na experiência foram capturados pelo Wireshark pacotes que parecem demonstrar este comportamento como se pode pelo anexo~\ref{ex6_retrans}.
+Observamos alguns dos comportamentos do TCP no tuxy1 no momento referido acima. Segundo o \href{http://www.ietf.org/rfc/rfc2581.txt}{RFC2581} o receptor deve enviar um duplicate ACK quando é recebido um segmento fora de ordem e pode ocorrer uma retransmissão, \emph{fast retransmit}, após a recepção de 3 confirmações duplicadas (duplicate ACKs) pelo transmissor. Na experiência foram capturados pelo Wireshark pacotes que parecem demonstrar este comportamento como se pode ver pela segunda imagem do anexo~\ref{ex6_retrans}.\\
 
-TODO...\\
+Na realização da última alínea pudemos verificar que a recepção de dados quando usada uma segunda ligação no tuxy2 era afectada. Pode observar-se nos anexos~\ref{ex6_a5_1io} e~\ref{ex6_a5_2io} que a recepção  tende para um plateau máximo no tuxy1 que é quebrado devido à ligação estabelecida pelo tuxy2. Observando o gráfico relativo ao tuxy2 podemos ver que este atinge um plateau máximo perto do final da sua ligação, que ocorre devido ao tuxy1 já ter terminado o download. Além deste plateau máximo podemos verificar que os gráficos são complementares no sentido em que a soma das funções dos dois gráficos, alinhando-os consoante os seus pontos mínimos e máximos dado que as leituras em Wireshark não foram iniciadas em simultâneo, resulta aproximadamente numa função constante que apresenta uma recepção entre 10000 e 12000 packets por segundo. Uma vez que este valor é semelhante ao plateau atigindo pelo tuxy2 é plausível que o servidor esteja limitado a esta taxa.\\
 
-Na realização da última alínea pudemos verificar que a recepção de dados quando usada uma segunda ligação no tuxy2 era afectada. Pode observar-se nos anexos~\ref{ex6_a5_1io} e~\ref{ex6_a5_2io} que a recepção  tende para um plateau máximo no tuxy1 que é quebrado devido à ligação estabelecida pelo tuxy2. Observando o gráfico relativo ao tuxy2 podemos ver que este atinge um plateau máximo perto do final da sua ligação, que ocorre devido ao tuxy1 já ter terminado o download. Além deste plateau máximo podemos verificar que os gráficos são complementares no sentido em que a soma das funções dos dois gráficos, alinhando-os consoante os seus pontos mínimos e máximos dado que as leituras em Wireshark não foram iniciadas em simultâneo, resulta aproximadamente numa função constante que apresenta uma recepção entre 10000 e 12000 packets por segundo.
+Detalhes adicionais relativos ao protocolo TCP podem ser consultados no \href{https://www.ietf.org/rfc/rfc793.txt}{RFC793}.
 
 \section{Experiência 7 - Implementar NAT em Linux}
 
@@ -376,18 +376,26 @@ tux63:~/Desktop/RCOM/scripts#
 \includegraphics[width=18cm]{ex6_handshake2.png}
 \includegraphics[width=18cm]{ex6_handshake3.png}
 
+\subsection{Capturas no tuxy1 de ACKs}
+\label{ex6_acks}
+\includegraphics[width=18cm]{ex6_arq.png}
+
 \subsection{Capturas no tuxy1 de Dup ACK, Fast Retransmission e Retransmission}
 \label{ex6_retrans}
-\includegraphics[width=18cm]{ex6_tux1_3054.png}
-\includegraphics[width=18cm]{ex6_tux1_fastretransmission.png}
+\includegraphics[width=18cm]{ex6_tux1_3054.png}\\
+\includegraphics[width=18cm]{ex6_tux1_fastretransmission.png}\\
 \includegraphics[width=18cm]{ex6_tux1_retransmission.png}
 
-\subsection{Alínea 5 - Gráfico de Tráfego no tuxy1}
+\subsection{Gráfico de Tráfego no tuxy1}
 \label{ex6_a5_1io}
 \includegraphics[width=18cm]{ex6_a5_tux1_IO.png}
-\subsection{Alínea 5 - Gráfico de Tráfego no tuxy2}
+\subsection{Gráfico de Tráfego no tuxy2}
 \label{ex6_a5_2io}
 \includegraphics[width=18cm]{ex6_a5_tux2_IO.png}
+
+\subsection{Gráfico de Window Size no tuxy1 de pacotes TCP recebidos na porta de dados}
+\label{ex6_window}
+\includegraphics[width=18cm]{ex6_tux1_window.png}
 
 \section{Ex7}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 

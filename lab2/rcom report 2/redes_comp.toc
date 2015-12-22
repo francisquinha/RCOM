@@ -8,7 +8,7 @@
 \contentsline {section}{\numberline {3.4}Experi\IeC {\^e}ncia 4 - Configurar um Router Comercial e Implementar NAT}{6}{section.3.4}
 \contentsline {section}{\numberline {3.5}Experi\IeC {\^e}ncia 5 - DNS}{6}{section.3.5}
 \contentsline {section}{\numberline {3.6}Experi\IeC {\^e}ncia 6 - Conex\IeC {\~o}es TCP}{7}{section.3.6}
-\contentsline {section}{\numberline {3.7}Experi\IeC {\^e}ncia 7 - Implementar NAT em Linux}{7}{section.3.7}
+\contentsline {section}{\numberline {3.7}Experi\IeC {\^e}ncia 7 - Implementar NAT em Linux}{8}{section.3.7}
 \contentsline {chapter}{\numberline {4}Conclus\IeC {\~o}es}{9}{chapter.4}
 \contentsline {chapter}{Appendices}{10}{section*.2}
 \contentsline {chapter}{\numberline {A}Endera\IeC {\c c}os MAC}{11}{Anexo.A}
@@ -33,17 +33,19 @@
 \contentsline {section}{\numberline {C.5}Ex6}{17}{section.C.5}
 \contentsline {subsection}{\numberline {C.5.1}Capturas dos `hanshakes' no tuxy1}{17}{subsection.C.5.1}
 \contentsline {subsection}{\numberline {C.5.2}Primeiro `Handshake' no tuxy1 em Detalhe}{17}{subsection.C.5.2}
-\contentsline {subsection}{\numberline {C.5.3}Capturas no tuxy1 de Dup ACK, Fast Retransmission e Retransmission}{19}{subsection.C.5.3}
-\contentsline {subsection}{\numberline {C.5.4}Al\IeC {\'\i }nea 5 - Gr\IeC {\'a}fico de Tr\IeC {\'a}fego no tuxy1}{20}{subsection.C.5.4}
-\contentsline {subsection}{\numberline {C.5.5}Al\IeC {\'\i }nea 5 - Gr\IeC {\'a}fico de Tr\IeC {\'a}fego no tuxy2}{20}{subsection.C.5.5}
-\contentsline {section}{\numberline {C.6}Ex7}{21}{section.C.6}
-\contentsline {subsection}{\numberline {C.6.1}Capturas TCP no tuxy4.eth0 e tuxy4.eth1}{21}{subsection.C.6.1}
-\contentsline {subsection}{\numberline {C.6.2}Captura UDP e timeout no tuxy4.eth0}{21}{subsection.C.6.2}
-\contentsline {subsection}{\numberline {C.6.3}Capturas TCP no tuxy4.eth0}{22}{subsection.C.6.3}
-\contentsline {chapter}{\numberline {D}C\IeC {\'o}digo Fonte}{23}{Anexo.D}
-\contentsline {section}{\numberline {D.1}downloader.c}{23}{section.D.1}
-\contentsline {section}{\numberline {D.2}ftp.h}{25}{section.D.2}
-\contentsline {section}{\numberline {D.3}ftp.c}{25}{section.D.3}
-\contentsline {section}{\numberline {D.4}socket.h}{30}{section.D.4}
-\contentsline {section}{\numberline {D.5}socket.c}{30}{section.D.5}
-\contentsline {section}{\numberline {D.6}Utilities.h}{31}{section.D.6}
+\contentsline {subsection}{\numberline {C.5.3}Capturas no tuxy1 de ACKs}{19}{subsection.C.5.3}
+\contentsline {subsection}{\numberline {C.5.4}Capturas no tuxy1 de Dup ACK, Fast Retransmission e Retransmission}{19}{subsection.C.5.4}
+\contentsline {subsection}{\numberline {C.5.5}Gr\IeC {\'a}fico de Tr\IeC {\'a}fego no tuxy1}{20}{subsection.C.5.5}
+\contentsline {subsection}{\numberline {C.5.6}Gr\IeC {\'a}fico de Tr\IeC {\'a}fego no tuxy2}{21}{subsection.C.5.6}
+\contentsline {subsection}{\numberline {C.5.7}Gr\IeC {\'a}fico de Window Size no tuxy1 de pacotes TCP recebidos na porta de dados}{21}{subsection.C.5.7}
+\contentsline {section}{\numberline {C.6}Ex7}{22}{section.C.6}
+\contentsline {subsection}{\numberline {C.6.1}Capturas TCP no tuxy4.eth0 e tuxy4.eth1}{22}{subsection.C.6.1}
+\contentsline {subsection}{\numberline {C.6.2}Captura UDP e timeout no tuxy4.eth0}{22}{subsection.C.6.2}
+\contentsline {subsection}{\numberline {C.6.3}Capturas TCP no tuxy4.eth0}{23}{subsection.C.6.3}
+\contentsline {chapter}{\numberline {D}C\IeC {\'o}digo Fonte}{24}{Anexo.D}
+\contentsline {section}{\numberline {D.1}downloader.c}{24}{section.D.1}
+\contentsline {section}{\numberline {D.2}ftp.h}{26}{section.D.2}
+\contentsline {section}{\numberline {D.3}ftp.c}{26}{section.D.3}
+\contentsline {section}{\numberline {D.4}socket.h}{31}{section.D.4}
+\contentsline {section}{\numberline {D.5}socket.c}{31}{section.D.5}
+\contentsline {section}{\numberline {D.6}Utilities.h}{32}{section.D.6}
