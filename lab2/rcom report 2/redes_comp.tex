@@ -112,6 +112,19 @@
     breaklines=true
 }
 
+
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
+\makeatother
+
+%\usepackage[
+%backend=biber,
+%style=alphabetic,
+%sorting=ynt
+%]{biblatex}
+%\addbibresource{refs.bib}
+
 \begin{document}
 
 \input{./title.tex}
@@ -132,20 +145,22 @@ Este relatório tem como objectivo reportar o segundo trabalho prático relativo
 %%%%%%%%%%%%%%
 % INTRODUCAO %
 %%%%%%%%%%%%%%
+\pagebreak
 \chapter{Introdução}
 
-No âmbito da unidade curricular de Redes de Computadores foi-nos proposta a realização de um trabalho prático cujo objetivo principal era configurar uma rede e compreender os vários aspetos dessa configuração. Além de realizarmos essa configuração, implementamos também uma aplicação de download de ficheiros, por forma a testar uma parte da rede.
+No âmbito da unidade curricular de Redes de Computadores foi-nos proposta a realização de um trabalho prático cujo objetivo principal era configurar uma rede e compreender os vários aspetos dessa mesma configuração. Além da realização da configuração, implementamos também uma aplicação de download de ficheiros, por forma a testar uma parte da rede.
 
-A primeira secção deste relatório incide sobre a aplicação desenvolvida. A aplicação de download de ficheiro foi implementada fora das aulas práticas e o relatório tenta esclarecer detalhes de implementação da mesma a fim de eliminar possíveis dúvidas que possam surgir face à mesma.
+A primeira secção deste relatório incide sobre a aplicação desenvolvida. A aplicação de download de ficheiros foi implementada fora das aulas práticas e o relatório tenta esclarecer detalhes de implementação da mesma, a fim de eliminar possíveis dúvidas que possam surgir.
 
 A segunda secção do relatório incide sob os sete exercícios realizados nas aulas práticas relacionados com a configuração de rede. O relatório evita relatar os exercícios detalhadamente uma vez que estes podem ser consultados no guião do trabalho e tenta focar-se mais na análise e interpretação dos resultados obtidos com o software \href{https://www.wireshark.org/}{Wireshark}.
 
-Na análise de dados realizada na segunda secção do relatório pode ser útil consultar o anexo ~\ref{mac_addresses} que apresenta os endereços MAC dos tuxys. É importante referir também que apesar de deste relatório referir muitas vezes o tuxy2, da experiência 4 até à 7, qualquer referência ao tuxy2 corresponde na realidade ao tuxy3 uma vez que o tuxy2 deixou de estar disponivel apartir de dada altura. Para que o relatório respeite os nomes referidos no guião e usados nos anexos, mantendo a continuidade entre experiências, decidimos continuar a referir-nos ao terceiro computador usado na rede como sendo o tuxy2.  
+Na análise de dados realizada na segunda secção do relatório pode ser útil consultar o anexo ~\ref{mac_addresses} que apresenta os endereços MAC dos tuxys. É importante referir também que apesar deste relatório referir muitas vezes o tuxy2, da experiência 4 até à 7, qualquer referência ao tuxy2 corresponde na realidade ao tuxy3 uma vez que o tuxy2 deixou de estar disponivel apartir de dada altura. Para que o relatório respeite os nomes referidos no guião e usados nos anexos, mantendo a continuidade entre experiências, decidimos continuar a referir-nos ao terceiro computador usado na rede como sendo o tuxy2.  
 	
 No final do relatório apresentamos uma conclusão com as nossas considerações face ao mesmo e ao nossa prestação.
 %%%%%%%%%%%%%%%
 % APLICAÇÂO %
 %%%%%%%%%%%%%%%
+\pagebreak
 \chapter{Aplicação}
 
 A aplicação desenvolvida realiza o download de um ficheiro fazendo uso do protocolo FTP, cuja especificação se encontra em  \href{https://www.ietf.org/rfc/rfc959.txt}{RFC959}.
@@ -169,6 +184,7 @@ Em termos de estrutura foram desenvolvidos apenas 4 múdulos que apresentamos se
 %%%%%%%%%%%%%%%%%%%%
 % LABS REALIZADOS%
 %%%%%%%%%%%%%%%%%%%%
+\pagebreak
 \chapter{Experiências}
 
 \section{Experiência 1 - Configurar uma Rede IP}
@@ -177,9 +193,9 @@ Nesta experiência criou-se uma rede LAN com o tuxy1 e o tuxy4 na mesma rede, te
 
 Atentando nos pacotes capturados com o Wireshark do anexo~\ref{ex1_headers}, é possível verificar que as tramas de tipo ARP são identificáveis pelo cabeçalho Ethernet x0806, enquanto que os pacotes IP têm o cabeçalho x0800. As mensagens de ping podem ser identificadas pelo cabeçalho Ethernet correspondente ao protocolo IP e pelo cabeçalho de IP x01 que corresponde ao protocolo ICMP.
 
-Verificamos também que o tamanho da trama recebida encontra-se indicado entre o bit 16 e 31 do primeiro byte do cabeçalho IP tal como é descrito na secção 3.1 do \href{https://www.ietf.org/rfc/rfc791.txt}{RFC791}
+Verificamos também que o tamanho da trama recebida encontra-se indicado entre o bit 16 e 31 do cabeçalho IP tal como é descrito na secção 3.1 do \href{https://www.ietf.org/rfc/rfc791.txt}{RFC791}
 
-Na lista de pacotes recebidos existe também pacotes do tipo loopback. Este são pacotes são redireccionados para a máquina que os emitiu, tipicamente com a finalidade de verificar se esta se encontra em estado operacional. Neste caso, os pacotes recebidos aparentam ser do switch, tendo como endereço de origem e destino o CiscoInc\_3a:f1:03.
+Na lista de pacotes recebidos existem também pacotes do tipo loopback. Estes são pacotes são redireccionados para a máquina que os emitiu, tipicamente com a finalidade de verificar se esta se encontra em estado operacional. Neste caso, os pacotes recebidos aparentam ser do switch, tendo como endereço de origem e destino o CiscoInc\_3a:f1:03.
 
 \section{Experiência 2 - Implementar 2 LANs num switch}
 
@@ -198,7 +214,7 @@ Relativamente aos endereços dos pacotes ICMP é possível verificar que apresen
 
 
 \section{Experiência 4 - Configurar um Router Comercial e Implementar NAT}
-A experiência quatro pode é composta por duas partes. A primeira consiste em conectar um router comercia, Rc,l à lab network e à rede 172.16.61.0/24 e definir como routers default o tuxy4 para para o tuxy1 e o Rc para o tuxy2 e tuxy4.
+A experiência quatro é composta por duas partes. A primeira consiste em conectar um router comercia, Rc,l à lab network e à rede 172.16.61.0/24 e definir como routers default o tuxy4 para o tuxy1 e o Rc para o tuxy2 e tuxy4.
 Esta configuração fez com que os pacotes enviados do tuxy2 para o tuxy1, após a remoção da rota na alínea quatro, percorrecem um caminho maior sendo encaminhados para o Rc que estava definido como default e só depois enviados para o tuxy4. Usando a rota via tuxy4 o encaminhamento foi directo e quando não se usou esta rota e se activou o redirecionamento ICMP o tuxy2 foi informado que existe uma rota melhor via tuxy4 pelo Rc. No anexo ~\ref{ex4_redirect} apresentamos o output em consola do traceroute ao fazer uso do redirecionamento ICMP.\\
 
 A segunda parte consistio em adicionar a funcionalidade de NAT (Network Address Translation) ao Rc.
@@ -206,13 +222,13 @@ O NAT permite criar uma separação entre uma rede LAN e uma outra rede (tipicam
 
 \section{Experiência 5 - DNS}
 
-A experiência 5 foi confiurado o DNS (Domain Name System) com o servidor lixa.netlab.fe.up.pt (172.16.1.1) alterando o ficheiro resolv.conf.
+A experiência 5 foi configurado o DNS (Domain Name System) com o servidor lixa.netlab.fe.up.pt (172.16.1.1) alterando o ficheiro resolv.conf.
 
 O DNS permite associar strings a endereços. Graças a ele pode-se aceder a sites/plataformas sem ter que usar os seus endereços directamente. O nome, de um site a que se quer aceder por exemplo, é verificado no servidor DNS definido e caso exista é devolvido o respectivo IP. Caso o servidor DNS não tenha conhecimento do IP respectivo pode questionar outros servidores DNS por este. \\
 
 Pode-se verficar a query DNS e a respectiva resposta do ping que realizamos para o \emph{sapo.pt} no anexo ~\ref{ex5_dns}.\\
 
-Por curiosidade, antes de ser realizado o ping para a um site na internet, reparamos que na rede a string tux4 (ou tuxy4?) era resolvida com o endereço default do tuxy4.
+%Por curiosidade, antes de ser realizado o ping para a um site na internet, reparamos que na rede a string tux4 (ou tuxy4?) era resolvida com o endereço default do tuxy4.
 
 \section{Experiência 6 - Conexões TCP}
 
@@ -223,21 +239,21 @@ Pudemos verificar o \emph{3-way handshake} de duas conexões TCP no tuxy1. O pri
 
 O TCP é também um protocolo fiável. Parte desta fiabilidade é conferida por um mecanismo de ARQ (Automatic Repeat Request) que no TCP é uma variante do Go-Back-N onde o servidor envia confirmações relativas a cada segmento que recebe. No anexo ~\ref{ex6_acks} é mostrada uma destas confirmações em detalhe. \\
 
-Outra característica do TCP é a sua capacidade de se adaptar à rede e à máquinas usadas.
+Outra característica do TCP é a sua capacidade de se adaptar à rede e ao hardware.
 
-Pouco depois do tuxy1 atingir o seu plateau máximo de tráfego, entre os 14 e 15 segundos do gráfico~\ref{ex6_a5_1io}, podem ser observadas vários pacotes do tipo [TCP Dup ACK], [Previous Segment not captured, [TCP Fast Retransmission], [TCP Out-Of-Order] e [TCP Retransmission] que parecem indicar congestionamento na rede causado pelo slow-start do protocolo TCP. O gráfico de I/O e de window size nos anexos ~\ref{ex6_a5_1io} e ~\ref{ex6_window} parecem sugerir o mesmo podendo observar-se um aumento na taxa de transmissão/recepção e no tamanho da janela até ao segundo 14.\\
+Pouco depois do tuxy1 atingir o seu plateau máximo de tráfego, entre os 14 e 15 segundos do gráfico~\ref{ex6_a5_1io}, podem ser observadas vários pacotes do tipo [TCP Dup ACK], [Previous Segment not captured, [TCP Fast Retransmission], [TCP Out-Of-Order] e [TCP Retransmission] que parecem indicar congestionamento na rede causado pelo slow-start do protocolo TCP. O gráfico de I/O e de window size nos anexos ~\ref{ex6_a5_1io} e ~\ref{ex6_window} parecem sugerir o mesmo, podendo observar-se um aumento na taxa de transmissão/recepção e no tamanho da janela até ao segundo 14.\\
 
-Observamos alguns dos comportamentos do TCP no tuxy1 no momento referido acima. Segundo o \href{http://www.ietf.org/rfc/rfc2581.txt}{RFC2581} o receptor deve enviar um duplicate ACK quando é recebido um segmento fora de ordem e pode ocorrer uma retransmissão, \emph{fast retransmit}, após a recepção de 3 confirmações duplicadas (duplicate ACKs) pelo transmissor. Na experiência foram capturados pelo Wireshark pacotes que parecem demonstrar este comportamento como se pode ver pela segunda imagem do anexo~\ref{ex6_retrans}.\\
+Observamos alguns dos comportamentos do TCP no tuxy1 no momento referido acima. Segundo o \href{http://www.ietf.org/rfc/rfc2581.txt}{RFC2581} o receptor deve enviar um duplicate ACK quando é recebido um segmento fora de ordem e pode ocorrer uma retransmissão, \emph{fast retransmit}, após a recepção de 3 confirmações duplicadas (duplicate ACKs) pelo transmissor. Na experiência foram capturados pelo Wireshark pacotes que parecem demonstrar este comportamento, como se pode ver pela segunda imagem do anexo~\ref{ex6_retrans}.\\
 
-Na realização da última alínea pudemos verificar que a recepção de dados quando usada uma segunda ligação no tuxy2 era afectada. Pode observar-se nos anexos~\ref{ex6_a5_1io} e~\ref{ex6_a5_2io} que a recepção  tende para um plateau máximo no tuxy1 que é quebrado devido à ligação estabelecida pelo tuxy2. Observando o gráfico relativo ao tuxy2 podemos ver que este atinge um plateau máximo perto do final da sua ligação, que ocorre devido ao tuxy1 já ter terminado o download. Além deste plateau máximo podemos verificar que os gráficos são complementares no sentido em que a soma das funções dos dois gráficos, alinhando-os consoante os seus pontos mínimos e máximos dado que as leituras em Wireshark não foram iniciadas em simultâneo, resulta aproximadamente numa função constante que apresenta uma recepção entre 10000 e 12000 packets por segundo. Uma vez que este valor é semelhante ao plateau atigindo pelo tuxy2 é plausível que o servidor esteja limitado a esta taxa.\\
+Na realização da última alínea pudemos verificar que a recepção de dados, quando usada uma segunda ligação no tuxy2, era afectada. Pode observar-se nos anexos~\ref{ex6_a5_1io} e~\ref{ex6_a5_2io} que a recepção  tende para um plateau máximo no tuxy1 que é quebrado devido à ligação estabelecida pelo tuxy2. Observando o gráfico relativo ao tuxy2 podemos ver que este atinge um plateau máximo perto do final da sua ligação, que ocorre devido ao tuxy1 já ter terminado o download. Além deste plateau máximo podemos verificar que os gráficos são complementares no sentido em que a soma das funções dos dois (alinhando-os consoante os seus pontos mínimos e máximos dado que as leituras em Wireshark não foram iniciadas em simultâneo) resulta aproximadamente numa função constante que apresenta uma taxa entre 10000 e 12000 packets por segundo. Uma vez que este valor é semelhante ao plateau atigindo pelo tuxy2 é plausível que o servidor esteja limitado a esta taxa.\\
 
 Detalhes adicionais relativos ao protocolo TCP podem ser consultados no \href{https://www.ietf.org/rfc/rfc793.txt}{RFC793}.
 
 \section{Experiência 7 - Implementar NAT em Linux}
 
-Experiência implementamos NAT no tuxy4 e geramos diferentes tipos de tráfego para interne. Foram usados os comando wget, traceroute e ping sendo consecutivamente observado o tráfego no tuxy4.eth0 e no tuxy4.eth1.\\
+Na experiência implementamos NAT no tuxy4 e geramos diferentes tipos de tráfego para internet. Foram usados os comando wget, traceroute e ping sendo consecutivamente observado o tráfego no tuxy4.eth0 e no tuxy4.eth1.\\
 
-Verificou-se que usando o NAT no tuxy4 que os endereços IP de destino da camada de Rede nos pacotes TCP recebidos (como resposta aos enviados) variavam consoante a rede em que se encontravam, tal como era esperado ao usar NAT. O encaminhamento só é realizado devido às portas indicadas na camada de transporte (TCP) sendo que o tuxy4 re-encaminhou para o tuxy1 pacotes associados à porta 37351 como se pode ver no anexo~\ref{ex7_tcp}.\\
+Verificou-se que usando o NAT no tuxy4 os endereços IP de destino da camada de Rede nos pacotes TCP recebidos (como resposta aos enviados) variavam consoante a rede em que se encontravam, tal como era esperado ao usar NAT. O encaminhamento só é realizado devido às portas indicadas na camada de transporte (TCP) sendo que o tuxy4 re-encaminhou para o tuxy1 pacotes associados à porta 37351 como se pode ver no anexo~\ref{ex7_tcp}.\\
 
 Foram enviados pacotes UDP ao realizar o traceroute. O protocolo UDP não é orientado a ligações e não é fiável ao contrário do TCP. No protocolo UDP não existem confirmações de pacotes nem retransmissões ou outros mecanismos que garantem a entrega de dados ao destinatário. Esta propriedade pode ser observedada no anexo ~\ref{ex7_udp} onde não foi recebida resposta a alguns dos pacotes UDP enviados. O \href{https://www.ietf.org/rfc/rfc768.txt}{RFC768} apresenta detalhes adicionais relativos ao protocolo UDP.\\
 
@@ -246,11 +262,21 @@ Foi observada a recepção de pacotes ICMP como resposta aos pacotes de tracerou
 %%%%%%%%%%%%%%
 % CONCLUSOES %
 %%%%%%%%%%%%%%
+\pagebreak
 \chapter{Conclusões}
 
 O grupo conseguio realizar todos os exercícios propostos. A realização destes exercícios e a elaboração do relatório visando responder às perguntas do guião ajudaram a sedimentar os conceitos leccionados através de uma metodologia prática e que estimula a reflexão crítica dos estudantes. Foi também possível aprofundar alguns detalhes através de pesquisa autónoma. 
 
 A parte que achamos mais difícil no projecto foi perceber e analisar o funcionamento do protocolo TCP.
+
+%%%%%%%%%%%%%%%%
+% BIBLIOGRAPHY %
+%%%%%%%%%%%%%%%%
+%\chapter{Referências}
+\bibliographystyle{IEEEtran}
+\bibliography{rabb,refs}
+%\nocite{*}
+%\printbibliography[heading=none]
 
 %%%%%%%%%%%%%%
 % NOTAS IMPORTANTES %
@@ -259,9 +285,7 @@ A parte que achamos mais difícil no projecto foi perceber e analisar o funciona
 
 %Apesar de deste relatório referir muitas vezes o tuxy2, da experiência 4 até à 7, qualquer referência ao tuxy2 corresponde na realidade ao tuxy3 uma vez que o tuxy2 deixou de estar disponivel apartir de dada altura. Para que o relatório respeite os nomes referidos no guião e usados nos anexos, mantendo a continuidade entre experiências, decidimos continuar a referir-nos ao terceiro computador usado na rede como sendo o tuxy2.  
 
-%%%%%%%%%%%%%%%%
-% BIBLIOGRAPHY %
-%%%%%%%%%%%%%%%%
+
 
 
 \begin{appendices}

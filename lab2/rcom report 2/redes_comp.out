@@ -9,42 +9,43 @@
 \BOOKMARK [1][-]{section.3.6}{Experi\352ncia 6 - Conex\365es TCP}{chapter.3}% 9
 \BOOKMARK [1][-]{section.3.7}{Experi\352ncia 7 - Implementar NAT em Linux}{chapter.3}% 10
 \BOOKMARK [0][-]{chapter.4}{Conclus\365es}{}% 11
-\BOOKMARK [0][-]{section*.2}{Appendices}{}% 12
-\BOOKMARK [0][-]{Anexo.A}{Endera\347os MAC}{}% 13
-\BOOKMARK [0][-]{Anexo.B}{Console logs}{}% 14
-\BOOKMARK [1][-]{section.B.1}{Ex4 al\355nea 4 \(redirect\)}{Anexo.B}% 15
-\BOOKMARK [0][-]{Anexo.C}{Wireshark logs and statistics}{}% 16
-\BOOKMARK [1][-]{section.C.1}{Ex1}{Anexo.C}% 17
-\BOOKMARK [2][-]{subsection.C.1.1}{Captura no tuxy1 - ARP}{section.C.1}% 18
-\BOOKMARK [2][-]{subsection.C.1.2}{Captura no tuxy1 - ICMP}{section.C.1}% 19
-\BOOKMARK [1][-]{section.C.2}{Ex2}{Anexo.C}% 20
-\BOOKMARK [2][-]{subsection.C.2.1}{Al\355nea 7 - Captura no tuxy1}{section.C.2}% 21
-\BOOKMARK [2][-]{subsection.C.2.2}{Al\355nea 7 - Captura no tuxy2}{section.C.2}% 22
-\BOOKMARK [2][-]{subsection.C.2.3}{Al\355nea 7 - Captura no tuxy4}{section.C.2}% 23
-\BOOKMARK [2][-]{subsection.C.2.4}{Al\355nea10 - Captura no tuxy1}{section.C.2}% 24
-\BOOKMARK [2][-]{subsection.C.2.5}{Al\355nea10 - Captura no tuxy2}{section.C.2}% 25
-\BOOKMARK [2][-]{subsection.C.2.6}{Al\355nea10 - Captura no tuxy4}{section.C.2}% 26
-\BOOKMARK [1][-]{section.C.3}{Ex3}{Anexo.C}% 27
-\BOOKMARK [2][-]{subsection.C.3.1}{Capturas no tuxy4.eth0}{section.C.3}% 28
-\BOOKMARK [2][-]{subsection.C.3.2}{Capturas no tuxy4.eth1}{section.C.3}% 29
-\BOOKMARK [1][-]{section.C.4}{Ex5}{Anexo.C}% 30
-\BOOKMARK [2][-]{subsection.C.4.1}{Capturas de DNS no tuxy1}{section.C.4}% 31
-\BOOKMARK [1][-]{section.C.5}{Ex6}{Anexo.C}% 32
-\BOOKMARK [2][-]{subsection.C.5.1}{Capturas dos `hanshakes' no tuxy1}{section.C.5}% 33
-\BOOKMARK [2][-]{subsection.C.5.2}{Primeiro `Handshake' no tuxy1 em Detalhe}{section.C.5}% 34
-\BOOKMARK [2][-]{subsection.C.5.3}{Capturas no tuxy1 de ACKs}{section.C.5}% 35
-\BOOKMARK [2][-]{subsection.C.5.4}{Capturas no tuxy1 de Dup ACK, Fast Retransmission e Retransmission}{section.C.5}% 36
-\BOOKMARK [2][-]{subsection.C.5.5}{Gr\341fico de Tr\341fego no tuxy1}{section.C.5}% 37
-\BOOKMARK [2][-]{subsection.C.5.6}{Gr\341fico de Tr\341fego no tuxy2}{section.C.5}% 38
-\BOOKMARK [2][-]{subsection.C.5.7}{Gr\341fico de Window Size no tuxy1 de pacotes TCP recebidos na porta de dados}{section.C.5}% 39
-\BOOKMARK [1][-]{section.C.6}{Ex7}{Anexo.C}% 40
-\BOOKMARK [2][-]{subsection.C.6.1}{Capturas TCP no tuxy4.eth0 e tuxy4.eth1}{section.C.6}% 41
-\BOOKMARK [2][-]{subsection.C.6.2}{Captura UDP e timeout no tuxy4.eth0}{section.C.6}% 42
-\BOOKMARK [2][-]{subsection.C.6.3}{Capturas TCP no tuxy4.eth0}{section.C.6}% 43
-\BOOKMARK [0][-]{Anexo.D}{C\363digo Fonte}{}% 44
-\BOOKMARK [1][-]{section.D.1}{downloader.c}{Anexo.D}% 45
-\BOOKMARK [1][-]{section.D.2}{ftp.h}{Anexo.D}% 46
-\BOOKMARK [1][-]{section.D.3}{ftp.c}{Anexo.D}% 47
-\BOOKMARK [1][-]{section.D.4}{socket.h}{Anexo.D}% 48
-\BOOKMARK [1][-]{section.D.5}{socket.c}{Anexo.D}% 49
-\BOOKMARK [1][-]{section.D.6}{Utilities.h}{Anexo.D}% 50
+\BOOKMARK [0][-]{chapter.5}{Bibliografia}{}% 12
+\BOOKMARK [0][-]{section*.2}{Appendices}{}% 13
+\BOOKMARK [0][-]{Anexo.A}{Endera\347os MAC}{}% 14
+\BOOKMARK [0][-]{Anexo.B}{Console logs}{}% 15
+\BOOKMARK [1][-]{section.B.1}{Ex4 al\355nea 4 \(redirect\)}{Anexo.B}% 16
+\BOOKMARK [0][-]{Anexo.C}{Wireshark logs and statistics}{}% 17
+\BOOKMARK [1][-]{section.C.1}{Ex1}{Anexo.C}% 18
+\BOOKMARK [2][-]{subsection.C.1.1}{Captura no tuxy1 - ARP}{section.C.1}% 19
+\BOOKMARK [2][-]{subsection.C.1.2}{Captura no tuxy1 - ICMP}{section.C.1}% 20
+\BOOKMARK [1][-]{section.C.2}{Ex2}{Anexo.C}% 21
+\BOOKMARK [2][-]{subsection.C.2.1}{Al\355nea 7 - Captura no tuxy1}{section.C.2}% 22
+\BOOKMARK [2][-]{subsection.C.2.2}{Al\355nea 7 - Captura no tuxy2}{section.C.2}% 23
+\BOOKMARK [2][-]{subsection.C.2.3}{Al\355nea 7 - Captura no tuxy4}{section.C.2}% 24
+\BOOKMARK [2][-]{subsection.C.2.4}{Al\355nea10 - Captura no tuxy1}{section.C.2}% 25
+\BOOKMARK [2][-]{subsection.C.2.5}{Al\355nea10 - Captura no tuxy2}{section.C.2}% 26
+\BOOKMARK [2][-]{subsection.C.2.6}{Al\355nea10 - Captura no tuxy4}{section.C.2}% 27
+\BOOKMARK [1][-]{section.C.3}{Ex3}{Anexo.C}% 28
+\BOOKMARK [2][-]{subsection.C.3.1}{Capturas no tuxy4.eth0}{section.C.3}% 29
+\BOOKMARK [2][-]{subsection.C.3.2}{Capturas no tuxy4.eth1}{section.C.3}% 30
+\BOOKMARK [1][-]{section.C.4}{Ex5}{Anexo.C}% 31
+\BOOKMARK [2][-]{subsection.C.4.1}{Capturas de DNS no tuxy1}{section.C.4}% 32
+\BOOKMARK [1][-]{section.C.5}{Ex6}{Anexo.C}% 33
+\BOOKMARK [2][-]{subsection.C.5.1}{Capturas dos `hanshakes' no tuxy1}{section.C.5}% 34
+\BOOKMARK [2][-]{subsection.C.5.2}{Primeiro `Handshake' no tuxy1 em Detalhe}{section.C.5}% 35
+\BOOKMARK [2][-]{subsection.C.5.3}{Capturas no tuxy1 de ACKs}{section.C.5}% 36
+\BOOKMARK [2][-]{subsection.C.5.4}{Capturas no tuxy1 de Dup ACK, Fast Retransmission e Retransmission}{section.C.5}% 37
+\BOOKMARK [2][-]{subsection.C.5.5}{Gr\341fico de Tr\341fego no tuxy1}{section.C.5}% 38
+\BOOKMARK [2][-]{subsection.C.5.6}{Gr\341fico de Tr\341fego no tuxy2}{section.C.5}% 39
+\BOOKMARK [2][-]{subsection.C.5.7}{Gr\341fico de Window Size no tuxy1 de pacotes TCP recebidos na porta de dados}{section.C.5}% 40
+\BOOKMARK [1][-]{section.C.6}{Ex7}{Anexo.C}% 41
+\BOOKMARK [2][-]{subsection.C.6.1}{Capturas TCP no tuxy4.eth0 e tuxy4.eth1}{section.C.6}% 42
+\BOOKMARK [2][-]{subsection.C.6.2}{Captura UDP e timeout no tuxy4.eth0}{section.C.6}% 43
+\BOOKMARK [2][-]{subsection.C.6.3}{Capturas TCP no tuxy4.eth0}{section.C.6}% 44
+\BOOKMARK [0][-]{Anexo.D}{C\363digo Fonte}{}% 45
+\BOOKMARK [1][-]{section.D.1}{downloader.c}{Anexo.D}% 46
+\BOOKMARK [1][-]{section.D.2}{ftp.h}{Anexo.D}% 47
+\BOOKMARK [1][-]{section.D.3}{ftp.c}{Anexo.D}% 48
+\BOOKMARK [1][-]{section.D.4}{socket.h}{Anexo.D}% 49
+\BOOKMARK [1][-]{section.D.5}{socket.c}{Anexo.D}% 50
+\BOOKMARK [1][-]{section.D.6}{Utilities.h}{Anexo.D}% 51
