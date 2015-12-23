@@ -318,7 +318,7 @@ B.~Hall, ``Beej's guide to network programming using internet sockets,'' 2015.
 \item tux4 eth1: 00:c0:df:04:20:8c
 \end{itemize}
 
-\chapter{Scripts de configuração}
+\chapter{Scripts finais de configuração, excluindo experiência 7}
 \section{tux1}
 \begin{verbatim}
 #!/bin/bash
@@ -400,40 +400,40 @@ ip route 0.0.0.0 0.0.0.0 172.16.1.254
 ip route 172.16.60.0 255.255.255.0 172.16.61.253 end
 \end{verbatim}
 
-\chapter{Wireshark logs and statistics}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+\chapter{Logs and statistics}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 \section{Experiência 1}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 \label{ex1_headers}
-\subsection{Captura no tux1 - ARP}
+\subsection{Captura Wireshark no tux1 - ARP}
 \includegraphics[width=16cm]{ex1_arp.png}
-\subsection{Captura no tux1 - ICMP}
+\subsection{Captura Wireshark no tux1 - ICMP}
 \includegraphics[width=16cm]{ex1_icmp.png}
 
 \section{Experiência 2}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 \label{ex_2}
-\subsection{Alínea 7 - Captura no tux1}
+\subsection{Alínea 7 - Captura Wireshark no tux1}
 \includegraphics[width=16cm]{ex2_a7_tux1.png}
-\subsection{Alínea 7 - Captura no tux2}
+\subsection{Alínea 7 - Captura Wireshark no tux2}
 \label{ex2_tux1ping_tux2}
 \includegraphics[width=16cm]{ex2_a7_tux2.png}
-\subsection{Alínea 7 - Captura no tux4}
+\subsection{Alínea 7 - Captura Wireshark no tux4}
 \label{ex2_tux1ping_tux4}
 \includegraphics[width=16cm]{ex2_a7_tux4.png}
 
-\subsection{Alínea10 - Captura no tux1}
+\subsection{Alínea10 - Captura Wireshark no tux1}
 \includegraphics[width=16cm]{ex2_a10_tux1.png}
-\subsection{Alínea10 - Captura no tux2}
+\subsection{Alínea10 - Captura Wireshark no tux2}
 \includegraphics[width=16cm]{ex2_a10_tux2.png}
-\subsection{Alínea10 - Captura no tux4}
+\subsection{Alínea10 - Captura Wireshark no tux4}
 \includegraphics[width=16cm]{ex2_a10_tux4.png}
 
 \section{Experiência 3}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-\subsection{Capturas no tux4.eth0}
+\subsection{Capturas Wireshark no tux4.eth0}
 \label{ex3_eth0}
 \includegraphics[width=16cm]{ex3_tux4eth0_ARP.png}
 
-\subsection{Capturas no tux4.eth1}
+\subsection{Capturas Wireshark no tux4.eth1}
 \label{ex3_eth1}
 \includegraphics[width=16cm]{ex3_tux4eth1_pingdetailed.png}
 
@@ -486,13 +486,13 @@ tux63:~/Desktop/RCOM/scripts#
 
 \section{Experiência 5}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-\subsection{Capturas de DNS no tux1}
+\subsection{Capturas Wireshark de DNS no tux1}
 \label{ex5_dns}
 \includegraphics[width=16cm]{ex5_dns.png}
 
 \section{Experiência 6}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-\subsection{Capturas dos `hanshakes' no tux1}
+\subsection{Capturas Wireshark dos `hanshakes' no tux1}
 \label{ex6_tux1_handshakes}
 \includegraphics[width=16cm]{ex6_tux1_handshakes.png}
 
@@ -504,11 +504,11 @@ tux63:~/Desktop/RCOM/scripts#
 
 \includegraphics[width=16cm]{ex6_handshake3.png}
 
-\subsection{Capturas no tux1 de ACKs}
+\subsection{Capturas Wireshark no tux1 de ACKs}
 \label{ex6_acks}
 \includegraphics[width=16cm]{ex6_arq.png}
 
-\subsection{Capturas no tux1 de Dup ACK, Fast Retransmission e Retransmission}
+\subsection{Capturas Wireshark no tux1 de Dup ACK, Fast Retransmission e Retransmission}
 \label{ex6_retrans}
 \includegraphics[width=16cm]{ex6_tux1_3054.png}
 
@@ -529,13 +529,13 @@ tux63:~/Desktop/RCOM/scripts#
 
 \section{Experiência 7}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-\subsection{Capturas TCP no tux4.eth0 e tux4.eth1}
+\subsection{Capturas Wireshark TCP no tux4.eth0 e tux4.eth1}
 \label{ex7_tcp}
 \includegraphics[width=16cm]{ex7_TCP.png}
-\subsection{Captura UDP e timeout no tux4.eth0}
+\subsection{Captura Wireshark UDP e timeout no tux4.eth0}
 \label{ex7_udp}
 \includegraphics[width=16cm]{ex7_udp_timeout.png}
-\subsection{Capturas TCP no tux4.eth0}
+\subsection{Capturas Wireshark TCP no tux4.eth0}
 \label{ex7_ping}
 \includegraphics[width=16cm]{ex7_ping.png}
 
