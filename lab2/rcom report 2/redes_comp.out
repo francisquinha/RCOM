@@ -1,0 +1,57 @@
+\BOOKMARK [0][-]{chapter.1}{Introdu\347\343o}{}% 1
+\BOOKMARK [0][-]{chapter.2}{Aplica\347\343o}{}% 2
+\BOOKMARK [0][-]{chapter.3}{Experi\352ncias}{}% 3
+\BOOKMARK [1][-]{section.3.1}{Experi\352ncia 1 - Configurar uma Rede IP}{chapter.3}% 4
+\BOOKMARK [1][-]{section.3.2}{Experi\352ncia 2 - Implementar 2 LANs num switch}{chapter.3}% 5
+\BOOKMARK [1][-]{section.3.3}{Experi\352ncia 3 - Configurar um Router em Linux}{chapter.3}% 6
+\BOOKMARK [1][-]{section.3.4}{Experi\352ncia 4 - Configurar um Router Comercial e Implementar NAT}{chapter.3}% 7
+\BOOKMARK [1][-]{section.3.5}{Experi\352ncia 5 - DNS}{chapter.3}% 8
+\BOOKMARK [1][-]{section.3.6}{Experi\352ncia 6 - Conex\365es TCP}{chapter.3}% 9
+\BOOKMARK [1][-]{section.3.7}{Experi\352ncia 7 - Implementar NAT em Linux}{chapter.3}% 10
+\BOOKMARK [0][-]{chapter.4}{Conclus\365es}{}% 11
+\BOOKMARK [0][-]{chapter.5}{Bibliografia}{}% 12
+\BOOKMARK [0][-]{section*.2}{Anexos}{}% 13
+\BOOKMARK [0][-]{Anexo.A}{Endera\347os MAC}{}% 14
+\BOOKMARK [0][-]{Anexo.B}{Scripts de configura\347\343o}{}% 15
+\BOOKMARK [1][-]{section.B.1}{tux1}{Anexo.B}% 16
+\BOOKMARK [1][-]{section.B.2}{tux2}{Anexo.B}% 17
+\BOOKMARK [1][-]{section.B.3}{tux4}{Anexo.B}% 18
+\BOOKMARK [1][-]{section.B.4}{switch}{Anexo.B}% 19
+\BOOKMARK [1][-]{section.B.5}{router}{Anexo.B}% 20
+\BOOKMARK [0][-]{Anexo.C}{Wireshark logs and statistics}{}% 21
+\BOOKMARK [1][-]{section.C.1}{Experi\352ncia 1}{Anexo.C}% 22
+\BOOKMARK [2][-]{subsection.C.1.1}{Captura no tux1 - ARP}{section.C.1}% 23
+\BOOKMARK [2][-]{subsection.C.1.2}{Captura no tux1 - ICMP}{section.C.1}% 24
+\BOOKMARK [1][-]{section.C.2}{Experi\352ncia 2}{Anexo.C}% 25
+\BOOKMARK [2][-]{subsection.C.2.1}{Al\355nea 7 - Captura no tux1}{section.C.2}% 26
+\BOOKMARK [2][-]{subsection.C.2.2}{Al\355nea 7 - Captura no tux2}{section.C.2}% 27
+\BOOKMARK [2][-]{subsection.C.2.3}{Al\355nea 7 - Captura no tux4}{section.C.2}% 28
+\BOOKMARK [2][-]{subsection.C.2.4}{Al\355nea10 - Captura no tux1}{section.C.2}% 29
+\BOOKMARK [2][-]{subsection.C.2.5}{Al\355nea10 - Captura no tux2}{section.C.2}% 30
+\BOOKMARK [2][-]{subsection.C.2.6}{Al\355nea10 - Captura no tux4}{section.C.2}% 31
+\BOOKMARK [1][-]{section.C.3}{Experi\352ncia 3}{Anexo.C}% 32
+\BOOKMARK [2][-]{subsection.C.3.1}{Capturas no tux4.eth0}{section.C.3}% 33
+\BOOKMARK [2][-]{subsection.C.3.2}{Capturas no tux4.eth1}{section.C.3}% 34
+\BOOKMARK [1][-]{section.C.4}{Experi\352ncia 4}{Anexo.C}% 35
+\BOOKMARK [2][-]{subsection.C.4.1}{Al\355nea 4 Console Log}{section.C.4}% 36
+\BOOKMARK [1][-]{section.C.5}{Experi\352ncia 5}{Anexo.C}% 37
+\BOOKMARK [2][-]{subsection.C.5.1}{Capturas de DNS no tux1}{section.C.5}% 38
+\BOOKMARK [1][-]{section.C.6}{Experi\352ncia 6}{Anexo.C}% 39
+\BOOKMARK [2][-]{subsection.C.6.1}{Capturas dos `hanshakes' no tux1}{section.C.6}% 40
+\BOOKMARK [2][-]{subsection.C.6.2}{Primeiro `Handshake' no tux1 em Detalhe}{section.C.6}% 41
+\BOOKMARK [2][-]{subsection.C.6.3}{Capturas no tux1 de ACKs}{section.C.6}% 42
+\BOOKMARK [2][-]{subsection.C.6.4}{Capturas no tux1 de Dup ACK, Fast Retransmission e Retransmission}{section.C.6}% 43
+\BOOKMARK [2][-]{subsection.C.6.5}{Gr\341fico de Tr\341fego no tux1}{section.C.6}% 44
+\BOOKMARK [2][-]{subsection.C.6.6}{Gr\341fico de Tr\341fego no tux2}{section.C.6}% 45
+\BOOKMARK [2][-]{subsection.C.6.7}{Gr\341fico de Window Size no tux1 de pacotes TCP recebidos na porta de dados}{section.C.6}% 46
+\BOOKMARK [1][-]{section.C.7}{Experi\352ncia 7}{Anexo.C}% 47
+\BOOKMARK [2][-]{subsection.C.7.1}{Capturas TCP no tux4.eth0 e tux4.eth1}{section.C.7}% 48
+\BOOKMARK [2][-]{subsection.C.7.2}{Captura UDP e timeout no tux4.eth0}{section.C.7}% 49
+\BOOKMARK [2][-]{subsection.C.7.3}{Capturas TCP no tux4.eth0}{section.C.7}% 50
+\BOOKMARK [0][-]{Anexo.D}{C\363digo Fonte}{}% 51
+\BOOKMARK [1][-]{section.D.1}{Ficheiro downloader.c}{Anexo.D}% 52
+\BOOKMARK [1][-]{section.D.2}{Ficheiro ftp.h}{Anexo.D}% 53
+\BOOKMARK [1][-]{section.D.3}{Ficheiro ftp.c}{Anexo.D}% 54
+\BOOKMARK [1][-]{section.D.4}{Ficheiro socket.h}{Anexo.D}% 55
+\BOOKMARK [1][-]{section.D.5}{Ficheiro socket.c}{Anexo.D}% 56
+\BOOKMARK [1][-]{section.D.6}{Ficheiro Utilities.h}{Anexo.D}% 57

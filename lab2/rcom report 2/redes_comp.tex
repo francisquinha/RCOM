@@ -84,6 +84,7 @@
   \renewcommand\abstractname{\huge Sumário}  
 }
 
+\usepackage{moreverb}
 \usepackage{verbatim}
 \usepackage{color}
 \definecolor{darkgray}{rgb}{0.41, 0.41, 0.41}
@@ -149,7 +150,7 @@ Os comandos usados podem ser verificados na Secção 4 (páginas 25 a 34)  e na 
 
 Todas as funcionalidades desenvolvidas ligadas ao protocolo FTP podem ser verificadas no ficheiro \verb|ftp.c| e \verb|ftp.h| disponíveis nos Anexos~\ref{FTPC} e~\ref{FTPH}, respetivamente. Apesar de existir uma função denominada \verb|ftp_abort| esta não envia um comando \verb|ABORT| (embora esta tenha sido a funcionalidade inicialmente pensada para o mesmo). Esta função apenas fecha as sockets em caso de erro.
 
-Para efectuar ligação ao servidor a aplicação deve também receber um URL no formato descrito em \href{https://www.ietf.org/rfc/rfc1738.txt}{RFC1738}. Não consideramos utilizadores anónimos como é referido na Secção 3.2.1. de RFC1738. No ficheiro \verb|downloader.c| (ver Anexo~\ref{DOWNLOADERC}) é realizado o parsing do \verb|url| ficando guardado numa estrutura o nome de utilizador, a sua password, o nome do host, o caminho até ao ficheiro e o nome do ficheiro.
+Para efectuar ligação ao servidor a aplicação deve também receber um URL no formato descrito em \href{https://www.ietf.org/rfc/rfc1738.txt}{RFC1738}. Não consideramos utilizadores anónimos, apesar do que é referido na Secção 3.2.1. de RFC1738. No ficheiro \verb|downloader.c| (ver Anexo~\ref{DOWNLOADERC}) é realizado o parsing do \verb|URL| ficando guardado numa estrutura o nome de utilizador, a sua password, o nome do host, o caminho até ao ficheiro e o nome do ficheiro.
 
 Uma vez realizado o parsing tenta-se obter o IP do destino e cria-se uma ligação TCP para a porta 21 do servidor a fim de enviar os comandos para pedir a recepção do ficheiro. As funções usadas para obter o IP e para estabelecer são as disponibilizadas nos exemplos do moodle da disciplina. A conexão é realizada com a função \verb|connect| e não com a função \verb|bind| uma vez que a aplicação está do lado do cliente. É utilizada a função \verb|gethostbyname| para obter o IP, que funciona mas está depreciada segundo \href{http://beej.us/guide/bgnet/output/html/multipage/index.html}{Beej's Guide to Network Programming}.
 
@@ -260,8 +261,8 @@ A parte que achamos mais difícil no projecto foi perceber e analisar o funciona
 %%%%%%%%%%%%%%%%
 \begin{thebibliography}{1}
 	
-\providecommand{\url}[1]{#1}
-\csname url@samestyle\endcsname
+\providecommand{\URL}[1]{#1}
+\csname URL@samestyle\endcsname
 \providecommand{\newblock}{\relax}
 \providecommand{\bibinfo}[2]{#2}
 \providecommand{\BIBentrySTDinterwordspacing}{\spaceskip=0pt\relax}
@@ -284,19 +285,19 @@ A parte que achamos mais difícil no projecto foi perceber e analisar o funciona
 \bibitem{ietfweb}
 \BIBentryALTinterwordspacing
 ``Request for comments (rfc).'' [Online]. Available:
-  \url{https://www.ietf.org/rfc.html}
+  \URL{https://www.ietf.org/rfc.html}
 \BIBentrySTDinterwordspacing
 
 \bibitem{beejguide}
 \BIBentryALTinterwordspacing
 B.~Hall, ``Beej's guide to network programming using internet sockets,'' 2015.
   [Online]. Available:
-  \url{http://beej.us/guide/bgnet/output/html/multipage/index.html}
+  \URL{http://beej.us/guide/bgnet/output/html/multipage/index.html}
 \BIBentrySTDinterwordspacing
 
 \bibitem{wireshark}
 \BIBentryALTinterwordspacing
-``Wireshark wiki.'' [Online]. Available: \url{https://wiki.wireshark.org/}
+``Wireshark wiki.'' [Online]. Available: \URL{https://wiki.wireshark.org/}
 \BIBentrySTDinterwordspacing
 
 \end{thebibliography}
@@ -317,7 +318,87 @@ B.~Hall, ``Beej's guide to network programming using internet sockets,'' 2015.
 \item tux4 eth1: 00:c0:df:04:20:8c
 \end{itemize}
 
-\chapter{Console logs}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+\chapter{Scripts de configuração}
+\section{tux1}
+\begin{verbatim}
+#!/bin/bash
+/etc/init.d/networking restart
+ip addr flush dev eth0
+ifconfig eth0 up
+ifconfig eth0 172.16.60.1/24
+route add default gw 172.16.60.254
+route -n
+echo 1 > /proc/sys/net/ipv4/ip_forward
+echo 0 > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
+\end{verbatim}
+\section{tux2}
+\begin{verbatim}
+#!/bin/bash
+/etc/init.d/networking restart
+ip addr flush dev eth0
+ifconfig eth0 up
+ifconfig eth0 172.16.61.1/24
+route add -net 172.16.60.0/24 gw 172.16.61.253
+route add default gw 172.16.61.254
+route -n
+echo 1 > /proc/sys/net/ipv4/ip_forward
+echo 0 > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
+echo 1 > /proc/sys/net/ipv4/conf/eth0/accept_redirects
+echo 1 > /proc/sys/net/ipv4/conf/all/accept_redirects
+\end{verbatim}
+\section{tux4}
+\begin{verbatim}
+#!/bin/bash
+/etc/init.d/networking restart
+ip addr flush dev eth0
+ip addr flush dev eth1
+ifconfig eth0 up
+ifconfig eth0 172.16.60.254/24
+ifconfig eth1 up
+ifconfig eth1 172.16.61.253/24
+route add default gw 172.16.61.254
+route -n
+echo 1 > /proc/sys/net/ipv4/ip_forward
+echo 0 > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts
+\end{verbatim}
+\section{switch}
+\begin{verbatim}
+configure terminal
+interface fastethernet 0/1
+switchport mode access
+switchport access vlan 60
+interface fastethernet 0/4
+switchport mode access
+switchport access vlan 60
+interface fastethernet 0/2
+switchport mode access
+switchport access vlan 61
+interface fastethernet 0/5
+switchport mode access
+switchport access vlan 61
+interface fastethernet 0/6
+switchport mode access
+switchport access vlan 61
+end
+\end{verbatim}
+\section{router}
+\begin{verbatim}
+conf t
+interface gigabitethernet 0/0
+ip address 172.16.61.254 255.255.255.0 no shutdown
+ip nat inside
+exit
+interface gigabitethernet 0/1
+ip address 172.16.1.69 255.255.255.0 no shutdown
+ip nat outside
+exit
+ip nat pool ovrld 172.16.1.69 172.16.1.69 prefix 24 
+ip nat inside source list 1 pool ovrld overload
+access-list 1 permit 172.16.60.0 0.0.0.7 
+access-list 1 permit 172.16.61.0 0.0.0.7
+ip route 0.0.0.0 0.0.0.0 172.16.1.254
+ip route 172.16.60.0 255.255.255.0 172.16.61.253 end
+\end{verbatim}
 
 \chapter{Wireshark logs and statistics}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
@@ -358,9 +439,9 @@ B.~Hall, ``Beej's guide to network programming using internet sockets,'' 2015.
 
 \section{Experiência 4}
 
-\subsection{Alínea 4 (redirect)}
+\subsection{Alínea 4 Console Log}
 \label{ex4_redirect}
-\begin{lstlisting}[frame=single]
+\begin{boxedverbatim}
 tux63:~/Desktop/RCOM/scripts# route -n
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 0.0.0.0         172.16.61.254   0.0.0.0         UG    0      0        0 eth0
@@ -401,7 +482,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 172.16.61.0     172.16.61.254   255.255.255.0   UG    0      0        0 eth0
 172.16.61.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
 tux63:~/Desktop/RCOM/scripts# 
-\end{lstlisting}
+\end{boxedverbatim}
 
 \section{Experiência 5}%XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
@@ -430,7 +511,9 @@ tux63:~/Desktop/RCOM/scripts#
 \subsection{Capturas no tux1 de Dup ACK, Fast Retransmission e Retransmission}
 \label{ex6_retrans}
 \includegraphics[width=16cm]{ex6_tux1_3054.png}
+
 \includegraphics[width=16cm]{ex6_tux1_fastretransmission.png}
+
 \includegraphics[width=16cm]{ex6_tux1_retransmission.png}
 
 \subsection{Gráfico de Tráfego no tux1}
